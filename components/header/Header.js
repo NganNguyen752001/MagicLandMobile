@@ -7,13 +7,13 @@ import defaultAvt from "../../assets/header/defaultAvt.png"
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-export default function Header({ goback, navigation }) {
+export default function Header({ goback, navigation, background }) {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: background }]}>
             <TouchableOpacity
                 style={styles.backButton}
                 onPress={() => {
-                    goback ? goback() : navigation?.goBack()
+                    goback ? goback() : navigation?.goBack();
                 }}
             >
                 <Icon name={"arrow-back-ios"} color={"#000000"} size={28} />
@@ -33,10 +33,10 @@ export default function Header({ goback, navigation }) {
 const styles = StyleSheet.create({
     container: {
         width: WIDTH,
-        backgroundColor: '#fff',
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center"
+        alignItems: "center",
+        padding: 5,
     },
     backButton: {
         width: 70,

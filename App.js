@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
   },
   unsafe: {
     flex: 0,
-    backgroundColor: 'white'
+    backgroundColor: '#000000'
   }
 });

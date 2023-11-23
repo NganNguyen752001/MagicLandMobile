@@ -8,6 +8,11 @@ import ScheduleScreen from '../screens/ScheduleScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 import CourseScreen from '../screens/CourseScreen';
+import CourseDetailScreen from '../screens/CourseDetailScreen';
+import ClassScreen from '../screens/ClassScreen';
+import ClassDetailScreen from '../screens/ClassDetailScreen';
+import ClassRegisterScreen from '../screens/ClassRegisterScreen';
+import ClassConfirmScreen from '../screens/ClassConfirmScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -57,6 +62,11 @@ const BottomTabNavigator = () => {
                 tabBarLabel: 'Cá nhân',
             }} />
             <Tab.Screen name="CourseScreen" component={CourseScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="CourseDetailScreen" component={CourseDetailScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="ClassScreen" component={ClassScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="ClassDetailScreen" component={ClassDetailScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="ClassRegisterScreen" component={ClassRegisterScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="ClassConfirmScreen" component={ClassConfirmScreen} options={{ tabBarButton: () => null }} />
         </Tab.Navigator>
     )
 }
