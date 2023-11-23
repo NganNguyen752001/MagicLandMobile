@@ -8,6 +8,11 @@ const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 export default function Header({ goback, navigation, background }) {
+
+    const cartNavigate = () => {
+        navigation.navigate("CartScreen")
+    }
+
     return (
         <View style={[styles.container, { backgroundColor: background }]}>
             <TouchableOpacity
@@ -19,7 +24,7 @@ export default function Header({ goback, navigation, background }) {
                 <Icon name={"arrow-back-ios"} color={"#000000"} size={28} />
             </TouchableOpacity>
             <View style={styles.right}>
-                <TouchableOpacity style={styles.cartButton}>
+                <TouchableOpacity style={styles.cartButton} onPress={cartNavigate}>
                     <Icon name={"shopping-cart"} color={"#C8A9F1"} size={28} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.avtButton}>

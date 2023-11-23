@@ -51,14 +51,10 @@ export default function CourseDetailScreen({ route, navigation }) {
         }, [])
     );
 
-    const goback = () => {
-        navigation.navigate("CourseDetailScreen", { course: course })
-    }
-
     return (
         <>
             <Header navigation={navigation} background={"#fff"} goback={() => { navigation.navigate("CourseScreen") }} />
-            <ScrollView style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <View style={styles.banner}>
                     <Image source={courseDetailBackground} style={styles.bannerBackground} />
                     <Text style={styles.bannerName}>{course?.name}</Text>
@@ -179,7 +175,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                     </Text>
                     <View style={styles.cardList}>
                         {classCardDetail?.map((item, key) => {
-                            return <ClassCard card={item} course={course} goback={goback} navigation={navigation} key={key} />
+                            return <ClassCard card={item} course={course} goback={()=>{navigation.navigate("CourseDetailScreen", { course: course })}} navigation={navigation} key={key} />
                         })}
                     </View>
                 </View>

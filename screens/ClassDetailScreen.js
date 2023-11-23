@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 import Header from '../components/header/Header';
+import NotificationModal from '../components/modal/NotificationModal';
 
 import defaultImage from "../assets/classCard/defaultImage.png"
 
@@ -14,14 +15,23 @@ export default function ClassDetailScreen({ route, navigation }) {
     const classDetail = route?.params?.classDetail
     const goback = route?.params?.goback
 
+    const [notificateModalVisible, setNotificateModalVisible] = useState(false)
+
     const handleRegister = () => {
         navigation.navigate("ClassRegisterScreen", { course: course, classDetail: classDetail, goback: goback })
+    }
+
+    const handleNotification = () => {
+        setNotificateModalVisible(true);
+        setTimeout(() => {
+            setNotificateModalVisible(false);
+        }, 1000);
     }
 
     return (
         <>
             <Header navigation={navigation} background={"#F5F5F5"} goback={goback} />
-            <ScrollView style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <Text style={styles.title}>{classDetail?.title}</Text>
                 <View style={styles.contentContainer}>
                     <Image source={classDetail?.img ? classDetail?.img : defaultImage} style={styles.banner} resizeMode="cover" />
@@ -119,13 +129,14 @@ export default function ClassDetailScreen({ route, navigation }) {
                 </View>
             </ScrollView>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={{ ...styles.boldText, padding: 15 }}>Thêm vào giỏ hàng</Text>
+                <TouchableOpacity style={styles.button} onPress={handleNotification}>
+                    <Text style={{ ...styles.boldText, padding: 15, color: "#C71212" }}>Thêm vào giỏ hàng</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{ ...styles.button, backgroundColor: "#C71212" }} onPress={handleRegister}>
                     <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Đăng Ký Ngay</Text>
                 </TouchableOpacity>
             </View>
+            <NotificationModal visible={notificateModalVisible}/>
         </>
     )
 }

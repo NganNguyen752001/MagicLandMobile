@@ -34,7 +34,8 @@ export default function ClassRegisterScreen({ route, navigation }) {
     }
 
     const hanldeConfirm = () =>{
-        navigation.navigate("ClassConfirmScreen", { course: course, classDetail: classDetail, goback: goback, studentList: studentList })
+        const registerList = studentList.filter(student => student.check === true);
+        navigation.navigate("RegisterConfirmScreen", { course: course, classDetail: classDetail, goback: goback, studentList: registerList })
     }
 
     const getStudentAmount = () => {
@@ -45,7 +46,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
     return (
         <>
             <Header navigation={navigation} background={"#F5F5F5"} goback={hanldeGoback} />
-            <ScrollView style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <Text style={styles.title}>Đăng Ký Lớp Học Ngay</Text>
                 <Text style={{ ...styles.title, backgroundColor: "#EAEAFF", fontSize: 16, color: "#3A0CA3" }}>Thông Tin Đăng Ký:</Text>
                 <View style={{ ...styles.flexColumn, padding: 20, paddingHorizontal: WIDTH * 0.1 }}>
@@ -151,7 +152,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                 </View>
             </ScrollView>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={{ ...styles.button, backgroundColor: "#C71212" }}>
+                <TouchableOpacity style={{ ...styles.button, backgroundColor: "#C71212" }} onPress={hanldeConfirm}>
                     <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Đăng Ký Ngay</Text>
                 </TouchableOpacity>
             </View>
