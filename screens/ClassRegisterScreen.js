@@ -25,21 +25,28 @@ const HEIGHT = Dimensions.get('window').height;
 export default function ClassRegisterScreen({ route, navigation }) {
 
     const [studentList, setStudentList] = useState(studentListDefault)
-    const course = route?.params?.course
-    const classDetail = route?.params?.classDetail
-    const goback = route?.params?.goback
+    let course = route?.params?.course
+    let classDetail = route?.params?.classDetail
+    let goback = route?.params?.goback
+
+    useEffect(() => {
+        course = route?.params?.course
+        classDetail = route?.params?.classDetail
+        goback = route?.params?.goback
+        setStudentList(studentListDefault)
+    }, [route?.params?.course, route?.params?.classDetail, route?.params?.goback])
 
     const hanldeGoback = () => {
         navigation.navigate("ClassDetailScreen", { course: course, classDetail: classDetail, goback: goback })
     }
 
-    const hanldeConfirm = () =>{
-        const registerList = studentList.filter(student => student.check === true);
+    const hanldeConfirm = () => {
+        const registerList = studentList?.filter(student => student.check === true);
         navigation.navigate("RegisterConfirmScreen", { course: course, classDetail: classDetail, goback: goback, studentList: registerList })
     }
 
     const getStudentAmount = () => {
-        const selectedStudents = studentList.filter(student => student.check === true);
+        const selectedStudents = studentList?.filter(student => student.check === true);
         return selectedStudents.length
     }
 
@@ -77,7 +84,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                         <Text style={{ ...styles.boldText, color: "white" }}>Thêm học viên + </Text>
                     </TouchableOpacity>
                 </View>
-                {studentList.map((item, key) => {
+                {studentList?.map((item, key) => {
                     return (
                         <View key={key} style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginHorizontal: WIDTH * 0.1, marginBottom: 20 }}>
                             <View style={styles.flexColumn}>
@@ -152,7 +159,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                 </View>
             </ScrollView>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={{ ...styles.button, backgroundColor: "#C71212" }} onPress={hanldeConfirm}>
+                <TouchableOpacity style={{ ...styles.button, backgroundColor: "#C71212" }} onPress={() => {hanldeConfirm()}}>
                     <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Đăng Ký Ngay</Text>
                 </TouchableOpacity>
             </View>

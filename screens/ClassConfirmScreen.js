@@ -12,9 +12,16 @@ const HEIGHT = Dimensions.get('window').height;
 export default function ClassConfirmScreen({ route, navigation }) {
 
     const [studentList, setStudentList] = useState(route?.params?.studentList)
-    const course = route?.params?.course
-    const classDetail = route?.params?.classDetail
-    const goback = route?.params?.goback
+    let course = route?.params?.course
+    let classDetail = route?.params?.classDetail
+    let goback = route?.params?.goback
+
+    useEffect(() => {
+        course = route?.params?.course
+        classDetail = route?.params?.classDetail
+        goback = route?.params?.goback
+        setStudentList(route?.params?.studentList)
+    }, [route?.params?.course, route?.params?.classDetail, route?.params?.goback, route?.params?.studentList])
 
     const hanldeGoback = () => {
         navigation.navigate("ClassRegisterScreen", { course: course, classDetail: classDetail, goback: goback })

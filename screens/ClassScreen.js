@@ -1,11 +1,13 @@
 import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native'
 import React, { useState, useEffect, useContext } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 
 import Header from '../components/header/Header';
 import SearchBar from '../components/SearchBar';
 import ClassCard from '../components/ClassCard';
 import FilterCustomModal from '../components/modal/FilterCustomModal';
 import InputRange from '../components/InputRange';
+
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -115,8 +117,16 @@ export default function ClassScreen({ route, navigation }) {
     const [typeOption, setTypeOption] = useState(typeOptionDefault)
     const [placeOption, setPlaceOption] = useState(placeOptionDefault)
     const [price, setPrice] = useState(priceDefault)
-    const course = route?.params?.course
+    let course = route?.params?.course
 
+    useEffect(() => {
+        setAgeOption(ageOptionDefault)
+        setTypeOption(typeOptionDefault)
+        setPlaceOption(placeOptionDefault)
+        setPrice(priceDefault)
+        course = route?.params?.course
+    }, [route?.params?.course])
+    
     const handleSearch = (value) => {
         setSearchValue(value)
     }
@@ -131,9 +141,9 @@ export default function ClassScreen({ route, navigation }) {
     }
 
     const hanldeClear = () => {
-        setAgeOption(ageOptionDefault.map(option => ({ ...option })));
-        setTypeOption(typeOptionDefault.map(option => ({ ...option })));
-        setPlaceOption(placeOptionDefault.map(option => ({ ...option })));
+        setAgeOption(ageOptionDefault.map(option => ({ ...option, choose: false })));
+        setTypeOption(typeOptionDefault.map(option => ({ ...option, choose: false })));
+        setPlaceOption(placeOptionDefault.map(option => ({ ...option, choose: false })));
         setPrice({ ...priceDefault });
     };
 
@@ -241,7 +251,7 @@ export default function ClassScreen({ route, navigation }) {
                 </View>
                 <View style={styles.cardList}>
                     {classCardDetail?.map((item, key) => {
-                        return <ClassCard card={item} course={course} navigation={navigation} key={key} goback={goback}/>
+                        return <ClassCard card={item} course={course} navigation={navigation} key={key} goback={goback} />
                     })}
                 </View>
             </ScrollView>

@@ -16,9 +16,9 @@ export default function FilterCustomModal({ visible, content, onCancle, onSubmit
             <TouchableOpacity style={styles.layout} onPress={onCancle} />
             <View style={styles.container}>
                 <View style={styles.modalHeader}>
-                    <View style={styles.closeIcon}>
+                    <TouchableOpacity style={styles.closeIcon} onPress={onCancle}>
                         <Icon name={"close"} color={"#000000"} size={28} />
-                    </View>
+                    </TouchableOpacity>
                     <Text style={styles.headerText}>
                         Tìm Kiếm
                     </Text>

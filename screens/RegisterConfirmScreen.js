@@ -8,18 +8,27 @@ import { formatPrice } from '../util/util';
 
 import defaultImage from "../assets/classCard/defaultImage.png"
 
+
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 export default function RegisterConfirmScreen({ route, navigation }) {
 
-    const course = route?.params?.course
-    const classDetail = route?.params?.classDetail
-    const goback = route?.params?.goback
+    let course = route?.params?.course
+    let classDetail = route?.params?.classDetail
+    let goback = route?.params?.goback
     const [studentList, setStudentList] = useState(route?.params?.studentList)
 
+    useEffect(() => {
+        course = route?.params?.course
+        classDetail = route?.params?.classDetail
+        goback = route?.params?.goback
+        setStudentList(route?.params?.studentList)
+    }, [route?.params?.studentList, route?.params?.course, route?.params?.classDetail, route?.params?.goback])
+
+
     const handleConfirm = () => {
-        navigation.navigate("PaymentScreen", { course: course, classDetail: classDetail, goback: goback , studentList: studentList })
+        navigation.navigate("PaymentScreen", { course: course, classDetail: classDetail, goback: goback, studentList: studentList })
     }
 
     const hanldeGoback = () => {
@@ -118,7 +127,7 @@ export default function RegisterConfirmScreen({ route, navigation }) {
                         return <InforCard item={item} index={index} key={index} />
                     })
                 }
-                <View style={{ ...styles.flexColumnBetween,  paddingBottom: 40, marginTop: 10}}>
+                <View style={{ ...styles.flexColumnBetween, paddingBottom: 40, marginTop: 10 }}>
                     <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Tổng Tiền: </Text>
                     <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>{formatPrice(getPrice())} đ</Text>
                 </View>

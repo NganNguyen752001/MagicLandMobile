@@ -43,13 +43,12 @@ const classCardDetail = [
 export default function CourseDetailScreen({ route, navigation }) {
 
     const [viewDetail, setViewDetail] = useState({ detail: false, course: false })
-    const course = route?.params?.course
+    let course = route?.params?.course
 
-    useFocusEffect(
-        React.useCallback(() => {
-            setViewDetail({ detail: false, course: false })
-        }, [])
-    );
+    useEffect(() => {
+        setViewDetail({ detail: false, course: false })
+        course = route?.params?.course
+    }, [route?.params?.course])
 
     return (
         <>
@@ -175,7 +174,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                     </Text>
                     <View style={styles.cardList}>
                         {classCardDetail?.map((item, key) => {
-                            return <ClassCard card={item} course={course} goback={()=>{navigation.navigate("CourseDetailScreen", { course: course })}} navigation={navigation} key={key} />
+                            return <ClassCard card={item} course={course} goback={() => { navigation.navigate("CourseDetailScreen", { course: course }) }} navigation={navigation} key={key} />
                         })}
                     </View>
                 </View>

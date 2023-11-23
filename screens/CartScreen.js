@@ -1,5 +1,6 @@
 import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native'
 import React, { useState, useEffect, useContext } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 import Header from '../components/header/Header';
@@ -28,6 +29,12 @@ export default function CartScreen({ navigation }) {
 
     const [studentList, setStudentList] = useState(studentListDefault)
 
+    useFocusEffect(
+        React.useCallback(() => {
+            setStudentList(studentListDefault)
+        }, [])
+    );
+
     const allSelected = () => {
         const selectedList = studentList.filter(vourcher => vourcher.choose === true);
         if (selectedList.length === studentList.length) {
@@ -50,6 +57,11 @@ export default function CartScreen({ navigation }) {
     const removeCard = (index) => {
         const updatedList = [...studentList];
         updatedList.splice(index, 1);
+        setStudentList(updatedList)
+    }
+
+    const deleteAll = () => {
+        const updatedList = [];
         setStudentList(updatedList)
     }
 
@@ -85,8 +97,8 @@ export default function CartScreen({ navigation }) {
                     </View>
                     <View style={styles.cardContent}>
                         <View style={{ ...styles.flexColumn, marginVertical: 10 }}>
-                            <Text style={{color:"#B8B8D2" }}>Thêm thông tin học viên </Text>
-                            <Text style={{ ...styles.boldText, marginLeft: 5, fontSize: 25, color:"#9B51E0" }}>+</Text>
+                            <Text style={{ color: "#B8B8D2" }}>Thêm thông tin học viên </Text>
+                            <Text style={{ ...styles.boldText, marginLeft: 5, fontSize: 25, color: "#9B51E0" }}>+</Text>
                         </View>
                     </View>
                     <View style={styles.cardHeader}>
@@ -155,30 +167,42 @@ export default function CartScreen({ navigation }) {
             <Header navigation={navigation} background={"#F5F5F5"} />
             <Text style={styles.title}>Giỏ Hàng</Text>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-                <View style={{ ...styles.flexColumn, marginBottom: 20, }}>
-                    <TouchableOpacity style={styles.flexColumn} onPress={handleSelectAll}>
-                        <View style={{ ...styles.check, marginRight: 10, backgroundColor: allSelected() ? "#3AAC45" : "white", borderColor: allSelected() ? "#3AAC45" : "#000000" }}>
-                            {allSelected() && <Icon name={"check"} color={"white"} size={22} />}
-                        </View>
-                        <Text>
-                            Chọn Tất Cả
-                        </Text>
-                    </TouchableOpacity>
-                </View>
                 {
-                    studentList?.map((item, index) => {
-                        return <InforCard item={item} index={index} key={index} />
-                    })
+                    studentList.length !== 0 &&
+                    <>
+                        <View style={{ ...styles.flexColumn, marginBottom: 20, position: "relative" }}>
+                            <TouchableOpacity style={styles.flexColumn} onPress={handleSelectAll}>
+                                <View style={{ ...styles.check, marginRight: 10, backgroundColor: allSelected() ? "#3AAC45" : "white", borderColor: allSelected() ? "#3AAC45" : "#000000" }}>
+                                    {allSelected() && <Icon name={"check"} color={"white"} size={22} />}
+                                </View>
+                                <Text>
+                                    Chọn Tất Cả
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.bin} onPress={deleteAll}>
+                                <Icon name={"delete"} color={"rgba(136,136,136,0.65)"} size={28} />
+                            </TouchableOpacity>
+                        </View>
+                        {
+                            studentList?.map((item, index) => {
+                                return <InforCard item={item} index={index} key={index} />
+                            })
+                        }
+                        <View style={{ ...styles.flexColumnBetween, paddingBottom: 40, marginTop: 10 }}>
+                            <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Tổng Tiền: </Text>
+                            <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>{formatPrice(400000)} đ</Text>
+                        </View>
+                    </>
                 }
-                <View style={{ ...styles.flexColumnBetween, paddingBottom: 40, marginTop: 10 }}>
-                    <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Tổng Tiền: </Text>
-                    <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>{formatPrice(400000)} đ</Text>
-                </View>
             </ScrollView>
+
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={{ ...styles.button, backgroundColor: "#C71212" }}>
-                    <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Đăng Ký</Text>
-                </TouchableOpacity>
+                {
+                    studentList.length !== 0 &&
+                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#C71212" }}>
+                        <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Đăng Ký</Text>
+                    </TouchableOpacity>
+                }
             </View>
         </>
     )
@@ -284,6 +308,7 @@ const styles = StyleSheet.create({
 
     buttonContainer: {
         position: "absolute",
+        height: 79,
         bottom: 0,
         right: 0,
         left: 0,
@@ -300,5 +325,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "white"
+    },
+    bin:{
+        position: "absolute",
+        right: 10,
     }
 });

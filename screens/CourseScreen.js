@@ -1,4 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useState } from 'react'
 
 import Header from '../components/header/Header';
@@ -28,8 +29,14 @@ const ageOptionDefault = [
 export default function CourseScreen({ navigation }) {
 
     const [searchValue, setSearchValue] = useState("")
-    const [ageOption, setAgeOption] = useState(ageOptionDefault)
+    const [ageOption, setAgeOption] = useState([...ageOptionDefault])
     const [filterVisible, setFilterVisible] = useState(false)
+
+    useFocusEffect(
+        React.useCallback(() => {
+            setAgeOption(ageOptionDefault)
+        }, [])
+    );
 
     const handleSearch = (value) => {
         setSearchValue(value)
@@ -37,12 +44,20 @@ export default function CourseScreen({ navigation }) {
 
     const hanldeSubmit = () => {
         console.log(ageOption);
+        hanldeClear()
         setFilterVisible(false)
     }
 
     const hanldeCancle = () => {
-        setAgeOption(ageOptionDefault)
+        hanldeClear()
         setFilterVisible(false)
+    }
+
+    const hanldeClear = () => {
+        const updateList = [...ageOptionDefault]
+        console.log(updateList);
+        updateList.forEach((item)=>item.choose = false)
+        setAgeOption(updateList)
     }
 
     const filterModal = () => {
@@ -94,7 +109,7 @@ export default function CourseScreen({ navigation }) {
                 </Text>
                 <CourseList navigation={navigation}/>
             </View>
-            <FilterCustomModal content={filterModal()} visible={filterVisible} onSubmit={hanldeSubmit} onCancle={hanldeCancle} />
+            <FilterCustomModal content={filterModal()} visible={filterVisible} onSubmit={hanldeSubmit} onCancle={hanldeCancle} onClear={hanldeClear}/>
         </View>
     )
 }

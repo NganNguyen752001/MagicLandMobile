@@ -1,5 +1,6 @@
 import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native'
 import React, { useState, useEffect, useContext } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 import Header from '../components/header/Header';
@@ -8,6 +9,7 @@ import InputOtpModal from '../components/modal/InputOtpModal';
 import PaymentSuccessModal from '../components/modal/PaymentSuccessModal';
 
 import { formatPrice } from '../util/util';
+
 
 const vourcherListDefault = [
     {
@@ -41,18 +43,24 @@ const HEIGHT = Dimensions.get('window').height;
 
 export default function PaymentScreen({ route, navigation }) {
 
-    const course = route?.params?.course
-    const classDetail = route?.params?.classDetail
-    const goback = route?.params?.goback
+    let course = route?.params?.course
+    let classDetail = route?.params?.classDetail
+    let goback = route?.params?.goback
     const [studentList, setStudentList] = useState(route?.params?.studentList)
     const [vourcherList, setVourcherList] = useState(vourcherListDefault)
     const [modalVisible, setModalVisible] = useState({ vourcher: false, otp: false, notifi: false })
 
+    useEffect(() => {
+        course = route?.params?.course
+        classDetail = route?.params?.classDetail
+        goback = route?.params?.goback
+        setStudentList(route?.params?.studentList)
+        setVourcherList(vourcherListDefault)
+    }, [route?.params?.course, route?.params?.classDetail, route?.params?.goback, route?.params?.studentList])
+
     const hanldeGoback = () => {
         navigation.navigate("RegisterConfirmScreen", { course: course, classDetail: classDetail, goback: goback, studentList: studentList })
     }
-
-
 
     const hanldeChooseVourcher = (index) => {
         const updateList = [...vourcherList]
@@ -275,8 +283,8 @@ export default function PaymentScreen({ route, navigation }) {
                 </TouchableOpacity>
             </View>
             <ChooseVourcherModal visible={modalVisible.vourcher} vourcherList={vourcherList} onCancle={hanldeCloseVourcherModal} onChoose={hanldeChooseVourcher} />
-            <InputOtpModal visible={modalVisible.otp} phone={"12345689"} onCancle={hanldeCloseOtpModal} onSubmit={handleSubmitOtp}/>
-            <PaymentSuccessModal visible={modalVisible.notifi} onSubmit={handleSubmitNotificate}/>
+            <InputOtpModal visible={modalVisible.otp} phone={"12345689"} onCancle={hanldeCloseOtpModal} onSubmit={handleSubmitOtp} />
+            <PaymentSuccessModal visible={modalVisible.notifi} onSubmit={handleSubmitNotificate} />
         </>
     )
 }

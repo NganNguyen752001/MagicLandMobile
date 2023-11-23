@@ -11,9 +11,15 @@ const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 export default function ClassDetailScreen({ route, navigation }) {
-    const course = route?.params?.course
-    const classDetail = route?.params?.classDetail
-    const goback = route?.params?.goback
+    let course = route?.params?.course
+    let classDetail = route?.params?.classDetail
+    let goback = route?.params?.goback
+
+    useEffect(() => {
+        course = route?.params?.course
+        classDetail = route?.params?.classDetail
+        goback = route?.params?.goback
+    }, [route?.params?.course, route?.params?.classDetail, route?.params?.goback])
 
     const [notificateModalVisible, setNotificateModalVisible] = useState(false)
 
@@ -136,7 +142,7 @@ export default function ClassDetailScreen({ route, navigation }) {
                     <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Đăng Ký Ngay</Text>
                 </TouchableOpacity>
             </View>
-            <NotificationModal visible={notificateModalVisible}/>
+            <NotificationModal visible={notificateModalVisible} />
         </>
     )
 }
