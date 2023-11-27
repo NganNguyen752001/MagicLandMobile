@@ -27,7 +27,7 @@ export default function ClassCard({ course, card, goback, navigation }) {
             </View>
             <View style={styles.statusContainer}>
                 <View style={styles.featureBox}>
-                    <Text style={styles.feature}>Best Seller</Text>
+                    <Text style={{...styles.feature, fontWeight: "600"}}>Best Seller</Text>
                 </View>
 
                 <View style={styles.status}>
@@ -60,9 +60,9 @@ export default function ClassCard({ course, card, goback, navigation }) {
                     <Text style={{ ...styles.boldText, marginLeft: 4, color: "#F4A120" }}>{card?.rate}</Text>
                 </View>
             </View>
-            <View style={{ ...styles.flexColumn, position: "absolute", bottom: 0, width: WIDTH * 0.4, backgroundColor: "#794BFF", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 50 }}>
+            <View style={{ ...styles.flexColumn, position: "absolute", bottom: 0, width: WIDTH * 0.4, backgroundColor: "#FFC90C", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 50 }}>
                 <View style={{ ...styles.flexColumn }}>
-                    <Icon name={"access-time"} color={"white"} size={18} />
+                    <Icon name={"person"} color={"white"} size={18} />
                     <Text style={{ ...styles.boldText, marginLeft: 4, color: "white" }}>{card?.registerAmount} người đăng ký</Text>
                 </View>
                 <View style={styles.centerLine} />

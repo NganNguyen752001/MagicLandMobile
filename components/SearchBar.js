@@ -9,7 +9,7 @@ export default function SearchBar({ input, setInput, setFilterModal, placeHolder
     return (
         <View style={styles.container}>
             <Icon name={"search"} color={"#B8B8D2"} size={28} />
-            <TextInput value={input} onChangeText={setInput} style={styles.searchField} placeholder={placeHolder}/>
+            <TextInput value={input} onChangeText={setInput} style={styles.searchField} placeholder={placeHolder} placeholderTextColor="#B8B8D2"/>
             <TouchableOpacity onPress={() => { setFilterModal(true) }}>
                 <Icon name={"filter-alt"} color={"#B8B8D2"} size={28} />
             </TouchableOpacity>
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         paddingHorizontal: 15,
         paddingRight: 25,
-        backgroundColor: '#F4F3FD',
+        backgroundColor: '#3A0CA3',
         flexDirection: "row",
         alignItems: "center",
     },
@@ -31,5 +31,6 @@ const styles = StyleSheet.create({
         width: "85%",
         paddingLeft: 10,
         marginVertical: 15,
+        color: "#B8B8D2"
     }
 });

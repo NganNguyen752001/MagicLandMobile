@@ -7,7 +7,7 @@ import SearchBar from '../components/SearchBar';
 import ClassCard from '../components/ClassCard';
 import FilterCustomModal from '../components/modal/FilterCustomModal';
 import InputRange from '../components/InputRange';
-
+import StarChoose from '../components/StarChoose';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -20,6 +20,8 @@ const classCardDetail = [
         title: "Lớp học Toán Tư Duy cho trẻ mới bắt đầu (Cơ Bản)",
         age: 8,
         place: "Cơ sở 1",
+        timeFrom: "18:30",
+        timeTo: "20:00",
         time: "18:30 20:00",
         rate: 4.6,
         registerAmount: 8,
@@ -32,6 +34,8 @@ const classCardDetail = [
         title: "Lớp học Toán Tư Duy cho trẻ mới bắt đầu (Cơ Bản)",
         age: 8,
         place: "Cơ sở 1",
+        timeFrom: "18:30",
+        timeTo: "20:00",
         time: "18:30 20:00",
         rate: 4.6,
         registerAmount: 8,
@@ -44,6 +48,8 @@ const classCardDetail = [
         title: "Lớp học Toán Tư Duy cho trẻ mới bắt đầu (Cơ Bản)",
         age: 8,
         place: "Cơ sở 1",
+        timeFrom: "18:30",
+        timeTo: "20:00",
         time: "18:30 20:00",
         rate: 4.6,
         registerAmount: 8,
@@ -56,6 +62,8 @@ const classCardDetail = [
         title: "Lớp học Toán Tư Duy cho trẻ mới bắt đầu (Cơ Bản)",
         age: 8,
         place: "Cơ sở 1",
+        timeFrom: "18:30",
+        timeTo: "20:00",
         time: "18:30 20:00",
         rate: 4.6,
         registerAmount: 8,
@@ -116,6 +124,7 @@ export default function ClassScreen({ route, navigation }) {
     const [ageOption, setAgeOption] = useState(ageOptionDefault)
     const [typeOption, setTypeOption] = useState(typeOptionDefault)
     const [placeOption, setPlaceOption] = useState(placeOptionDefault)
+    const [rate, setRate] = useState(0)
     const [price, setPrice] = useState(priceDefault)
     let course = route?.params?.course
 
@@ -126,7 +135,7 @@ export default function ClassScreen({ route, navigation }) {
         setPrice(priceDefault)
         course = route?.params?.course
     }, [route?.params?.course])
-    
+
     const handleSearch = (value) => {
         setSearchValue(value)
     }
@@ -145,6 +154,7 @@ export default function ClassScreen({ route, navigation }) {
         setTypeOption(typeOptionDefault.map(option => ({ ...option, choose: false })));
         setPlaceOption(placeOptionDefault.map(option => ({ ...option, choose: false })));
         setPrice({ ...priceDefault });
+        setRate(0)
     };
 
     const handleChangePrice = (value) => {
@@ -234,6 +244,8 @@ export default function ClassScreen({ route, navigation }) {
                     }
                 </View>
                 <InputRange title={"Học Phí"} min={0} max={2000} minValue={price.min} maxValue={price.max} steps={10} onValueChange={handleChangePrice} />
+                <Text style={styles.modalTitle}>Đánh Giá:</Text>
+                <StarChoose size={rate} setSize={setRate} />
             </View>
         )
     }

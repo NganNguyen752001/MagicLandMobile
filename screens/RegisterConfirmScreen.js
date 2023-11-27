@@ -73,9 +73,9 @@ export default function RegisterConfirmScreen({ route, navigation }) {
                     >
                         {
                             item?.check ?
-                                <Icon name={"keyboard-arrow-down"} color={"#794BFF"} size={22} />
+                                <Icon name={"keyboard-arrow-down"} color={"white"} size={22} />
                                 :
-                                <Icon name={"keyboard-arrow-up"} color={"#794BFF"} size={22} />
+                                <Icon name={"keyboard-arrow-up"} color={"white"} size={22} />
                         }
                     </TouchableOpacity>
                 </View>
@@ -202,19 +202,19 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         // borderBottomWidth: 0,
         borderRadius: 10,
-        backgroundColor: "rgba(200, 169, 241, 0.65)",
+        backgroundColor: "#3A0CA3",
         justifyContent: "center"
     },
     dropdown: {
         position: "absolute",
         right: 20,
         borderWidth: 2,
-        borderColor: "#363853",
+        borderColor: "white",
         borderRadius: 50,
         backgroundColor: "rgba(54, 56, 83, 0.15)",
     },
     cardHeaderText: {
-        color: "#3A0CA3"
+        color: "white"
     },
     cardContent: {
         width: "90%",

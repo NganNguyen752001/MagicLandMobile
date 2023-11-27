@@ -4,9 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 import Header from '../components/header/Header';
-import ChooseVourcherModal from '../components/modal/ChooseVourcherModal';
 import InputOtpModal from '../components/modal/InputOtpModal';
-import PaymentSuccessModal from '../components/modal/PaymentSuccessModal';
 
 import { formatPrice } from '../util/util';
 
@@ -18,6 +16,7 @@ const vourcherListDefault = [
         value: 15,
         max: 40000,
         minUse: 150000,
+        expire: "20.12.2023",
         choose: false
     },
     {
@@ -26,6 +25,7 @@ const vourcherListDefault = [
         value: 40,
         max: 30000,
         minUse: 150000,
+        expire: "20.12.2023",
         choose: false
     },
     {
@@ -34,6 +34,7 @@ const vourcherListDefault = [
         value: 50,
         max: 50000,
         minUse: 150000,
+        expire: "20.12.2023",
         choose: false
     },
 ]
@@ -46,32 +47,21 @@ export default function PaymentScreen({ route, navigation }) {
     let course = route?.params?.course
     let classDetail = route?.params?.classDetail
     let goback = route?.params?.goback
+    let vourcher = route?.params?.vourcherList
     const [studentList, setStudentList] = useState(route?.params?.studentList)
-    const [vourcherList, setVourcherList] = useState(vourcherListDefault)
-    const [modalVisible, setModalVisible] = useState({ vourcher: false, otp: false, notifi: false })
+    const [vourcherList, setVourcherList] = useState(vourcher ? vourcher : vourcherListDefault)
+    const [modalVisible, setModalVisible] = useState({ vourcher: false, otp: false })
 
     useEffect(() => {
         course = route?.params?.course
         classDetail = route?.params?.classDetail
         goback = route?.params?.goback
         setStudentList(route?.params?.studentList)
-        setVourcherList(vourcherListDefault)
-    }, [route?.params?.course, route?.params?.classDetail, route?.params?.goback, route?.params?.studentList])
+        setVourcherList(vourcher ? vourcher : vourcherListDefault)
+    }, [route?.params?.course, route?.params?.classDetail, route?.params?.goback, route?.params?.studentList, route?.params?.vourcherList])
 
     const hanldeGoback = () => {
         navigation.navigate("RegisterConfirmScreen", { course: course, classDetail: classDetail, goback: goback, studentList: studentList })
-    }
-
-    const hanldeChooseVourcher = (index) => {
-        const updateList = [...vourcherList]
-        const choosed = updateList[index].choose
-        updateList.forEach((item) => item.choose = false)
-        updateList[index].choose = !choosed
-        setVourcherList(updateList)
-    }
-
-    const hanldeCloseVourcherModal = () => {
-        setModalVisible({ ...modalVisible, vourcher: false })
     }
 
     const hanldeCloseOtpModal = () => {
@@ -83,12 +73,12 @@ export default function PaymentScreen({ route, navigation }) {
     }
 
     const handleSubmitOtp = (otp) => {
-        console.log(otp);
-        setModalVisible({ ...modalVisible, notifi: true, otp: false })
+        setModalVisible({ ...modalVisible, otp: false })
+        navigation.navigate("TransactionDetailScreen", { course: course, classDetail: classDetail, goback: goback, studentList: studentList, vourcherList: vourcherList, total: totalPayment()  })
     }
 
-    const handleSubmitNotificate = () => {
-        setModalVisible({ ...modalVisible, notifi: false })
+    const handleNavigateVourcher = () => {
+        navigation.navigate("ChooseVoucherScreen", { course: course, classDetail: classDetail, goback: goback, studentList: studentList, vourcherList: vourcherList})
     }
 
     const getPrice = () => {
@@ -123,85 +113,6 @@ export default function PaymentScreen({ route, navigation }) {
         const totalPayment = totalPrice() - discountValue
         return totalPayment
     }
-
-    const InforCard = ({ item, index }) => {
-        return (
-            <View style={styles.card}>
-                <View style={styles.cardHeader}>
-                    <Text style={styles.cardHeaderText}>
-                        Học Viên:
-                    </Text>
-                </View>
-                <View style={styles.cardContent}>
-                    <View style={{ ...styles.flexColumnBetween, marginVertical: 10 }}>
-                        <Text>Tên: </Text>
-                        <Text style={styles.boldText}>{item?.name}</Text>
-                    </View>
-                    <View style={{ ...styles.flexColumnBetween, marginVertical: 10 }}>
-                        <Text>Tuổi: </Text>
-                        <Text style={styles.boldText}>{item?.age} Tuổi</Text>
-                    </View>
-                </View>
-                <View style={styles.cardHeader}>
-                    <Text style={styles.cardHeaderText}>
-                        Khóa Học:
-                    </Text>
-                    <TouchableOpacity
-                        style={styles.dropdown}
-                        onPress={() => {
-                            setStudentList((prevAgeOption) => {
-                                const updatedList = [...prevAgeOption];
-                                updatedList[index].check = !updatedList[index].check;
-                                return updatedList;
-                            });
-                        }}
-                    >
-                        {
-                            item?.check ?
-                                <Icon name={"keyboard-arrow-down"} color={"#794BFF"} size={22} />
-                                :
-                                <Icon name={"keyboard-arrow-up"} color={"#794BFF"} size={22} />
-                        }
-                    </TouchableOpacity>
-                </View>
-                {
-                    !item?.check &&
-                    <View style={styles.cardContent}>
-                        <View style={{ ...styles.flexColumnBetween, marginVertical: 10 }}>
-                            <Text>Tên Lớp Học: </Text>
-                            <Text style={{ ...styles.boldText, color: "#3A0CA3", width: "60%" }}>{classDetail?.title}</Text>
-                        </View>
-                        <View style={{ ...styles.flexColumnBetween, marginVertical: 10 }}>
-                            <Text>Giáo Viên : </Text>
-                            <Text style={{ ...styles.boldText, color: "#3A0CA3", width: "60%" }}>Cô Hà My</Text>
-                        </View>
-                        <View style={{ ...styles.flexColumnBetween, marginVertical: 10 }}>
-                            <Text>Số Buổi: </Text>
-                            <Text style={{ ...styles.boldText, color: "#3A0CA3", width: "60%" }}>4 buổi</Text>
-                        </View>
-                        <View style={{ ...styles.flexColumnBetween, marginVertical: 10 }}>
-                            <Text>Ngày Học:</Text>
-                            <Text style={{ ...styles.boldText, color: "#3A0CA3", width: "60%" }}>8,9,10,11 / 11</Text>
-                        </View>
-                        <View style={{ ...styles.flexColumnBetween, marginVertical: 10 }}>
-                            <Text>Thời Gian: </Text>
-                            <Text style={{ ...styles.boldText, color: "#3A0CA3", width: "60%" }}>18:00 - 20:00</Text>
-                        </View>
-                        <View style={{ ...styles.flexColumnBetween, marginVertical: 10 }}>
-                            <Text>Hình Thức: </Text>
-                            <Text style={{ ...styles.boldText, color: "#3A0CA3", width: "60%" }}>Online</Text>
-                        </View>
-                    </View>
-                }
-                <View style={styles.dashLine} />
-                <View style={{ ...styles.flexColumnBetween, width: "80%", marginVertical: 10 }}>
-                    <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Giá: </Text>
-                    <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>{formatPrice(classDetail.price)} đ</Text>
-                </View>
-            </View>
-        )
-    }
-
     return (
         <>
             <Header navigation={navigation} background={"#F5F5F5"} goback={hanldeGoback} />
@@ -229,62 +140,60 @@ export default function PaymentScreen({ route, navigation }) {
                 <View style={{ ...styles.flexColumn, paddingVertical: 20 }}>
                     <Text style={{ ...styles.boldText, color: "#C8A9F1" }}>Thông Tin Mua Hàng:</Text>
                 </View>
-                {
-                    studentList?.map((item, index) => {
-                        return <InforCard item={item} index={index} key={index} />
-                    })
-                }
-                <View style={styles.vourcherView}>
-                    <View style={{ ...styles.flexColumnBetween, width: "100%", borderBottomWidth: 1, paddingBottom: 10 }}>
-                        <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Tổng Lớp Học Đăng Ký:</Text>
-                        <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>{studentList.length}</Text>
+                <View style={styles.paymentInfor}>
+                    <View style={{ ...styles.vourcherView, paddingTop: 20 }}>
+                        <View style={{ ...styles.flexColumnBetween, width: "100%", borderBottomWidth: 1, paddingBottom: 10 }}>
+                            <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Tổng Lớp Học Đăng Ký:</Text>
+                            <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>{studentList.length}</Text>
+                        </View>
+
+                        <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
+                            <Text style={{ ...styles.boldText, color: "#3AAC45" }}>Vourcher Giảm Giá:</Text>
+                            <TouchableOpacity onPress={handleNavigateVourcher}>
+                                <Text style={{ ...styles.boldText, color: "#3AAC45", transform: [{ translateY: -8 }] }}>
+                                    {vourcherValue() ? vourcherValue()?.name : "Không Chọn"}
+                                    <View style={{ transform: [{ translateY: 5 }] }}>
+                                        <Icon name={"keyboard-arrow-right"} color={"#3AAC45"} size={20} />
+                                    </View>
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
-                        <Text style={{ ...styles.boldText, color: "#3AAC45" }}>Vourcher Giảm Giá:</Text>
-                        <TouchableOpacity onPress={() => setModalVisible({ ...modalVisible, vourcher: true })}>
-                            <Text style={{ ...styles.boldText, color: "#3AAC45" }}>
-                                {vourcherValue() ? vourcherValue()?.name : "Không Chọn"}
-                            </Text>
-                        </TouchableOpacity>
+
+                    <View style={styles.vourcherView}>
+                        <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
+                            <Text style={{ ...styles.boldText, color: "#C8A9F1" }}>TPhương Thức Thanh Toán</Text>
+                            <Text style={{ ...styles.boldText, color: "#888888" }}> Ví Điện Tử</Text>
+                        </View>
+                        <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
+                            <Text style={{ ...styles.boldText, color: "#888888" }}>Số Dư Của Bạn:</Text>
+                            <Text style={{ ...styles.boldText, color: "#888888" }}>{formatPrice(1000000)} đ</Text>
+                        </View>
+                    </View>
+
+                    <View style={{ ...styles.vourcherView, paddingBottom: 20, paddingTop: 30 }}>
+                        <Text style={{ ...styles.boldText, color: "#C8A9F1" }}>Chi Tiết Thanh Toán:</Text>
+                        <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
+                            <Text style={{ ...styles.boldText, color: "#888888" }}>Tổng Tiền:</Text>
+                            <Text style={{ ...styles.boldText, color: "#888888" }}>{formatPrice(totalPrice())} đ</Text>
+                        </View>
+                        <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
+                            <Text style={{ ...styles.boldText, color: "#888888" }}>Vourcher Giảm Giá:</Text>
+                            <Text style={{ ...styles.boldText, color: "#888888" }}>{vourcherValue() ? formatPrice(vourcherDiscount()) : 0} đ</Text>
+                        </View>
+                        <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
+                            <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Tổng Thanh Toán:</Text>
+                            <Text style={{ ...styles.boldText, color: "#C71212" }}>{formatPrice(totalPayment())} đ</Text>
+                        </View>
                     </View>
                 </View>
-
-                <View style={styles.vourcherView}>
-                    <View style={{ ...styles.flexColumnBetween, width: "100%", paddingBottom: 10 }}>
-                        <Text style={{ ...styles.boldText, color: "#C8A9F1" }}>TPhương Thức Thanh Toán</Text>
-                        <Text style={{ ...styles.boldText, color: "#888888" }}> Ví Điện Tử</Text>
-                    </View>
-                    <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
-                        <Text style={{ ...styles.boldText, color: "#888888" }}>Số Dư Của Bạn:</Text>
-                        <Text style={{ ...styles.boldText, color: "#888888" }}>{formatPrice(1000000)} đ</Text>
-                    </View>
-                </View>
-
-                <View style={styles.vourcherView}>
-                    <Text style={{ ...styles.boldText, color: "#C8A9F1" }}>Chi Tiết Thanh Toán:</Text>
-                    <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
-                        <Text style={{ ...styles.boldText, color: "#888888" }}>Tổng Tiền:</Text>
-                        <Text style={{ ...styles.boldText, color: "#888888" }}>{formatPrice(totalPrice())} đ</Text>
-                    </View>
-                    <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
-                        <Text style={{ ...styles.boldText, color: "#888888" }}>Vourcher Giảm Giá:</Text>
-                        <Text style={{ ...styles.boldText, color: "#888888" }}>{vourcherValue() ? formatPrice(vourcherDiscount()) : 0} đ</Text>
-                    </View>
-                    <View style={{ ...styles.flexColumnBetween, width: "100%", paddingTop: 10 }}>
-                        <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Tổng Thanh Toán:</Text>
-                        <Text style={{ ...styles.boldText, color: "#C71212" }}>{formatPrice(totalPayment())} đ</Text>
-                    </View>
-                </View>
-
             </ScrollView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={{ ...styles.button, backgroundColor: "#C71212" }} onPress={handlePayment}>
                     <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Thanh Toán</Text>
                 </TouchableOpacity>
             </View>
-            <ChooseVourcherModal visible={modalVisible.vourcher} vourcherList={vourcherList} onCancle={hanldeCloseVourcherModal} onChoose={hanldeChooseVourcher} />
             <InputOtpModal visible={modalVisible.otp} phone={"12345689"} onCancle={hanldeCloseOtpModal} onSubmit={handleSubmitOtp} />
-            <PaymentSuccessModal visible={modalVisible.notifi} onSubmit={handleSubmitNotificate} />
         </>
     )
 }
@@ -368,12 +277,14 @@ const styles = StyleSheet.create({
     cardContent: {
         width: "90%",
     },
-    vourcherView: {
-        width: WIDTH * 0.9,
-        padding: 20,
+    paymentInfor: {
         borderRadius: 10,
         borderWidth: 1,
-        marginBottom: 20,
+        marginBottom: 30,
+    },
+    vourcherView: {
+        width: WIDTH * 0.9,
+        paddingHorizontal: 20,
     },
 
     buttonContainer: {

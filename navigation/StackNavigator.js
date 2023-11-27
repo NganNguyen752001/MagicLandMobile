@@ -10,6 +10,8 @@ import ClassConfirmScreen from '../screens/ClassConfirmScreen';
 import RegisterConfirmScreen from '../screens/RegisterConfirmScreen';
 import PaymentScreen from '../screens/PaymentScreen';
 import CartScreen from '../screens/CartScreen';
+import ChooseVoucherScreen from '../screens/ChooseVoucherScreen';
+import TransactionDetailScreen from '../screens/TransactionDetailScreen';
 
 const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
@@ -30,6 +32,8 @@ const StackNavigator = () => {
             <Stack.Screen name="RegisterConfirmScreen" component={RegisterConfirmScreen} options={{ headerShown: false }} />
             <Stack.Screen name="PaymentScreen" component={PaymentScreen} options={{ headerShown: false }} />
             <Stack.Screen name="CartScreen" component={CartScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="ChooseVoucherScreen" component={ChooseVoucherScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="TransactionDetailScreen" component={TransactionDetailScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }

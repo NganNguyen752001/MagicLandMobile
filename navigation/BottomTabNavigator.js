@@ -16,6 +16,8 @@ import ClassConfirmScreen from '../screens/ClassConfirmScreen';
 import RegisterConfirmScreen from '../screens/RegisterConfirmScreen';
 import PaymentScreen from '../screens/PaymentScreen';
 import CartScreen from '../screens/CartScreen';
+import ChooseVoucherScreen from '../screens/ChooseVoucherScreen';
+import TransactionDetailScreen from '../screens/TransactionDetailScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +26,7 @@ const BottomTabNavigator = () => {
         <Tab.Navigator
             screenOptions={{
                 tabBarStyle: styles.tabNavigator,
-                tabBarInactiveTintColor: '#484C52',
+                tabBarInactiveTintColor: '#B8B8D2',
                 tabBarActiveTintColor: '#83A2FF',
                 headerShown: false,
             }}
@@ -73,6 +75,8 @@ const BottomTabNavigator = () => {
             <Tab.Screen name="RegisterConfirmScreen" component={RegisterConfirmScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="PaymentScreen" component={PaymentScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="CartScreen" component={CartScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="ChooseVoucherScreen" component={ChooseVoucherScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="TransactionDetailScreen" component={TransactionDetailScreen} options={{ tabBarButton: () => null }} />
         </Tab.Navigator>
     )
 }
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
-        backgroundColor: '#DADAF7'
+        backgroundColor: '#3A0CA3'
     }
 });
 

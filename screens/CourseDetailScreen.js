@@ -92,7 +92,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                                         {course?.courseFeture[0]?.name}:
                                         <Text style={styles.descrip}>
                                             {truncateString(" " + course?.courseFeture[0]?.detail, 60)}
-                                            <TouchableOpacity onPress={() => { setViewDetail({ ...viewDetail, detail: true }) }}>
+                                            <TouchableOpacity onPress={() => { setViewDetail({ ...viewDetail, detail: true, course: false }) }}>
                                                 <Text style={styles.viewDetail}>
                                                     Xem Chi Tiết
                                                 </Text>
@@ -116,7 +116,6 @@ export default function CourseDetailScreen({ route, navigation }) {
                                                     {" " + item?.detail}
                                                 </Text>
                                             </Text>
-
                                         </View>
                                     </View>
                                 )
@@ -124,14 +123,11 @@ export default function CourseDetailScreen({ route, navigation }) {
                     }
                     <Text style={{ ...styles.title, marginTop: 20 }}>
                         {`Chi Tiết Khóa Học   `}
-                        {
-                            !viewDetail?.course &&
-                            <TouchableOpacity onPress={() => { setViewDetail({ ...viewDetail, course: true }) }}>
-                                <Text style={styles.viewDetail}>
-                                    Xem Chi Tiết
-                                </Text>
-                            </TouchableOpacity>
-                        }
+                        <TouchableOpacity onPress={() => { setViewDetail({ ...viewDetail, course: true, detail: false }) }}>
+                            <Text style={styles.viewDetail}>
+                                Xem Chi Tiết
+                            </Text>
+                        </TouchableOpacity>
                     </Text>
                     {
                         viewDetail?.course &&

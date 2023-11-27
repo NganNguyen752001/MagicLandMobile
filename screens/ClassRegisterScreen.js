@@ -55,9 +55,9 @@ export default function ClassRegisterScreen({ route, navigation }) {
             <Header navigation={navigation} background={"#F5F5F5"} goback={hanldeGoback} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <Text style={styles.title}>Đăng Ký Lớp Học Ngay</Text>
-                <Text style={{ ...styles.title, backgroundColor: "#EAEAFF", fontSize: 16, color: "#3A0CA3" }}>Thông Tin Đăng Ký:</Text>
+                <Text style={{ ...styles.title, backgroundColor: "#3A0CA3", fontSize: 16, color: "white" }}>Thông Tin Đăng Ký:</Text>
                 <View style={{ ...styles.flexColumn, padding: 20, paddingHorizontal: WIDTH * 0.1 }}>
-                    <Text style={{ ...styles.boldText, color: "#C8A9F1" }}>Phụ Huynh:</Text>
+                    <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Phụ Huynh:</Text>
                 </View>
                 <View style={styles.parentDetail}>
                     <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.6, marginBottom: 10 }}>
@@ -79,7 +79,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                 </View>
                 <View style={styles.dashLine} />
                 <View style={{ ...styles.flexColumn, padding: 20, paddingHorizontal: WIDTH * 0.1 }}>
-                    <Text style={{ ...styles.boldText, color: "#C8A9F1" }}>Học Viên: </Text>
+                    <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Học Viên: </Text>
                     <TouchableOpacity style={styles.addButton}>
                         <Text style={{ ...styles.boldText, color: "white" }}>Thêm học viên + </Text>
                     </TouchableOpacity>
@@ -89,7 +89,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                         <View key={key} style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginHorizontal: WIDTH * 0.1, marginBottom: 20 }}>
                             <View style={styles.flexColumn}>
                                 <TouchableOpacity
-                                    style={{ ...styles.selectBox, backgroundColor: item.check ? "#C8A9F1" : "white" }}
+                                    style={{ ...styles.selectBox, backgroundColor: item.check ? "#3A0CA3" : "white" }}
                                     onPress={() => {
                                         setStudentList((prevAgeOption) => {
                                             const updatedList = [...prevAgeOption];
@@ -98,7 +98,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                                         });
                                     }}
                                 >
-                                    {item.check && <Icon name={"check"} color={"#794BFF"} size={25} />}
+                                    {item.check && <Icon name={"check"} color={"white"} size={25} />}
                                 </TouchableOpacity>
                                 <Text style={styles.boldText}>Tên: </Text>
                                 <Text>{item.name}</Text>
@@ -219,13 +219,14 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 15,
         marginHorizontal: 20,
-        backgroundColor: "rgba(200, 169, 241, 0.7)",
+        backgroundColor: "#3A0CA3",
     },
     selectBox: {
         width: 29,
         height: 29,
         borderWidth: 2,
-        borderColor: "#794BFF",
+        borderColor: "#3A0CA3",
+        borderRadius: 5,
         marginRight: 10,
     },
     detailCard: {

@@ -25,7 +25,7 @@ export default function Header({ goback, navigation, background }) {
             </TouchableOpacity>
             <View style={styles.right}>
                 <TouchableOpacity style={styles.cartButton} onPress={cartNavigate}>
-                    <Icon name={"shopping-cart"} color={"#C8A9F1"} size={28} />
+                    <Icon name={"shopping-cart"} color={"#3A0CA3"} size={28} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.avtButton}>
                     <Image source={defaultAvt} style={styles.avtImg} />

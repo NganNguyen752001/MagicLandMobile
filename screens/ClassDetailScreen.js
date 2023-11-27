@@ -197,15 +197,15 @@ const styles = StyleSheet.create({
     priceView: {
         borderWidth: 1,
         borderColor: "#C71212",
-        borderRadius: 15,
+        borderRadius: 10,
     },
     detailCard: {
         width: WIDTH * 0.9,
         padding: 20,
         borderRadius: 15,
         marginHorizontal: WIDTH * 0.05,
-        backgroundColor: "rgba(218, 218, 247, 0.6)"
-    },
+        backgroundColor: "#F9D2DD"
+    }, 
     cardText: {
         width: WIDTH * 0.5,
         textAlign: "right"
