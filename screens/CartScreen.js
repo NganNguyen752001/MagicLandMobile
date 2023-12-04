@@ -185,6 +185,7 @@ export default function CartScreen({ navigation }) {
 
     const hanldeChangeStatus = () => {
         if (bottomModalVisible.total) {
+            hanldeClearChoosed()
             setBottomModalVisible({ total: false, confirm: false })
         } else {
             setBottomModalVisible({ total: true, confirm: false })
@@ -204,9 +205,15 @@ export default function CartScreen({ navigation }) {
         setChoosedList(updateList)
     }
 
-    const handleCancel = () =>{
-        setBottomModalVisible({ total: false, confirm: false })
+    const handleCancel = () => {
         hanldeClearChoosed()
+        setBottomModalVisible({ total: false, confirm: false })
+    }
+
+    const handleSubmit = () => {
+        // choosedList.forEach(item => console.log(item.choose))
+        navigation.push("RegisterClassScreen", { courseList: choosedList })
+        // hanldeChangeStatus()
     }
 
     const hanldeCoursePress = (course) => {
@@ -252,7 +259,7 @@ export default function CartScreen({ navigation }) {
                                     <TouchableOpacity style={styles.modalButton} onPress={handleCancel}>
                                         <Text style={styles.modalButtonText}>Bỏ qua</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.modalButton}>
+                                    <TouchableOpacity style={styles.modalButton} onPress={handleSubmit}>
                                         <Text style={{ ...styles.modalButtonText, color: "#C71212" }}>Đăng ký</Text>
                                     </TouchableOpacity>
                                 </View>

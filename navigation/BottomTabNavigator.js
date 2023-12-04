@@ -18,6 +18,8 @@ import PaymentScreen from '../screens/PaymentScreen';
 import CartScreen from '../screens/CartScreen';
 import ChooseVoucherScreen from '../screens/ChooseVoucherScreen';
 import TransactionDetailScreen from '../screens/TransactionDetailScreen';
+import RegisterClassScreen from '../screens/RegisterClassScreen';
+import MultipleRegisScreen from '../screens/MultipleRegisScreen';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -79,6 +81,8 @@ const BottomTabNavigator = () => {
             <Tab.Screen name="CartScreen" component={CartScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="ChooseVoucherScreen" component={ChooseVoucherScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="TransactionDetailScreen" component={TransactionDetailScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="RegisterClassScreen" component={RegisterClassScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="MultipleRegisScreen" component={MultipleRegisScreen} options={{ tabBarButton: () => null }} />
         </Tab.Navigator>
     )
 }

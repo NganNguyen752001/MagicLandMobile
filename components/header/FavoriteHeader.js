@@ -7,7 +7,7 @@ import defaultAvt from "../../assets/header/defaultAvt.png"
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-export default function FavoriteHeader({ goback, navigation, background, title, type, setType }) {
+export default function FavoriteHeader({ goback, navigation, background, title, type, setType, defaultType, editType }) {
 
     return (
         <View style={[styles.container, { backgroundColor: background }]}>
@@ -29,11 +29,11 @@ export default function FavoriteHeader({ goback, navigation, background, title, 
                 {
                     type ?
                         <Text style={styles.chooseText}>
-                            Huỷ
+                            {defaultType ? defaultType : "Huỷ"}
                         </Text>
                         :
                         <Text style={styles.chooseText}>
-                            Chọn
+                            {editType ? editType : "Chọn"}
                         </Text>
                 }
 

@@ -110,7 +110,7 @@ export default function PaymentScreen({ route, navigation }) {
     }
 
     const totalPrice = () => {
-        return (studentList.length * classDetail.price)
+        return (studentList.length * (classDetail.price ? classDetail.price : 200000))
     }
 
     const vourcherDiscount = () => {
@@ -134,7 +134,7 @@ export default function PaymentScreen({ route, navigation }) {
             <Header navigation={navigation} background={"#FF8F8F"} title={"Thông tin thanh toán"} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <View style={styles.checkPayment}>
-                    <Icon name={"account"} color={"#FF8D9D"} size={28} />
+                    <Icon name={"alert-circle"} color={"#FF8D9D"} size={28} />
                     <Text style={{ color: "#FF8F8F" }}>Vui lòng kiểm tra lại thông tin thanh toán:</Text>
                 </View>
                 <View style={styles.titleView}>
