@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import React from 'react'
+import React, { useState } from 'react'
 
 import { formatPrice } from '../util/util';
 
@@ -9,17 +9,24 @@ const HEIGHT = Dimensions.get('window').height;
 
 export default function CourseCard({ cardDetail, onClick, choose }) {
 
+    const [favorite, setFavorite] = useState(cardDetail.favorite)
+
+    const handleStarClick = () => {
+        setFavorite(!favorite)
+    }
+
     return (
         <View style={styles.container}>
+            <TouchableOpacity style={styles.cardFavorite} onPress={handleStarClick}>
+                {
+                    favorite ?
+                        <Icon name={"star"} color={"#FFC90C"} size={28} />
+                        :
+                        <Icon name={"star"} color={"white"} size={28} />
+                }
+            </TouchableOpacity>
             <TouchableOpacity style={styles.card} onPress={() => { onClick(cardDetail) }}>
-                <View style={styles.cardFavorite}>
-                    {
-                        cardDetail.favorite ?
-                            <Icon name={"star"} color={"#FFC90C"} size={28} />
-                            :
-                            <Icon name={"star"} color={"white"} size={28} />
-                    }
-                </View>
+
                 <Image source={cardDetail.img} style={styles.image} resizeMode='cover' />
                 <View style={{ ...styles.flexBetweenColumn, marginBottom: 10 }}>
                     <Text style={{ textTransform: "capitalize" }}>{cardDetail.vietType}</Text>
@@ -83,8 +90,8 @@ const styles = StyleSheet.create({
     },
     cardFavorite: {
         position: "absolute",
-        top: 10,
-        right: 10,
+        top: 15,
+        right: 15,
         zIndex: 10
     },
     image: {

@@ -15,9 +15,13 @@ export default function TransactionDetailScreen({ route, navigation }) {
 
     let total = route?.params?.total
 
+    const handleClose = () => {
+        navigation.popToTop()
+    }
+
     return (
         <>
-            <Header navigation={navigation} background={"#FF8F8F"} goback={navigation.pop} title={"Chi tiết giao dịch"} />
+            <Header navigation={navigation} background={"#FF8F8F"} goback={navigation.popToTop} title={"Chi tiết giao dịch"} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 {/* <Text style={{ ...styles.boldText, textAlign: "center", fontSize: 30 }}>Thanh Toán</Text> */}
                 <View style={{ ...styles.flexColumnCenter, marginVertical: 20 }}>
@@ -47,7 +51,7 @@ export default function TransactionDetailScreen({ route, navigation }) {
                     <Text style={{ ...styles.boldText, color: "#3A0CA3" }}>Ngô Gia Thưởng</Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#FF8D9D" }}>
+                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#FF8D9D" }} onPress={handleClose}>
                         <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Đóng</Text>
                     </TouchableOpacity>
                 </View>

@@ -67,7 +67,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
 
     return (
         <>
-            <Header navigation={navigation} background={"#FF8F8F"} goback={navigation.pop} title={"Đăng Ký Khóa Học"} />
+            <Header navigation={navigation} background={"#FF8F8F"} goback={navigation.popToTop} title={"Đăng Ký Khóa Học"} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Chọn Cháu:</Text>

@@ -370,7 +370,7 @@ export default function CourseScreen({ navigation }) {
                         </View>
                         <View style={styles.headerInforRight}>
                             <View style={styles.flexBetweenColumn}>
-                                <TouchableOpacity style={styles.iconNavigate} onPress={()=>navigation.push("CartScreen")}>
+                                <TouchableOpacity style={styles.iconNavigate} onPress={() => navigation.push("CartScreen")}>
                                     <Icon name={"book"} color={"#ffffff"} size={28} />
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.iconNavigate}>
@@ -433,7 +433,7 @@ export default function CourseScreen({ navigation }) {
                     {
                         homeContentDetail.courseDetail.map((item, index) => {
                             return (
-                                <CourseCard cardDetail={item} onClick={hanldeCoursePress} key={index}/>
+                                <CourseCard cardDetail={item} onClick={hanldeCoursePress} navigation={navigation} key={index} />
                             )
                         })
                     }
@@ -443,7 +443,7 @@ export default function CourseScreen({ navigation }) {
                     {
                         homeContentDetail.courseDetail.map((item, index) => {
                             return (
-                                <CourseCard cardDetail={item} navigation={navigation} key={index} />
+                                <CourseCard cardDetail={item} onClick={hanldeCoursePress} navigation={navigation} key={index} />
                             )
                         })
                     }

@@ -20,7 +20,7 @@ const courseDetail = [
         rateValue: 4.5,
         rateCount: 8,
         coursePrice: 200000,
-        favorite: false,
+        favorite: true,
         choose: false,
         courseFeture: [
             {
