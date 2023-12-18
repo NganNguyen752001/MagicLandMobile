@@ -8,6 +8,7 @@ import ClassCard from '../components/ClassCard';
 import { truncateString, formatPrice } from '../util/util';
 
 import courseDetailBackground from "../assets/images/courseDetailBackground.png"
+import FilterCustomModal from '../components/modal/FilterCustomModal';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -68,10 +69,67 @@ const classCardDetailDefault = [
     },
 ]
 
+const filterDetailDefault = {
+    amountRegister: [
+        {
+            name: "Dưới 10 học viên",
+            check: false,
+        },
+        {
+            name: "Từ 10 - 20 học viên",
+            check: false,
+        },
+        {
+            name: "Trên 20 học viên",
+            check: false,
+        },
+    ],
+    amountLesson: [
+        {
+            name: "Dưới 10 buổi",
+            check: false,
+        },
+        {
+            name: "Từ 10 - 20 buổi",
+            check: false,
+        },
+        {
+            name: "Trên 20 buổi",
+            check: false,
+        },
+    ],
+    type: [
+        {
+            name: "Online",
+            check: false,
+        },
+        {
+            name: "Offline",
+            check: false,
+        },
+    ],
+    time: [
+        {
+            name: "Thứ 2 - Thứ 4 - Thứ 6",
+            check: false,
+        },
+        {
+            name: "Thứ 3 - Thứ 5 - Thứ 7",
+            check: false,
+        },
+        {
+            name: "Thứ 7 - Chủ Nhật",
+            check: false,
+        },
+    ]
+}
+
 export default function CourseDetailScreen({ route, navigation }) {
 
     const [viewDetail, setViewDetail] = useState({ detail: false, course: false })
     const [classCardDetail, setClassCardDetail] = useState(classCardDetailDefault)
+    const [filterVisible, setFilterVisible] = useState(false)
+    const [filterValue, setFilterValue] = useState(filterDetailDefault)
     let course = route?.params?.course
 
     useEffect(() => {
@@ -101,17 +159,146 @@ export default function CourseDetailScreen({ route, navigation }) {
         navigation.push("ClassRegisterScreen", { course: course, classList: classCardDetail })
     }
 
+    const hanldeSubmit = () => {
+        hanldeClear()
+        setFilterVisible(false)
+    }
+
+    const hanldeCancle = () => {
+        hanldeClear()
+        setFilterVisible(false)
+    }
+
+    const hanldeClear = () => {
+        const clearedFilterValue = { ...filterValue };
+
+        clearedFilterValue.amountRegister.forEach(item => (item.check = false));
+        clearedFilterValue.amountLesson.forEach(item => (item.check = false));
+        clearedFilterValue.type.forEach(item => (item.check = false));
+        clearedFilterValue.time.forEach(item => (item.check = false));
+
+        setFilterValue(clearedFilterValue);
+    };
+
+    const filterModal = () => {
+        return (
+            <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Số lượng đăng ký:</Text>
+                {
+                    filterValue.amountRegister.map((item, index) => {
+                        return (
+                            <TouchableOpacity
+                                style={styles.flexColumn}
+                                onPress={() => {
+                                    const updatedFilterValue = { ...filterValue };
+                                    const defaultValue = updatedFilterValue.amountRegister[index].check
+                                    updatedFilterValue.amountRegister.forEach(item => item.check = false)
+                                    updatedFilterValue.amountRegister[index].check = !defaultValue;
+                                    setFilterValue(updatedFilterValue);
+                                }}
+                                key={index}
+                            >
+                                <View style={[styles.checkboxButton, item.check && styles.checkboxChoosed]}>
+                                    <Icon name={"check"} color={"white"} size={20} />
+                                </View>
+                                <Text style={[styles.checkboxText]}>
+                                    {item.name}
+                                </Text>
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+                <Text style={styles.modalTitle}>Số buổi học</Text>
+                {
+                    filterValue.amountLesson.map((item, index) => {
+                        return (
+                            <TouchableOpacity
+                                style={styles.flexColumn}
+                                onPress={() => {
+                                    const updatedFilterValue = { ...filterValue };
+                                    const defaultValue = updatedFilterValue.amountLesson[index].check
+                                    updatedFilterValue.amountLesson.forEach(item => item.check = false)
+                                    updatedFilterValue.amountLesson[index].check = !defaultValue;
+                                    setFilterValue(updatedFilterValue);
+                                }}
+                                key={index}
+                            >
+                                <View style={[styles.checkboxButton, item.check && styles.checkboxChoosed]}>
+                                    <Icon name={"check"} color={"white"} size={20} />
+                                </View>
+                                <Text style={[styles.checkboxText]}>
+                                    {item.name}
+                                </Text>
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+                <Text style={styles.modalTitle}>Hình thức</Text>
+                {
+                    filterValue.type.map((item, index) => {
+                        return (
+                            <TouchableOpacity
+                                style={styles.flexColumn}
+                                onPress={() => {
+                                    const updatedFilterValue = { ...filterValue };
+                                    const defaultValue = updatedFilterValue.type[index].check
+                                    updatedFilterValue.type.forEach(item => item.check = false)
+                                    updatedFilterValue.type[index].check = !defaultValue;
+                                    setFilterValue(updatedFilterValue);
+                                }}
+                                key={index}
+                            >
+                                <View style={[styles.checkboxButton, item.check && styles.checkboxChoosed]}>
+                                    <Icon name={"check"} color={"white"} size={20} />
+                                </View>
+                                <Text style={[styles.checkboxText]}>
+                                    {item.name}
+                                </Text>
+                            </TouchableOpacity>
+                        )
+                    })
+                }
+                <Text style={styles.modalTitle}>Thời gian</Text>
+                <View style={styles.modalOption}>
+                    {
+                        filterValue.time.map((item, index) => {
+                            return (
+                                <TouchableOpacity
+                                    style={[styles.optionButton, item.check && styles.choosed]}
+                                    onPress={() => {
+                                        const updatedFilterValue = { ...filterValue };
+                                        const defaultValue = updatedFilterValue.time[index].check
+                                        updatedFilterValue.time.forEach(item => item.check = false)
+                                        updatedFilterValue.time[index].check = !defaultValue;
+                                        setFilterValue(updatedFilterValue);
+                                    }}
+                                    key={index}
+                                >
+                                    <Text style={[styles.optionText, item.check && styles.choosedText]}>
+                                        {item.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </View>
+            </View>
+        )
+    }
+
     return (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
             <View style={styles.banner}>
                 <Image source={course?.img} style={styles.bannerBackground} resizeMode="cover" />
                 <View style={styles.bannerHeader}>
                     <TouchableOpacity onPress={goback}>
-                        <Icon name={"chevron-left"} color={"#FF8D9D"} size={32} />
+                        <Icon name={"chevron-left"} color={"#FFFFFF"} size={32} />
                     </TouchableOpacity>
                     <View style={styles.flexColumn}>
-                        <View style={styles.headerIcon}><Icon name={"book"} color={"#FF8D9D"} size={28} /></View>
-                        <View style={styles.headerIcon}><Icon name={"bell"} color={"#FF8D9D"} size={28} /></View>
+                        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.push("CartScreen")}>
+                            <Icon name={"book"} color={"#FFFFFF"} size={28} />
+                        </TouchableOpacity>
+                        <View style={styles.headerIcon}><Icon name={"bell"} color={"#FFFFFF"} size={28} /></View>
                     </View>
                 </View>
             </View>
@@ -240,9 +427,19 @@ export default function CourseDetailScreen({ route, navigation }) {
                         </View>
                     </View>
                 }
-                <Text style={{ ...styles.title, marginTop: 20 }}>
-                    {`Lịch Học Các Lớp Học: `}
-                </Text>
+                <View style={{ ...styles.flexBetweenColumn, alignItems: "baseline", marginBottom: 15 }}>
+                    <Text style={{ ...styles.title, marginTop: 20 }}>
+                        {`Lịch Học Các Lớp Học: `}
+                    </Text>
+                    <TouchableOpacity
+                        style={{ transform: [{ translateY: 5 }] }}
+                        onPress={() => {
+                            setFilterVisible(true)
+                        }}
+                    >
+                        <Icon name={"filter-variant"} color={"#33363F"} size={28} />
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.cardList}>
                     {classCardDetail?.map((item, key) => {
                         return <ClassCard cardDetail={item} check={true} index={key} onClick={selectCourse} key={key} />
@@ -252,11 +449,12 @@ export default function CourseDetailScreen({ route, navigation }) {
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.buttonText}>Quan Tâm</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#FF8D9D" }} onPress={handleRegister}>
+                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#4582E6" }} onPress={handleRegister}>
                         <Text style={{ ...styles.buttonText, color: "white" }}>Đăng Ký Ngay</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+            <FilterCustomModal content={filterModal()} visible={filterVisible} onSubmit={hanldeSubmit} onCancle={hanldeCancle} onClear={hanldeClear} />
         </ScrollView>
     )
 }
@@ -375,11 +573,60 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderWidth: 1,
         borderRadius: 5,
-        borderColor: "#FF8D9D",
+        borderColor: "#4582E6",
         marginHorizontal: 15,
     },
     buttonText: {
-        color: "#FF8D9D",
+        color: "#4582E6",
         fontWeight: "600"
+    },
+
+    modalContent: {
+        width: WIDTH * 0.9,
+        marginHorizontal: WIDTH * 0.05,
+        marginBottom: 20,
+    },
+    modalTitle: {
+        fontWeight: "600",
+        fontSize: 18,
+        color: "#888888"
+    },
+    modalOption: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginTop: 10,
+    },
+    optionButton: {
+        padding: 10,
+        paddingHorizontal: 15,
+        borderColor: "#3D5CFF",
+        borderWidth: 1,
+        borderRadius: 10,
+        marginRight: 10,
+        marginBottom: 10,
+        // backgroundColor: "#D9D9D9",
+    },
+    optionText: {
+        color: "#4582E6",
+        fontWeight: "600"
+    },
+    choosed: {
+        backgroundColor: "#4582E6",
+    },
+    choosedText: {
+        color: "white"
+    },
+    checkboxButton: {
+        width: 25,
+        height: 25,
+        borderWidth: 3,
+        borderColor: "#888888",
+        borderRadius: 5,
+        marginHorizontal: 10,
+        marginVertical: 8,
+    },
+    checkboxChoosed: {
+        borderColor: "#4582E6",
+        backgroundColor: "#4582E6",
     }
 });

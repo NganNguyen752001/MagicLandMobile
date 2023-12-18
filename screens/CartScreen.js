@@ -6,6 +6,7 @@ import FavoriteHeader from '../components/header/FavoriteHeader';
 
 import { formatPrice, getIndexById } from '../util/util';
 import CourseCard from '../components/CourseCard';
+import ClassCard from '../components/ClassCard';
 
 const courseDetail = [
     {
@@ -175,12 +176,69 @@ const courseDetail = [
     },
 ]
 
+const classCardDetailDefault = [
+    {
+        id: 0,
+        status: true,
+        title: "Lớp Toán Tư Duy 1",
+        age: 8,
+        place: "Cơ sở 1",
+        timeFrom: "18:30",
+        timeTo: "20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 100000,
+        leasonAmount: 20,
+        choose: false,
+    },
+    {
+        id: 1,
+        status: false,
+        title: "Lớp Toán Tư Duy 2",
+        age: 8,
+        place: "Cơ sở 1",
+        time: "18:30 20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 150000,
+        leasonAmount: 20,
+        choose: false,
+    },
+    {
+        id: 2,
+        status: false,
+        title: "Lớp Toán Tư Duy 3",
+        age: 8,
+        place: "Cơ sở 1",
+        time: "18:30 20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 200000,
+        leasonAmount: 20,
+        choose: false,
+    },
+    {
+        id: 3,
+        status: true,
+        title: "Lớp Toán Tư Duy 4",
+        age: 8,
+        place: "Cơ sở 1",
+        time: "18:30 20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 250000,
+        leasonAmount: 20,
+        choose: false,
+    },
+]
+
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 export default function CartScreen({ navigation }) {
 
     const [choosedList, setChoosedList] = useState([...courseDetail])
+    const [classCardDetail, setClassCardDetail] = useState(classCardDetailDefault)
     const [bottomModalVisible, setBottomModalVisible] = useState({ total: false, confirm: false })
 
     const hanldeChangeStatus = () => {
@@ -193,16 +251,16 @@ export default function CartScreen({ navigation }) {
     }
 
     const hanldeRegis = () => {
-        const choosesListCount = choosedList.filter(item => item.choose)
+        const choosesListCount = classCardDetail.filter(item => item.choose)
         if (choosesListCount.length !== 0) {
             setBottomModalVisible({ total: true, confirm: true })
         }
     }
 
     const hanldeClearChoosed = () => {
-        const updateList = [...choosedList]
+        const updateList = [...classCardDetail]
         updateList.forEach(item => item.choose = false)
-        setChoosedList(updateList)
+        setClassCardDetail(updateList)
     }
 
     const handleCancel = () => {
@@ -211,33 +269,35 @@ export default function CartScreen({ navigation }) {
     }
 
     const handleSubmit = () => {
-        // choosedList.forEach(item => console.log(item.choose))
-        navigation.push("RegisterClassScreen", { courseList: choosedList })
+        const courseList = classCardDetail.filter(item => item.choose)
+        navigation.push("RegisterClassScreen", { courseList: courseList })
         // hanldeChangeStatus()
     }
 
-    const hanldeCoursePress = (course) => {
-        if (bottomModalVisible.total && !bottomModalVisible.confirm) {
-            const updateList = [...choosedList]
-            const index = getIndexById(choosedList, course?.id)
-            updateList[index].choose = !updateList[index].choose
-            setChoosedList(updateList)
-        } else {
-            console.log("ada");
-            // navigation.navigate("CourseDetailScreen", { course: course })
-        }
+    const getCountChoosed = () => {
+        const choosesListCount = classCardDetail.filter(item => item.choose)
+        return choosesListCount.length
     }
 
-    const getCountChoosed = () => {
-        const choosesListCount = choosedList.filter(item => item.choose)
-        return choosesListCount.length
+    const selectCourse = (id) => {
+        if (bottomModalVisible.total) {
+            const index = classCardDetail.findIndex(obj => obj.id === id);
+            const updateArray = [...classCardDetailDefault]
+            const defaultStatus = updateArray[index].choose
+            // updateArray.forEach(item => item.choose = false)
+            updateArray[index].choose = !defaultStatus;
+            setClassCardDetail(updateArray)
+        }
     }
 
     return (
         <>
-            <FavoriteHeader navigation={navigation} background={"#FF8F8F"} title={`Khóa Học Bạn Quan Tâm (${choosedList.length})`} type={bottomModalVisible.total} setType={hanldeChangeStatus} />
+            <FavoriteHeader navigation={navigation} background={"#241468"} title={`Khóa Học Bạn Quan Tâm (${classCardDetail.length})`} type={bottomModalVisible.total} setType={hanldeChangeStatus} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-                <View style={styles.cardList}>
+                {classCardDetail?.map((item, index) => {
+                    return <ClassCard cardDetail={item} check={bottomModalVisible.total} index={index} onClick={selectCourse} key={index} />
+                })}
+                {/* <View style={styles.cardList}>
                     {
                         courseDetail.map((item, index) => {
                             return (
@@ -245,7 +305,7 @@ export default function CartScreen({ navigation }) {
                             )
                         })
                     }
-                </View>
+                </View> */}
             </ScrollView>
             {
                 bottomModalVisible.total &&
@@ -253,7 +313,7 @@ export default function CartScreen({ navigation }) {
                     {
                         bottomModalVisible.confirm ?
                             <View style={styles.confirmModal}>
-                                <Text style={{ ...styles.modalText, marginBottom: 7 }}>Bạn Đã chọn 2 khóa học</Text>
+                                <Text style={{ ...styles.modalText, marginBottom: 7 }}>Bạn Đã chọn {getCountChoosed()} khóa học</Text>
                                 <Text style={{ ...styles.modalText, marginBottom: 15 }}>Bạn có muốn đăng ký khóa học không?</Text>
                                 <View style={styles.modalButtonView}>
                                     <TouchableOpacity style={styles.modalButton} onPress={handleCancel}>
@@ -287,7 +347,8 @@ export default function CartScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        // padding: 20,
+        paddingHorizontal: WIDTH * 0.03,
+        paddingTop: 20,
         // borderTopLeftRadius: 30,
         // borderTopRightRadius: 30,
     },
@@ -324,7 +385,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "#FF8D9D",
+        backgroundColor: "#241468",
         justifyContent: "flex-start",
     },
     choosingModal: {

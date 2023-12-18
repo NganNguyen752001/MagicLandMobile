@@ -4,6 +4,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import StudentView from '../components/StudentView';
 import PersonalClassCard from '../components/PersonalClassCard';
+import ClassCard from '../components/ClassCard';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -19,8 +20,23 @@ const studentListDefault = [
       {
         id: 0,
         status: true,
-        type: "Sắp bắt đầu",
+        type: "start",
         title: "Lớp Toán Tư Duy 1",
+        age: 8,
+        place: "Cơ sở 1",
+        timeFrom: "18:30",
+        timeTo: "20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 200000,
+        leasonAmount: 20,
+        choose: false,
+      },
+      {
+        id: 3,
+        status: true,
+        type: "start",
+        title: "Lớp Toán Tư Duy 2",
         age: 8,
         place: "Cơ sở 1",
         timeFrom: "18:30",
@@ -34,8 +50,22 @@ const studentListDefault = [
       {
         id: 1,
         status: false,
-        type: "Đang học",
+        type: "going",
         title: "Lớp Toán Tư Duy 2",
+        age: 8,
+        place: "Cơ sở 1",
+        time: "18:30 20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 200000,
+        leasonAmount: 20,
+        choose: false,
+      },
+      {
+        id: 4,
+        status: false,
+        type: "going",
+        title: "Lớp Toán Tư Duy 52",
         age: 8,
         place: "Cơ sở 1",
         time: "18:30 20:00",
@@ -48,8 +78,22 @@ const studentListDefault = [
       {
         id: 2,
         status: false,
-        type: "Đã kết thúc",
+        type: "complete",
         title: "Lớp Toán Tư Duy 3",
+        age: 8,
+        place: "Cơ sở 1",
+        time: "18:30 20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 200000,
+        leasonAmount: 20,
+        choose: false,
+      },
+      {
+        id: 5,
+        status: false,
+        type: "complete",
+        title: "Lớp Toán Tư Duy 32",
         age: 8,
         place: "Cơ sở 1",
         time: "18:30 20:00",
@@ -71,8 +115,23 @@ const studentListDefault = [
       {
         id: 0,
         status: true,
-        type: "Sắp bắt đầu",
+        type: "start",
         title: "Lớp Toán Tư Duy 1",
+        age: 8,
+        place: "Cơ sở 1",
+        timeFrom: "18:30",
+        timeTo: "20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 200000,
+        leasonAmount: 20,
+        choose: false,
+      },
+      {
+        id: 3,
+        status: true,
+        type: "start",
+        title: "Lớp Toán Tư Duy 1123",
         age: 8,
         place: "Cơ sở 1",
         timeFrom: "18:30",
@@ -86,8 +145,22 @@ const studentListDefault = [
       {
         id: 1,
         status: false,
-        type: "Đã kết thúc",
+        type: "complete",
         title: "Lớp Toán Tư Duy 3",
+        age: 8,
+        place: "Cơ sở 1",
+        time: "18:30 20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 200000,
+        leasonAmount: 20,
+        choose: false,
+      },
+      {
+        id: 4,
+        status: false,
+        type: "complete",
+        title: "Lớp Toán Tư Duy 33",
         age: 8,
         place: "Cơ sở 1",
         time: "18:30 20:00",
@@ -100,8 +173,22 @@ const studentListDefault = [
       {
         id: 2,
         status: false,
-        type: "Đang học",
+        type: "going",
         title: "Lớp Toán Tư Duy 2",
+        age: 8,
+        place: "Cơ sở 1",
+        time: "18:30 20:00",
+        rate: 4.6,
+        registerAmount: 8,
+        price: 200000,
+        leasonAmount: 20,
+        choose: false,
+      },
+      {
+        id: 5,
+        status: false,
+        type: "going",
+        title: "Lớp Toán Tư Duy 232",
         age: 8,
         place: "Cơ sở 1",
         time: "18:30 20:00",
@@ -119,6 +206,7 @@ const studentListDefault = [
 export default function DocumentScreen({ navigation }) {
 
   const [studentList, setStudentList] = useState(studentListDefault)
+  const [type, setType] = useState("start")
 
   const selectStudent = (id) => {
     const index = studentList.findIndex(obj => obj.id === id);
@@ -137,6 +225,34 @@ export default function DocumentScreen({ navigation }) {
   const getClassList = () => {
     const updateArray = studentList.filter(item => item.check === true)
     return updateArray[0].classList
+  }
+
+  const filterClassList = (array) => {
+    const updateArray = array.filter(item => item.type === type)
+    return updateArray
+  }
+
+  const renderClassCard = (type, item, index) => {
+    switch (type) {
+      case "start":
+        return (
+          <ClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#C8A9F1"} key={index} />
+        )
+      case "going":
+        return (
+          <ClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#FACE9B"} key={index} />
+        )
+
+      case "complete":
+        return (
+          <ClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#BFE3C6"} key={index} />
+        )
+
+      default:
+        return (
+          <ClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} key={index} />
+        )
+    }
   }
 
   return (
@@ -167,13 +283,55 @@ export default function DocumentScreen({ navigation }) {
         <Text style={styles.title}>Các khóa học đã đăng ký:</Text>
       </View>
       <View style={styles.classList}>
-        {
-          getClassList().map((item, index) => {
-            return (
-              <PersonalClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} key={index} />
-            )
-          })
-        }
+        <View style={{ ...styles.flexColumnAround, position: "relative" }}>
+          {/* <View style={{ ...styles.buttonBorder }}>
+
+          </View> */}
+          <TouchableOpacity
+            onPress={() => setType("start")}
+            style={{ ...styles.typeButton, backgroundColor: "#C8A9F1" }}
+          >
+            <Text style={{ ...styles.typeText, color: "#250056" }}>
+              Sắp bắt đầu
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setType("going")}
+            style={{ ...styles.typeButton, backgroundColor: "#FACE9B" }}
+          >
+            <Text style={{ ...styles.typeText, color: "#9A5E03" }}>
+              Đang Học
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setType("complete")}
+            style={{ ...styles.typeButton, backgroundColor: "#BFE3C6" }}
+          >
+            <Text style={{ ...styles.typeText, color: "#286A2F" }}>
+              Hoàn Thành
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            ...styles.classItemList,
+            borderColor: type === "start" ?
+              "#C8A9F1"
+              :
+              type === "going" ?
+                "#FACE9B"
+                :
+                "#BFE3C6"
+          }}
+        >
+          {
+            filterClassList(getClassList()).map((item, index) => {
+              return (
+                renderClassCard(type, item, index)
+              )
+            })
+          }
+        </View>
       </View>
       <View style={styles.titleView}>
         <Text style={styles.title}>Các sự kiện đã tham gia:</Text>
@@ -191,13 +349,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: 20,
     borderLeftWidth: 5,
-    borderLeftColor: "#FF8F8F",
+    borderLeftColor: "#4582E6",
     marginVertical: 15,
     alignItems: "center"
   },
   title: {
     marginLeft: 5,
-    color: "#FF8F8F",
+    color: "#4582E6",
     fontWeight: "600",
     fontSize: 18,
   },
@@ -243,6 +401,48 @@ const styles = StyleSheet.create({
     color: "#888888"
   },
   classList: {
-    paddingHorizontal: WIDTH * 0.07,
+    paddingHorizontal: WIDTH * 0.03,
+  },
+  typeButton: {
+    width: "30%",
+    textAlign: "center",
+    justifyContent: "center",
+    paddingVertical: 5,
+    paddingHorizontal: 7,
+    borderRadius: 10,
+  },
+  buttonBorder: {
+    position: "absolute",
+    width: "32%",
+    height: "150%",
+    borderWidth: 1,
+    borderBottomWidth: 0,
+    backgroundColor: "white",
+    transform: [{ translateX: -10 }]
+  },
+  typeText: {
+    textAlign: "center",
+  },
+  classItemList: {
+    padding: 10,
+    // paddingHorizontal: 10,
+    borderWidth: 1,
+    marginTop: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    // borderTopWidth: 0,
+  },
+
+  flexColumnAround: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    // borderWidth: 1,
+  },
+  flexColumnBetween: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    // borderWidth: 1,
   }
 });

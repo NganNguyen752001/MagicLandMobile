@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 3,
         borderRadius: 50,
-        backgroundColor: "#3AA6B9"
+        backgroundColor: "#4582E6"
     },
     priceText: {
         fontWeight: "600",
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     cardName: {
         fontWeight: "600",
         fontSize: 16,
-        color: "#3AA6B9",
+        color: "#4582E6",
         marginBottom: 10
     },
     flexBetweenColumn: {

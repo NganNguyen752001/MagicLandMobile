@@ -57,7 +57,7 @@ export default function InputRange({ min, max, minValue, maxValue, steps, title,
 
     const styleLine = useAnimatedStyle(() => {
         return {
-            backgroundColor: "#FF8D9D",
+            backgroundColor: "#4582E6",
             height: 3,
             marginTop: -3,
             borderRadius: 3,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     },
     track: {
         height: 3,
-        backgroundColor: "#FF8D9D",
+        backgroundColor: "#B8B8D2",
         borderRadius: 3,
     },
     knob: {
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         height: KONBSIZE,
         width: KONBSIZE,
         borderRadius: KONBSIZE / 2,
-        borderColor: "#FF8D9D",
+        borderColor: "#4582E6",
         borderWidth: 2,
         backgroundColor: "#fff",
         marginTop: -KONBSIZE + 8,

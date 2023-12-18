@@ -67,7 +67,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
 
     return (
         <>
-            <Header navigation={navigation} background={"#FF8F8F"} goback={navigation.popToTop} title={"Đăng Ký Khóa Học"} />
+            <Header navigation={navigation} background={"#241468"} goback={navigation.popToTop} title={"Đăng Ký Khóa Học"} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Chọn Cháu:</Text>
@@ -105,7 +105,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                                         <View style={styles.dashline} />
                                     }
                                     <View style={styles.flexColumn}>
-                                        <Icon name={"edit"} color={"#FF8D9D"} size={32} />
+                                        <Icon name={"edit"} color={"#4582E6"} size={32} />
                                         <View style={styles.detailView}>
                                             <Text style={styles.detailViewTitle}>Họ và Tên:</Text>
                                             <TextInput
@@ -116,7 +116,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                                         </View>
                                     </View>
                                     <View style={styles.flexColumn}>
-                                        <Icon name={"card-giftcard"} color={"#FF8D9D"} size={32} />
+                                        <Icon name={"card-giftcard"} color={"#4582E6"} size={32} />
                                         <View style={styles.detailView}>
                                             <Text style={styles.detailViewTitle}>Họ và Tên:</Text>
                                             <TextInput
@@ -179,7 +179,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                     }
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#FF8D9D" }} onPress={() => { hanldeConfirm() }}>
+                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#4582E6" }} onPress={() => { hanldeConfirm() }}>
                         <Text style={{ ...styles.boldText, padding: 15, color: "white" }}>Đăng Ký Ngay</Text>
                     </TouchableOpacity>
                 </View>
@@ -229,13 +229,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginHorizontal: 20,
         borderLeftWidth: 5,
-        borderLeftColor: "#FF8F8F",
+        borderLeftColor: "#4582E6",
         marginTop: 15,
         alignItems: "center"
     },
     title: {
         marginLeft: 5,
-        color: "#FF8F8F",
+        color: "#4582E6",
         fontWeight: "600",
         fontSize: 18,
     },

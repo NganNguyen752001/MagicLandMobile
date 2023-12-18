@@ -15,6 +15,7 @@ const programEducationDefault = [
     {
         name: "Giới thiệu khái quát Toán Tư Duy.",
         expand: false,
+        complete: true,
         list: [
             {
                 name: "Giới thiệu khóa học"
@@ -30,6 +31,7 @@ const programEducationDefault = [
     {
         name: "Rèn kỹ năng so sánh, thống kê, cân thăng bằng. ",
         expand: false,
+        complete: true,
         list: [
             {
                 name: "Cân thăng bằng"
@@ -54,6 +56,7 @@ const programEducationDefault = [
     {
         name: "Làm quen các số từ 0 đến 10, tập đếm đến 20, ... ",
         expand: false,
+        complete: false,
         list: [
             {
                 name: "Số nào ở đâu?"
@@ -84,6 +87,7 @@ const programEducationDefault = [
     {
         name: "Sáng tạo với hình học, xếp vòng.",
         expand: false,
+        complete: false,
         list: [
             {
                 name: "Khối trụ"
@@ -105,6 +109,7 @@ const programEducationDefault = [
     {
         name: "Các bài toán vận dụng thực tiễn.",
         expand: false,
+        complete: false,
         list: [
             {
                 name: "Câu đố hoa quả"
@@ -128,7 +133,7 @@ const programEducationDefault = [
     },
 ]
 
-export default function ClassDetailScreen({ route, navigation }) {
+export default function ClassStudyDetailScreen({ route, navigation }) {
     let classDetail = route?.params?.classDetail
     const [programEducation, setProgramEducation] = useState(programEducationDefault)
     let count = 0
@@ -144,42 +149,40 @@ export default function ClassDetailScreen({ route, navigation }) {
 
     return (
         <>
-            <Header navigation={navigation} background={"#241468"} goback={navigation.pop} title={"Thông Tin Chi Tiết Của Lớp Học"} />
+            <Header navigation={navigation} background={"#241468"} goback={navigation.pop} title={classDetail.title} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+
+
+                <View style={{ ...styles.flexColumnCenter, marginVertical: 15 }}>
+                    <Text style={{ ...styles.title, textAlign: "center" }}>Lớp Toán Tư Duy 2 - TTD2</Text>
+                </View>
+
+                <ProcessBar
+                    leftLable={"7 buổi"}
+                    leftWidth={getLeftWidth(7, 20)}
+                    rightLabel={"13 buổi"}
+                    rightWidth={(WIDTH * 0.9) - getLeftWidth(7, 20)}
+                    mainLabel={"20 buổi"}
+                />
+
                 <View style={styles.titleView}>
-                    <Text style={styles.title}>Khóa học:</Text>
+                    <Text style={styles.title}>Chi tiết:</Text>
                 </View>
                 <View style={styles.classDetail}>
                     <View style={styles.flexColumnBetween}>
                         <Text style={styles.boldText}>
-                            Khóa học:
+                            Ngày học:
                         </Text>
                         <Text style={styles.classValue}>
-                            {classDetail?.title}
+                            Thứ 5 , 02/12/2023
                         </Text>
                     </View>
                     <View style={styles.flexColumnBetween}>
                         <Text style={styles.boldText}>
-                            Lớp học:
+                            Thời gian:
                         </Text>
                         <Text style={styles.classValue}>
-                            TTD2
-                        </Text>
-                    </View>
-                    <View style={styles.flexColumnBetween}>
-                        <Text style={styles.boldText}>
-                            Ngày khai giảng:
-                        </Text>
-                        <Text style={styles.classValue}>
-                            05/01/2024
-                        </Text>
-                    </View>
-                    <View style={styles.flexColumnBetween}>
-                        <Text style={styles.boldText}>
-                            Lịch học
-                        </Text>
-                        <Text style={styles.classValue}>
-                            Thứ 3 - 5 - 7 (17h - 18h:30)
+                            17h30 - 19h
                         </Text>
                     </View>
                     <View style={styles.flexColumnBetween}>
@@ -192,115 +195,99 @@ export default function ClassDetailScreen({ route, navigation }) {
                     </View>
                     <View style={styles.flexColumnBetween}>
                         <Text style={styles.boldText}>
-                            Trạng thái:
+                            Phòng học:
                         </Text>
                         <Text style={styles.classValue}>
-                            Đang học
+                            P001
+                        </Text>
+                    </View>
+                    <View style={styles.flexColumnBetween}>
+                        <Text style={styles.boldText}>
+                            Tình trạng:
+                        </Text>
+                        <Text style={styles.classValue}>
+                            Đã điểm danh
                         </Text>
                     </View>
 
                 </View>
 
                 <View style={styles.titleView}>
-                    <Text style={styles.title}>Tiến độ:</Text>
+                    <Text style={styles.title}>Nội dung buổi học:</Text>
                 </View>
 
-                <ProcessBar
-                    leftLable={"7 buổi"}
-                    leftWidth={getLeftWidth(7, classDetail.leasonAmount)}
-                    rightLabel={"13 buổi"}
-                    rightWidth={(WIDTH * 0.9) - getLeftWidth(7, classDetail.leasonAmount)}
-                    mainLabel={"20 buổi"}
-                />
-
-                <View style={styles.titleView}>
-                    <Text style={styles.title}>Chương trình giảng dạy:</Text>
-                </View>
-
-                <View style={styles.program}>
+                <ScrollView style={styles.program}>
                     {
                         programEducation?.map((item, index) => {
                             return (
                                 <View
                                     style={{
                                         ...styles.mainTab,
-                                        backgroundColor: index % 2 === 1 ? "#C2D9FF" : "white"
+                                        // borderBottomWidth: item.expand ? 1 : 0,
+                                        backgroundColor: index % 2 === 1 ?
+                                            item.complete ?
+                                                "#8EE69F"
+                                                :
+                                                "#C2D9FF"
+                                            :
+                                            "white",
                                     }}
                                     key={index}
                                 >
                                     <TouchableOpacity
-                                        style={{ ...styles.flexColumnBetween, paddingVertical: 8 }}
+                                        style={{
+                                            ...styles.flexColumnBetween,
+                                            // alignItems: "baseline",
+                                            paddingVertical: 8,
+                                            paddingRight: 10,
+                                            borderRadius: 10,
+                                            // borderWidth: 1,
+                                        }}
                                         onPress={() => {
                                             const updatedProgramEducation = [...programEducation];
                                             updatedProgramEducation[index].expand = !updatedProgramEducation[index].expand;
                                             setProgramEducation(updatedProgramEducation);
                                         }}
                                     >
-                                        <Text style={styles.mainText} numberOfLines={1}>{"Chủ đề " + (index + 1) + " - " + item.name}</Text>
+                                        <Text style={styles.mainText} numberOfLines={1}>{"Buổi " + (index + 1) + ":"}</Text>
                                         {
-                                            !item.expand ?
-                                                <Icon name={"plus"} color={"#241468"} size={25} />
+                                            item.complete ?
+                                                <Icon name={"check-circle"} color={"#2C8535"} size={25} />
                                                 :
-                                                <Icon name={"minus"} color={"#241468"} size={25} />
+                                                !item.expand ?
+                                                    <Icon name={"plus"} color={"#241468"} size={25} />
+                                                    :
+                                                    <Icon name={"minus"} color={"#241468"} size={25} />
                                         }
                                     </TouchableOpacity>
+
                                     {
                                         item.expand &&
-                                        item.list.map((element, key) => {
-                                            count += 1
-                                            return (
-                                                <Text style={styles.childText} key={key}>{count}. {element.name}</Text>
-                                            )
-                                        })
+                                        <>
+                                            <View style={{ ...styles.flexColumn, paddingVertical: 8 }} >
+                                                <Text
+                                                    style={styles.mainText}
+                                                    numberOfLines={1}
+                                                >
+                                                    {"Chủ đề " + (index + 1) + " - " + item.name}
+                                                </Text>
+                                            </View>
+                                            {
+                                                item.list.map((element, key) => {
+                                                    count += 1
+                                                    return (
+                                                        <Text style={styles.childText} key={key}>{count}. {element.name}</Text>
+                                                    )
+                                                })
+                                            }
+                                        </>
+
                                     }
                                 </View>
                             )
                         })
                     }
-                </View>
-
-                <View style={styles.titleView}>
-                    <Text style={styles.title}>Yêu cầu:</Text>
-                </View>
-
-                <View style={{ ...styles.flexColumn, alignItems: "baseline", marginHorizontal: WIDTH * 0.05 }}>
-                    <Icon name={"circle"} color={"#4582E6"} size={15} />
-                    <Text style={{ ...styles.boldText, marginLeft: 10 }}>Thực hiện đầy đủ các bài tập</Text>
-                </View>
-                <View style={{ ...styles.flexColumn, alignItems: "baseline", marginHorizontal: WIDTH * 0.05 }}>
-                    <Icon name={"circle"} color={"#4582E6"} size={15} />
-                    <Text style={{ ...styles.boldText, marginLeft: 10 }}>Tham gia tích cực</Text>
-                </View>
-
-                <View style={styles.titleView}>
-                    <Text style={styles.title}>Giáo Viên:</Text>
-                </View>
-
-                <View style={styles.teacherInfor}>
-                    <View style={styles.flexColumn}>
-                        <Image
-                            source={ThuyTienAvt}
-                            style={styles.teachAvt}
-                        />
-                    </View>
-                    <View style={styles.infor}>
-                        <Text style={{ ...styles.boldText, textAlign: "center" }}>Cô Thủy Tiên</Text>
-                        <View style={{ ...styles.flexColumn, width: "85%" }}>
-                            <Icon name={"arrow-right-bold-outline"} color={"#3AAC45"} size={22} />
-                            <Text style={{ ...styles.boldText }}>Giáo viên trung tâm anh ngữ</Text>
-                        </View>
-                        <View style={{ ...styles.flexColumn, width: "85%" }}>
-                            <Icon name={"arrow-right-bold-outline"} color={"#3AAC45"} size={22} />
-                            <Text style={styles.boldText}>Kinh nghiệm 5 năm giảng dạy</Text>
-                        </View>
-                        <TouchableOpacity style={styles.viewButton}>
-                            <View style={styles.button}>
-                                <Text style={{ ...styles.boldText, color: "white" }}>Xem Hồ Sơ</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
+                </ScrollView>
             </ScrollView>
         </>
     )
@@ -366,23 +353,31 @@ const styles = StyleSheet.create({
     },
     program: {
         width: WIDTH * 0.9,
+        maxHeight: HEIGHT * 0.4,
+        // paddingBottom: 20,
         borderWidth: 1,
         borderRadius: 10,
         marginHorizontal: WIDTH * 0.05,
-        overflow: "hidden"
+        marginBottom: 50,
+        overflow: "hidden",
+        backgroundColor: "white"
     },
     mainTab: {
-        padding: 10,
+        // paddingVertical: 10,
         borderRadius: 10,
+        borderColor: "rgba(0,0,0,0.2)",
+        // marginBottom: 10,
+        backgroundColor: "white",
     },
     mainText: {
         width: "90%",
         fontWeight: "600",
         color: "#241468",
+        paddingHorizontal: 15,
         marginBottom: 10,
     },
     childText: {
-        paddingLeft: 10,
+        paddingLeft: 30,
         marginBottom: 5,
     },
     teacherInfor: {

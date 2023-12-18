@@ -76,14 +76,13 @@ export default function ScheduleScreen({ navigation }) {
   }
 
   const handleClassNavigate = (classDetail) => {
-    navigation.push("ClassDetailScreen", { classDetail: classDetail })
+    navigation.push("ClassStudyDetailScreen", { classDetail: classDetail })
   }
 
   const getClassList = () => {
     const updateArray = dateList.filter(item => item.date === selected)
     return updateArray[0]?.classList
   }
-
 
   const getMarkedDates = () => {
     let markedDates = {};
@@ -164,7 +163,11 @@ export default function ScheduleScreen({ navigation }) {
       {
         getClassList()?.map((item, index) => {
           return (
-            <View style={{ ...styles.classColumn, backgroundColor: index % 2 === 0 ? "#FFE4E7" : "white"}} key={index}>
+            <TouchableOpacity
+              style={{ ...styles.classColumn, backgroundColor: index % 2 === 0 ? "rgba(69, 130, 230, 0.25)" : "white" }}
+              onPress={() => handleClassNavigate(item)}
+              key={index}
+            >
               <View style={styles.flexColumnBetween}>
                 <View style={styles.flexColumn}>
                   <View style={styles.circle} />
@@ -174,7 +177,7 @@ export default function ScheduleScreen({ navigation }) {
               </View>
               <Text style={styles.classTitle}>{item.title}</Text>
               <Text style={{ ...styles.classRoom, marginTop: 5 }}>Phòng {item.room}</Text>
-            </View>
+            </TouchableOpacity>
           )
         })
       }

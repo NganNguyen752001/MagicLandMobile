@@ -19,7 +19,8 @@ import CartScreen from '../screens/CartScreen';
 import ChooseVoucherScreen from '../screens/ChooseVoucherScreen';
 import TransactionDetailScreen from '../screens/TransactionDetailScreen';
 import RegisterClassScreen from '../screens/RegisterClassScreen';
-import MultipleRegisScreen from '../screens/MultipleRegisScreen';
+import MultiplePaymentScreen from '../screens/MultiplePaymentScreen';
+import ClassStudyDetailScreen from '../screens/ClassStudyDetailScreen';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -27,7 +28,7 @@ const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
 
-    const activeColor = "#000000"
+    const activeColor = "#FFC90C"
     const inactiveColor = "#FFFFFF"
 
     return (
@@ -82,7 +83,8 @@ const BottomTabNavigator = () => {
             <Tab.Screen name="ChooseVoucherScreen" component={ChooseVoucherScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="TransactionDetailScreen" component={TransactionDetailScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="RegisterClassScreen" component={RegisterClassScreen} options={{ tabBarButton: () => null }} />
-            <Tab.Screen name="MultipleRegisScreen" component={MultipleRegisScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="MultiplePaymentScreen" component={MultiplePaymentScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="ClassStudyDetailScreen" component={ClassStudyDetailScreen} options={{ tabBarButton: () => null }} />
         </Tab.Navigator>
     )
 }
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
-        backgroundColor: '#FF8F8F'
+        backgroundColor: '#241468'
     }
 });
 

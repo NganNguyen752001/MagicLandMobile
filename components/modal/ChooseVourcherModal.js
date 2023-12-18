@@ -21,8 +21,8 @@ export default function ChooseVourcherModal({ visible, vourcherList, onCancle, o
                     <Text style={styles.vourcherLeftValue}>{item?.value} %</Text>
                 </View>
                 <View style={styles.vourcherRight}>
-                    <Text style={{ ...styles.boldText, color: "#F8556C" }}>Giảm tối đa {formatPrice(item.max)}đ </Text>
-                    <Text style={styles.boldText}>Đơn tối thiểu {formatPrice(item.minUse)}đ</Text>
+                    <Text style={{ ...styles.boldText, color: "#241468" }}>Giảm tối đa {formatPrice(item.max)}đ </Text>
+                    <Text style={{...styles.boldText, fontWeight: "500"}}>Đơn tối thiểu {formatPrice(item.minUse)}đ</Text>
                     <Text style={styles.smallText}>{item?.content}</Text>
                 </View>
             </TouchableOpacity>
@@ -37,7 +37,7 @@ export default function ChooseVourcherModal({ visible, vourcherList, onCancle, o
         >
             <View style={styles.container}>
                 <View style={styles.safeArea} />
-                <Header navigation={navigation} background={"#FF8F8F"} goback={onCancle} title={"Chọn mã giảm giá"} />
+                <Header navigation={navigation} background={"#241468"} goback={onCancle} title={"Chọn mã giảm giá"} />
                 <ScrollView showsVerticalScrollIndicator={false} style={styles.vourcherList}>
                     {
                         vourcherList.map((item, index) => {
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     safeArea: {
         width: WIDTH,
         height: 50,
-        backgroundColor: "#FF8F8F"
+        backgroundColor: "#241468"
     },
     vourcherList: {
         marginTop: 20,
@@ -128,6 +128,6 @@ const styles = StyleSheet.create({
     choosedText: {
         paddingVertical: 10,
         paddingBottom: 40,
-        color: "#F8556C"
+        color: "#241468"
     }
 });

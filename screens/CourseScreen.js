@@ -276,6 +276,7 @@ export default function CourseScreen({ navigation }) {
 
     const [searchValue, setSearchValue] = useState("")
     const [courseOption, setCourseOption] = useState([...courseOptionDefault])
+    const [filterValue, setFilterValue] = useState({ type: undefined })
     const [filterVisible, setFilterVisible] = useState(false)
     const [carouselIndex, setCarouselIndex] = useState(0)
     const [rate, setRate] = useState(0)
@@ -345,7 +346,7 @@ export default function CourseScreen({ navigation }) {
                                     }}
                                     key={index}
                                 >
-                                    <Text style={styles.optionText}>
+                                    <Text style={[styles.optionText, item.choose && styles.choosedText]}>
                                         {item.name}
                                     </Text>
                                 </TouchableOpacity>
@@ -406,8 +407,7 @@ export default function CourseScreen({ navigation }) {
                         {
                             homeContentDetail.carousel.map((item, index) => {
                                 return (
-                                    <View style={{ ...styles.carouselDot, backgroundColor: carouselIndex === index ? "#FF597B" : "#FFFFFF" }} key={index} />
-
+                                    <View style={{ ...styles.carouselDot, backgroundColor: carouselIndex === index ? "#888888" : "#FFFFFF" }} key={index} />
                                 )
                             })
                         }
@@ -418,8 +418,27 @@ export default function CourseScreen({ navigation }) {
                     {
                         homeContentDetail.courseIcon.map((item, index) => {
                             return (
-                                <TouchableOpacity style={styles.courseView} key={index}>
-                                    <View style={styles.courseImageView}>
+                                <TouchableOpacity
+                                    style={styles.courseView}
+                                    key={index}
+                                    onPress={() => {
+                                        if (item.type === filterValue.type) {
+                                            setFilterValue({ ...filterValue, type: undefined })
+                                        } else {
+                                            setFilterValue({ ...filterValue, type: item.type })
+                                        }
+                                    }}
+                                    activeOpacity={0.5}
+                                >
+                                    <View
+                                        style={{
+                                            ...styles.courseImageView,
+                                            backgroundColor: item.type === filterValue.type ?
+                                                "rgba(69, 130, 230, 0.7)"
+                                                :
+                                                "rgba(58, 166, 185, 0.25)"
+                                        }}
+                                    >
                                         <Image source={item.img} style={styles.courseImage} resizeMode="cover" />
                                     </View>
                                     <Text style={styles.courseName}>{item.name}</Text>
@@ -428,7 +447,20 @@ export default function CourseScreen({ navigation }) {
                         })
                     }
                 </ScrollView>
-                <Text style={styles.title}>Best Sellers:</Text>
+                <View style={styles.filterOption}>
+                    <TouchableOpacity style={[styles.filterOptionView, styles.newOption]}>
+                        <Text style={styles.filterOptionText} numberOfLines={1}>Mới nhất</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.filterOptionView, styles.saleOption]}>
+                        <Text style={styles.filterOptionText} numberOfLines={1}>Giảm giá</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.filterOptionView, styles.registerOption]}>
+                        <Text style={styles.filterOptionText} numberOfLines={1}>Lượt đăng ký cao</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.filterOptionView, styles.priceOption]}>
+                        <Text style={styles.filterOptionText} numberOfLines={1}>Giá</Text>
+                    </TouchableOpacity>
+                </View>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {
                         homeContentDetail.courseDetail.map((item, index) => {
@@ -438,7 +470,7 @@ export default function CourseScreen({ navigation }) {
                         })
                     }
                 </ScrollView>
-                <Text style={styles.title}>Khóa Học Mới:</Text>
+                {/* <Text style={styles.title}>Khóa Học Mới:</Text> */}
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     {
                         homeContentDetail.courseDetail.map((item, index) => {
@@ -466,9 +498,10 @@ const styles = StyleSheet.create({
     title: {
         marginVertical: 10,
         marginHorizontal: WIDTH * 0.05,
-        color: "#3AA6B9",
+        color: "#4582E6",
         fontSize: 20,
         fontWeight: "700",
+        textAlign: "center"
     },
     searchBar: {
         width: WIDTH * 0.9,
@@ -520,15 +553,18 @@ const styles = StyleSheet.create({
         backgroundColor: "#D9D9D9",
     },
     optionText: {
-        color: "#FF8D9D",
+        color: "#4582E6",
         fontWeight: "600"
     },
     choosed: {
-        backgroundColor: "#3D5CFF"
+        backgroundColor: "rgba(36, 20,  104, 0.6)",
+    },
+    choosedText: {
+        color: "white"
     },
 
     header: {
-        backgroundColor: "#FF8F8F",
+        backgroundColor: "#241468",
         borderBottomLeftRadius: 15,
         borderBottomRightRadius: 15,
     },
@@ -578,7 +614,35 @@ const styles = StyleSheet.create({
     },
     courseName: {
         marginVertical: 10,
-        color: "#3AA6B9",
+        color: "#4582E6",
         fontWeight: "700",
     },
+
+    filterOption: {
+        flexDirection: "row"
+    },
+    filterOptionView: {
+        flexDirection: "row",
+        paddingVertical: 10,
+        borderWidth: 1,
+        borderColor: "#4582E6",
+        borderLeftWidth: 0,
+        justifyContent: "center"
+    },
+    filterOptionText: {
+        fontSize: 12,
+        textAlign: "center"
+    },
+    newOption: {
+        width: "25%"
+    },
+    saleOption: {
+        width: "25%"
+    },
+    registerOption: {
+        width: "35%"
+    },
+    priceOption: {
+        width: "15%"
+    }
 });
