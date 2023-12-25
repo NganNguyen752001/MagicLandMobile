@@ -7,6 +7,7 @@ import NotificationModal from '../components/modal/NotificationModal';
 
 import ThuyTienAvt from "../assets/images/ThuyTienAvt.png"
 import ProcessBar from '../components/ProcessBar';
+import CircularProgressBar from '../components/CircularProgressBar';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -142,9 +143,8 @@ export default function ClassStudyDetailScreen({ route, navigation }) {
         classDetail = route?.params?.classDetail
     }, [route?.params?.classDetail])
 
-    const getLeftWidth = (amount, total) => {
-        const percent = amount / total
-        return (WIDTH * 0.9) * percent
+    const handleViewDetail = () => {
+        navigation.push("ClassContentScreen", { classDetail : classDetail })
     }
 
     return (
@@ -156,14 +156,6 @@ export default function ClassStudyDetailScreen({ route, navigation }) {
                 <View style={{ ...styles.flexColumnCenter, marginVertical: 15 }}>
                     <Text style={{ ...styles.title, textAlign: "center" }}>Lớp Toán Tư Duy 2 - TTD2</Text>
                 </View>
-
-                <ProcessBar
-                    leftLable={"7 buổi"}
-                    leftWidth={getLeftWidth(7, 20)}
-                    rightLabel={"13 buổi"}
-                    rightWidth={(WIDTH * 0.9) - getLeftWidth(7, 20)}
-                    mainLabel={"20 buổi"}
-                />
 
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Chi tiết:</Text>
@@ -211,6 +203,41 @@ export default function ClassStudyDetailScreen({ route, navigation }) {
                     </View>
 
                 </View>
+
+                <View style={styles.titleView}>
+                    <Text style={styles.title}>Nội dung buổi học:</Text>
+                </View>
+                <View style={styles.programcontent}>
+                    <Text style={styles.boldText}>Buổi 7:</Text>
+                    <Text style={styles.boldText} numberOfLines={1}>Chủ đề 3 - Làm quen các số từ 0 đến 10, tập đếm đến 20, ... </Text>
+                    <Text style={{ marginLeft: 10 }} >Bài 10: Số nào ở đâu?</Text>
+                    <Text style={{ marginLeft: 10 }}>Bài 11:  Que tính kỳ diệu</Text>
+                    <TouchableOpacity style={styles.startProgram} onPress={handleViewDetail}>
+                        <Text style={{ ...styles.boldText, color: "#4582E6" }}>Xem Chi Tiết</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.titleView}>
+                    <Text style={styles.title}>Mức độ hoàn thành khóa học:</Text>
+                </View>
+
+                <View style={styles.processBar}>
+                    <CircularProgressBar
+                        value={100}
+                        inActiveStrokeColor={"#7388A95A"}
+                        activeStrokeColor={"#5BBF4A"}
+                    />
+                </View>
+
+                <View style={styles.titleView}>
+                    <Text style={styles.title}>Đánh giá của giáo viên:</Text>
+                </View>
+                <View style={{ ...styles.flexColumn, marginHorizontal: WIDTH * 0.08, alignItems: "baseline" }}>
+                    <Icon name={"circle"} color={"#000000"} size={12} />
+                    <Text> Đánh giá của giáo viên:</Text>
+                    <Text style={{ ...styles.boldText, color: "#2C8535" }}> Tốt</Text>
+                </View>
+
 
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Nội dung buổi học:</Text>
@@ -350,6 +377,23 @@ const styles = StyleSheet.create({
     },
     classValue: {
         color: "#888888"
+    },
+    programcontent: {
+        position: 'relative',
+        width: WIDTH * 0.9,
+        paddingBottom: 30,
+        marginHorizontal: WIDTH * 0.05,
+    },
+    startProgram: {
+        position: "absolute",
+        bottom: 0,
+        right: 0
+    },
+    processBar: {
+        width: WIDTH,
+        alignItems: "center",
+        justifyContent: "center",
+        marginVertical: 20,
     },
     program: {
         width: WIDTH * 0.9,

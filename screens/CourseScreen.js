@@ -1,20 +1,27 @@
-import { View, Text, TextInput, Image, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, TextInput, Image, TouchableOpacity, Dimensions, ScrollView, FlatList, StyleSheet } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useState, useEffect, useRef } from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import Header from '../components/header/Header';
 import SearchBar from '../components/SearchBar';
 import CourseSlide from '../components/CourseSlide';
 import CourseCard from '../components/CourseCard';
 import FilterCustomModal from '../components/modal/FilterCustomModal';
 import InputRange from '../components/InputRange';
 import StarChoose from '../components/StarChoose';
+import { getAllCourse } from '../api/course';
+import SpinnerLoading from '../components/SpinnerLoading';
+import { userSelector } from '../store/selector';
+import { useSelector } from 'react-redux';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
 const courseOptionDefault = [
+    {
+        name: "Tất cả",
+        choose: true
+    },
     {
         name: "Toán",
         choose: false
@@ -105,183 +112,26 @@ const homeContentDetail = {
             name: "Lập Trình",
             img: require("../assets/home/courseImage/courseCoding.png")
         },
-    ],
-    courseDetail: [
-        {
-            id: 0,
-            name: "Toán Tư Duy Cho Bé (Cơ Bản)",
-            regexDescrip: "Dành cho bé từ 7 đến 15 tuổi",
-            introduce: "Khóa học Toán Tư Duy Cho Bé được thiết kế dành cho các  bé từ 3 tuổi đến 15 tuổi nhằm giúp phát triển trí não, nâng cao độ hiểu biết của trẻ về môn toán. Từ đó, giúp các bé mở rộng thêm tiềm năng phát triển trong tương lai",
-            vietType: "toán",
-            type: "math",
-            img: require("../assets/home/cardImage/homeCardMathImg.png"),
-            registerAmount: 8,
-            rateValue: 4.5,
-            rateCount: 8,
-            coursePrice: 200000,
-            favorite: false,
-            courseFeture: [
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-            ],
-            courseDetail: [
-                {
-                    name: "Tên KH",
-                    detail: "Toán Tư Duy Cho Bé"
-                },
-                {
-                    name: "Điều kiện tham gia",
-                    detail: "Đã hoàn thành khóa học Math001"
-                },
-                {
-                    name: "Độ tuổi",
-                    detail: "Từ 7 tuổi"
-                },
-                {
-                    name: "Loại Hình",
-                    detail: "Tiếng Anh"
-                },
-                {
-                    name: "Hình Thức",
-                    detail: "Lớp học"
-                },
-                {
-                    name: "Số buổi",
-                    detail: "4 buổi / khóa"
-                },
-            ],
-        },
-        {
-            id: 1,
-            name: "Vẽ Cùng Bé",
-            regexDescrip: "Dành cho bé từ 7 đến 15 tuổi",
-            introduce: "Khóa học Toán Tư Duy Cho Bé được thiết kế dành cho các  bé từ 3 tuổi đến 15 tuổi nhằm giúp phát triển trí não, nâng cao độ hiểu biết của trẻ về môn toán. Từ đó, giúp các bé mở rộng thêm tiềm năng phát triển trong tương lai",
-            vietType: "toán",
-            type: "art",
-            img: require("../assets/home/cardImage/homeCardDrawImg.png"),
-            registerAmount: 8,
-            rateValue: 4.5,
-            rateCount: 8,
-            coursePrice: 200000,
-            favorite: true,
-            courseFeture: [
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-            ],
-            courseDetail: [
-                {
-                    name: "Tên KH",
-                    detail: "Toán Tư Duy Cho Bé"
-                },
-                {
-                    name: "Điều kiện tham gia",
-                    detail: "Đã hoàn thành khóa học Math001"
-                },
-                {
-                    name: "Độ tuổi",
-                    detail: "Từ 7 tuổi"
-                },
-                {
-                    name: "Loại Hình",
-                    detail: "Tiếng Anh"
-                },
-                {
-                    name: "Hình Thức",
-                    detail: "Lớp học"
-                },
-                {
-                    name: "Số buổi",
-                    detail: "4 buổi / khóa"
-                },
-            ],
-        },
-        {
-            id: 2,
-            name: "Vẽ Cùng Bé 2",
-            regexDescrip: "Dành cho bé từ 7 đến 15 tuổi",
-            introduce: "Khóa học Toán Tư Duy Cho Bé được thiết kế dành cho các  bé từ 3 tuổi đến 15 tuổi nhằm giúp phát triển trí não, nâng cao độ hiểu biết của trẻ về môn toán. Từ đó, giúp các bé mở rộng thêm tiềm năng phát triển trong tương lai",
-            vietType: "toán",
-            type: "art",
-            img: require("../assets/home/cardImage/homeCardDrawImg.png"),
-            registerAmount: 8,
-            rateValue: 0,
-            rateCount: 0,
-            coursePrice: 200000,
-            favorite: true,
-            courseFeture: [
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-                {
-                    name: "Phát trển tư duy và kỹ năng",
-                    detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
-                },
-            ],
-            courseDetail: [
-                {
-                    name: "Tên KH",
-                    detail: "Toán Tư Duy Cho Bé"
-                },
-                {
-                    name: "Điều kiện tham gia",
-                    detail: "Đã hoàn thành khóa học Math001"
-                },
-                {
-                    name: "Độ tuổi",
-                    detail: "Từ 7 tuổi"
-                },
-                {
-                    name: "Loại Hình",
-                    detail: "Tiếng Anh"
-                },
-                {
-                    name: "Hình Thức",
-                    detail: "Lớp học"
-                },
-                {
-                    name: "Số buổi",
-                    detail: "4 buổi / khóa"
-                },
-            ],
-        },
     ]
 }
 
 export default function CourseScreen({ navigation }) {
 
+    const [courseList, setCourseList] = useState([])
     const [searchValue, setSearchValue] = useState("")
     const [courseOption, setCourseOption] = useState([...courseOptionDefault])
     const [filterValue, setFilterValue] = useState({ type: undefined })
     const [filterVisible, setFilterVisible] = useState(false)
+    const [dataLoading, setDataLoading] = useState(true)
     const [carouselIndex, setCarouselIndex] = useState(0)
     const [rate, setRate] = useState(0)
     const [priceRange, setPriceRange] = useState(priceDefault)
     const scrollViewRef = useRef(null);
+    const user = useSelector(userSelector);
+
+    useEffect(() => {
+        loadAllCourseData()
+    }, [])
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -297,9 +147,19 @@ export default function CourseScreen({ navigation }) {
         });
     }, [carouselIndex]);
 
+    const loadAllCourseData = async () => {
+        setDataLoading(true)
+        const response = await getAllCourse()
+        if (response?.status === 200) {
+            setCourseList(response?.data)
+        } else {
+            console.log("load courseList fail");
+        }
+        setDataLoading(false)
+    }
+
     const handleChangePrice = (value) => {
         setPriceRange({ min: value?.min, max: value?.max })
-        console.log(value);
     }
 
     const handleSearch = (value) => {
@@ -340,7 +200,8 @@ export default function CourseScreen({ navigation }) {
                                     onPress={() => {
                                         setCourseOption((prevAgeOption) => {
                                             const updatedList = [...prevAgeOption];
-                                            updatedList[index].choose = !updatedList[index].choose;
+                                            updatedList.map(item => item.choose = false)
+                                            updatedList[index].choose = true;
                                             return updatedList;
                                         });
                                     }}
@@ -367,7 +228,7 @@ export default function CourseScreen({ navigation }) {
                     <View style={{ ...styles.flexBetweenColumn, paddingHorizontal: 20 }}>
                         <View style={styles.headerInforLeft}>
                             <Text style={{ color: "white" }}>Xin chào!</Text>
-                            <Text style={{ fontWeight: "700", fontSize: 18, color: "white" }}>PH: Ngô Gia Thưởng</Text>
+                            <Text style={{ fontWeight: "700", fontSize: 18, color: "white" }}>PH: {user.fullName}</Text>
                         </View>
                         <View style={styles.headerInforRight}>
                             <View style={styles.flexBetweenColumn}>
@@ -461,25 +322,23 @@ export default function CourseScreen({ navigation }) {
                         <Text style={styles.filterOptionText} numberOfLines={1}>Giá</Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View
+                    style={{
+                        ...styles.courseListScroll,
+                        marginBottom: !dataLoading ? 100 : "35%"
+                    }}
+                >
                     {
-                        homeContentDetail.courseDetail.map((item, index) => {
-                            return (
-                                <CourseCard cardDetail={item} onClick={hanldeCoursePress} navigation={navigation} key={index} />
-                            )
-                        })
+                        dataLoading ?
+                            <SpinnerLoading />
+                            :
+                            courseList.map((item, index) => {
+                                return (
+                                    <CourseCard cardDetail={item} onClick={hanldeCoursePress} navigation={navigation} key={index} />
+                                )
+                            })
                     }
-                </ScrollView>
-                {/* <Text style={styles.title}>Khóa Học Mới:</Text> */}
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {
-                        homeContentDetail.courseDetail.map((item, index) => {
-                            return (
-                                <CourseCard cardDetail={item} onClick={hanldeCoursePress} navigation={navigation} key={index} />
-                            )
-                        })
-                    }
-                </ScrollView>
+                </View>
             </ScrollView>
             <FilterCustomModal content={filterModal()} visible={filterVisible} onSubmit={hanldeSubmit} onCancle={hanldeCancle} onClear={hanldeClear} />
         </View >
@@ -492,7 +351,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     scrollView: {
-        // // paddingBottom: 80,
+        flex: 1
+        // paddingBottom: 80,
         // marginBottom: 15,
     },
     title: {
@@ -644,5 +504,9 @@ const styles = StyleSheet.create({
     },
     priceOption: {
         width: "15%"
-    }
+    },
+    courseListScroll: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+    },
 });

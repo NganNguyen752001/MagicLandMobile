@@ -154,7 +154,7 @@ export default function PaymentScreen({ route, navigation }) {
                                 </View>
                                 <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                     <Text style={styles.detailViewTitle}>Khóa Học:</Text>
-                                    <Text style={styles.boldText}>{classDetail.title}</Text>
+                                    <Text style={styles.boldText}>{classDetail.name}</Text>
                                 </View>
                                 <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                     <Text style={styles.detailViewTitle}>Khai giảng ngày:</Text>

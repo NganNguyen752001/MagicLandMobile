@@ -1,73 +1,17 @@
 import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native'
 import React, { useState, useEffect, useContext } from "react";
-import { useFocusEffect } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import Header from '../components/header/Header';
-import ClassCard from '../components/ClassCard';
-import { truncateString, formatPrice } from '../util/util';
+import { getClassByCourseId } from '../api/class';
 
-import courseDetailBackground from "../assets/images/courseDetailBackground.png"
+import ClassCard from '../components/ClassCard';
 import FilterCustomModal from '../components/modal/FilterCustomModal';
+import SpinnerLoading from '../components/SpinnerLoading';
+import { truncateString, formatPrice } from '../util/util';
+import { modifyCart } from '../api/cart';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
-
-const classCardDetailDefault = [
-    {
-        id: 0,
-        status: true,
-        title: "Lớp Toán Tư Duy 1",
-        age: 8,
-        place: "Cơ sở 1",
-        timeFrom: "18:30",
-        timeTo: "20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-    },
-    {
-        id: 1,
-        status: false,
-        title: "Lớp Toán Tư Duy 2",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-    },
-    {
-        id: 2,
-        status: false,
-        title: "Lớp Toán Tư Duy 3",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-    },
-    {
-        id: 3,
-        status: true,
-        title: "Lớp Toán Tư Duy 4",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-    },
-]
 
 const filterDetailDefault = {
     amountRegister: [
@@ -124,32 +68,87 @@ const filterDetailDefault = {
     ]
 }
 
+const defaultData = {
+    courseFeture: [
+        {
+            name: "Phát trển tư duy và kỹ năng",
+            detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
+        },
+        {
+            name: "Phát trển tư duy và kỹ năng",
+            detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
+        },
+        {
+            name: "Phát trển tư duy và kỹ năng",
+            detail: "phát triển trí não và nâng cao các kỹ năng nhận biết với các phép tính toán…"
+        },
+    ],
+    courseDetail: [
+        {
+            name: "Tên KH",
+            detail: "Toán Tư Duy Cho Bé"
+        },
+        {
+            name: "Điều kiện tham gia",
+            detail: "Đã hoàn thành khóa học Math001"
+        },
+        {
+            name: "Độ tuổi",
+            detail: "Từ 7 tuổi"
+        },
+        {
+            name: "Loại Hình",
+            detail: "Tiếng Anh"
+        },
+        {
+            name: "Hình Thức",
+            detail: "Lớp học"
+        },
+        {
+            name: "Số buổi",
+            detail: "4 buổi / khóa"
+        },
+    ],
+}
+
+const introduceDefault = "Khóa học Toán Tư Duy Cho Bé được thiết kế dành cho các  bé từ 3 tuổi đến 15 tuổi nhằm giúp phát triển trí não, nâng cao độ hiểu biết của trẻ về môn toán. Từ đó, giúp các bé mở rộng thêm tiềm năng phát triển trong tương lai"
+
 export default function CourseDetailScreen({ route, navigation }) {
 
     const [viewDetail, setViewDetail] = useState({ detail: false, course: false })
-    const [classCardDetail, setClassCardDetail] = useState(classCardDetailDefault)
+    const [classCardDetail, setClassCardDetail] = useState([])
     const [filterVisible, setFilterVisible] = useState(false)
     const [filterValue, setFilterValue] = useState(filterDetailDefault)
+    const [dataLoading, setDataLoading] = useState(true)
     let course = route?.params?.course
 
     useEffect(() => {
         setViewDetail({ detail: false, course: false })
-        setClassCardDetail(classCardDetailDefault)
+        loadClassData()
         course = route?.params?.course
     }, [])
+
+    const loadClassData = async () => {
+        setDataLoading(true)
+        const response = await getClassByCourseId(course?.id)
+        if (response?.status === 200) {
+            setClassCardDetail(response?.data)
+        }
+        setDataLoading(false)
+    }
 
     const goback = () => {
         if (route?.params?.goback) {
             route?.params?.goback()
         } else {
-            navigation.navigate("CourseScreen")
+            navigation.goBack()
         }
     }
 
     const selectCourse = (id) => {
         const index = classCardDetail.findIndex(obj => obj.id === id);
-        const updateArray = [...classCardDetailDefault]
-        const defaultStatus = updateArray[index].choose
+        const updateArray = [...classCardDetail]
+        const defaultStatus = updateArray[index].choose ? updateArray[index].choose : false
         updateArray.forEach(item => item.choose = false)
         updateArray[index].choose = !defaultStatus;
         setClassCardDetail(updateArray)
@@ -157,6 +156,20 @@ export default function CourseDetailScreen({ route, navigation }) {
 
     const handleRegister = () => {
         navigation.push("ClassRegisterScreen", { course: course, classList: classCardDetail })
+    }
+
+    const handleCare = async () => {
+        const classChoosed = getChoosedClass()
+        if (classChoosed) {
+            const response = await modifyCart([], classChoosed.id)
+            if (response?.status === 200) {
+                console.log(`Đã thêm ${classChoosed?.name} vào giỏ hàng`);
+            } else {
+                console.log(`Thêm ${classChoosed?.name} vào giỏ hàng thất bại`);
+            }
+        } else {
+            console.log("chưa Chọn lớp");
+        }
     }
 
     const hanldeSubmit = () => {
@@ -179,6 +192,11 @@ export default function CourseDetailScreen({ route, navigation }) {
 
         setFilterValue(clearedFilterValue);
     };
+
+    const getChoosedClass = () => {
+        const classChoosed = classCardDetail.find(obj => obj.choose === true);
+        return classChoosed
+    }
 
     const filterModal = () => {
         return (
@@ -289,7 +307,7 @@ export default function CourseDetailScreen({ route, navigation }) {
     return (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
             <View style={styles.banner}>
-                <Image source={course?.img} style={styles.bannerBackground} resizeMode="cover" />
+                <Image source={{ uri: course?.image }} style={styles.bannerBackground} resizeMode="cover" />
                 <View style={styles.bannerHeader}>
                     <TouchableOpacity onPress={goback}>
                         <Icon name={"chevron-left"} color={"#FFFFFF"} size={32} />
@@ -309,7 +327,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                     </Text>
                     <View style={styles.priceView}>
                         <Text style={{ ...styles.priceText }}>
-                            {formatPrice(course?.coursePrice)} đ
+                            {formatPrice(course?.price ? course?.price : 0)} đ
                         </Text>
                     </View>
                 </View>
@@ -319,10 +337,10 @@ export default function CourseDetailScreen({ route, navigation }) {
                 }}>
                     <View style={styles.flexColumn}>
                         <Icon name={"account"} color={"#3AAC45"} size={32} />
-                        <Text style={styles.cardText}>{course.rateCount} người đăng ký</Text>
+                        <Text style={styles.cardText}>{course?.rateCount ? course?.rateCount : 0} người đăng ký</Text>
                     </View>
                     {
-                        course.rateCount !== 0 ?
+                        course?.rateCount && course?.rateCount !== 0 ?
                             <View style={styles.flexColumn}>
                                 <Icon name={"star"} color={"#FFC90C"} size={28} />
                                 <Text style={styles.cardText}><Text style={{ ...styles.cardText, fontSize: 15 }}>{course.rateValue}</Text> ({course.registerAmount} lượt đánh giá)</Text>
@@ -337,9 +355,9 @@ export default function CourseDetailScreen({ route, navigation }) {
                 <Text style={styles.descrip}>
                     {
                         !viewDetail.detail ?
-                            truncateString(course?.introduce, 109)
+                            truncateString(introduceDefault, 109)
                             :
-                            course?.introduce
+                            introduceDefault
                     }
                 </Text>
                 <Text style={{ ...styles.descrip }}>
@@ -347,7 +365,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                         !viewDetail.detail ?
                             ""
                             :
-                            `(${course?.regexDescrip})`
+                            `Dành cho bé từ ${course?.minAgeStudent} đến ${course?.maxAgeStudent} tuổi`
                     }
                 </Text>
                 <Text style={styles.title}>
@@ -361,9 +379,9 @@ export default function CourseDetailScreen({ route, navigation }) {
                             </View>
                             <View style={styles.featureText}>
                                 <Text style={{ ...styles.descrip, fontWeight: "600" }}>
-                                    {course?.courseFeture[0]?.name}:
+                                    {defaultData?.courseFeture[0]?.name}:
                                     <Text style={styles.descrip}>
-                                        {truncateString(" " + course?.courseFeture[0]?.detail, 60)}
+                                        {truncateString(" " + defaultData?.courseFeture[0]?.detail, 60)}
                                         <TouchableOpacity onPress={() => { setViewDetail({ ...viewDetail, detail: true, course: false }) }}>
                                             <Text style={styles.viewDetail}>
                                                 Xem Chi Tiết
@@ -375,7 +393,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                             </View>
                         </View>
                         :
-                        course?.courseFeture?.map((item, key) => {
+                        defaultData?.courseFeture?.map((item, key) => {
                             return (
                                 <View style={styles.courseFeature} key={key}>
                                     <View style={styles.featureIcon}>
@@ -405,7 +423,7 @@ export default function CourseDetailScreen({ route, navigation }) {
                     viewDetail?.course &&
                     <View style={styles.courseDetail}>
                         <View>
-                            {course?.courseDetail?.map((item, key) => {
+                            {defaultData?.courseDetail?.map((item, key) => {
                                 return (
                                     <View style={styles.flexColumn} key={key}>
                                         <View style={styles.detailColumn} >
@@ -440,19 +458,26 @@ export default function CourseDetailScreen({ route, navigation }) {
                         <Icon name={"filter-variant"} color={"#33363F"} size={28} />
                     </TouchableOpacity>
                 </View>
-                <View style={styles.cardList}>
-                    {classCardDetail?.map((item, key) => {
-                        return <ClassCard cardDetail={item} check={true} index={key} onClick={selectCourse} key={key} />
-                    })}
-                </View>
-                <View style={{ ...styles.flexBetweenColumn, marginVertical: 15 }}>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Quan Tâm</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button, backgroundColor: "#4582E6" }} onPress={handleRegister}>
-                        <Text style={{ ...styles.buttonText, color: "white" }}>Đăng Ký Ngay</Text>
-                    </TouchableOpacity>
-                </View>
+                {
+                    dataLoading ?
+                        <SpinnerLoading />
+                        :
+                        <>
+                            <View style={styles.cardList}>
+                                {classCardDetail?.map((item, key) => {
+                                    return <ClassCard cardDetail={item} check={true} index={key} onClick={selectCourse} key={key} />
+                                })}
+                            </View>
+                            <View style={{ ...styles.flexBetweenColumn, marginVertical: 15 }}>
+                                <TouchableOpacity style={styles.button} onPress={handleCare}>
+                                    <Text style={styles.buttonText}>Quan Tâm</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{ ...styles.button, backgroundColor: "#4582E6" }} onPress={handleRegister}>
+                                    <Text style={{ ...styles.buttonText, color: "white" }}>Đăng Ký Ngay</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </>
+                }
             </View>
             <FilterCustomModal content={filterModal()} visible={filterVisible} onSubmit={hanldeSubmit} onCancle={hanldeCancle} onClear={hanldeClear} />
         </ScrollView>
@@ -621,7 +646,7 @@ const styles = StyleSheet.create({
         height: 25,
         borderWidth: 3,
         borderColor: "#888888",
-        borderRadius: 5,
+        borderRadius: 15,
         marginHorizontal: 10,
         marginVertical: 8,
     },

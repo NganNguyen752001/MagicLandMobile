@@ -1,225 +1,140 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import StudentView from '../components/StudentView';
 import PersonalClassCard from '../components/PersonalClassCard';
 import ClassCard from '../components/ClassCard';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../store/selector';
+import { getStudents } from '../api/student';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-const studentListDefault = [
+
+const classListData = [
   {
     id: 0,
-    name: "Lê Bảo Ngọc",
-    age: "10",
-    dob: "2-2-2002",
-    check: true,
-    classList: [
-      {
-        id: 0,
-        status: true,
-        type: "start",
-        title: "Lớp Toán Tư Duy 1",
-        age: 8,
-        place: "Cơ sở 1",
-        timeFrom: "18:30",
-        timeTo: "20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 3,
-        status: true,
-        type: "start",
-        title: "Lớp Toán Tư Duy 2",
-        age: 8,
-        place: "Cơ sở 1",
-        timeFrom: "18:30",
-        timeTo: "20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 1,
-        status: false,
-        type: "going",
-        title: "Lớp Toán Tư Duy 2",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 4,
-        status: false,
-        type: "going",
-        title: "Lớp Toán Tư Duy 52",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 2,
-        status: false,
-        type: "complete",
-        title: "Lớp Toán Tư Duy 3",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 5,
-        status: false,
-        type: "complete",
-        title: "Lớp Toán Tư Duy 32",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-    ]
+    status: true,
+    type: "start",
+    title: "Lớp Toán Tư Duy 1",
+    age: 8,
+    place: "Cơ sở 1",
+    timeFrom: "18:30",
+    timeTo: "20:00",
+    rate: 4.6,
+    registerAmount: 8,
+    price: 200000,
+    leasonAmount: 20,
+    choose: false,
+  },
+  {
+    id: 3,
+    status: true,
+    type: "start",
+    title: "Lớp Toán Tư Duy 2",
+    age: 8,
+    place: "Cơ sở 1",
+    timeFrom: "18:30",
+    timeTo: "20:00",
+    rate: 4.6,
+    registerAmount: 8,
+    price: 200000,
+    leasonAmount: 20,
+    choose: false,
   },
   {
     id: 1,
-    name: "Trần Hữu Nghĩa",
-    age: "11",
-    dob: "2-2-2003",
-    check: false,
-    classList: [
-      {
-        id: 0,
-        status: true,
-        type: "start",
-        title: "Lớp Toán Tư Duy 1",
-        age: 8,
-        place: "Cơ sở 1",
-        timeFrom: "18:30",
-        timeTo: "20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 3,
-        status: true,
-        type: "start",
-        title: "Lớp Toán Tư Duy 1123",
-        age: 8,
-        place: "Cơ sở 1",
-        timeFrom: "18:30",
-        timeTo: "20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 1,
-        status: false,
-        type: "complete",
-        title: "Lớp Toán Tư Duy 3",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 4,
-        status: false,
-        type: "complete",
-        title: "Lớp Toán Tư Duy 33",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 2,
-        status: false,
-        type: "going",
-        title: "Lớp Toán Tư Duy 2",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-      {
-        id: 5,
-        status: false,
-        type: "going",
-        title: "Lớp Toán Tư Duy 232",
-        age: 8,
-        place: "Cơ sở 1",
-        time: "18:30 20:00",
-        rate: 4.6,
-        registerAmount: 8,
-        price: 200000,
-        leasonAmount: 20,
-        choose: false,
-      },
-
-    ]
+    status: false,
+    type: "going",
+    title: "Lớp Toán Tư Duy 2",
+    age: 8,
+    place: "Cơ sở 1",
+    time: "18:30 20:00",
+    rate: 4.6,
+    registerAmount: 8,
+    price: 200000,
+    leasonAmount: 20,
+    choose: false,
+  },
+  {
+    id: 4,
+    status: false,
+    type: "going",
+    title: "Lớp Toán Tư Duy 52",
+    age: 8,
+    place: "Cơ sở 1",
+    time: "18:30 20:00",
+    rate: 4.6,
+    registerAmount: 8,
+    price: 200000,
+    leasonAmount: 20,
+    choose: false,
+  },
+  {
+    id: 2,
+    status: false,
+    type: "complete",
+    title: "Lớp Toán Tư Duy 3",
+    age: 8,
+    place: "Cơ sở 1",
+    time: "18:30 20:00",
+    rate: 4.6,
+    registerAmount: 8,
+    price: 200000,
+    leasonAmount: 20,
+    choose: false,
+  },
+  {
+    id: 5,
+    status: false,
+    type: "complete",
+    title: "Lớp Toán Tư Duy 32",
+    age: 8,
+    place: "Cơ sở 1",
+    time: "18:30 20:00",
+    rate: 4.6,
+    registerAmount: 8,
+    price: 200000,
+    leasonAmount: 20,
+    choose: false,
   },
 ]
 
 export default function DocumentScreen({ navigation }) {
 
-  const [studentList, setStudentList] = useState(studentListDefault)
+  const [studentList, setStudentList] = useState([])
+  const [classList, setClassList] = useState([])
   const [type, setType] = useState("start")
+  const user = useSelector(userSelector);
+
+  useEffect(() => {
+    loadStudentData()
+  }, [])
+
+  const loadStudentData = async () => {
+    setStudentList(user?.students)
+  }
 
   const selectStudent = (id) => {
-    const index = studentList.findIndex(obj => obj.id === id);
-    const updateArray = [...studentListDefault]
-    const defaultStatus = updateArray[index].check
-    updateArray.forEach(item => item.check = false)
-    updateArray[index].check = !defaultStatus;
-    // console.log(updateArray);
-    setStudentList(updateArray)
-  }
+    setStudentList((prevStudentList) => {
+      const index = prevStudentList.findIndex(obj => obj.id === id);
+      return prevStudentList.map((item, i) => ({
+        ...item,
+        check: i === index ? !item.check : false,
+      }));
+    });
+  };
+
+
 
   const handleClassNavigate = (classDetail) => {
     navigation.push("ClassDetailScreen", { classDetail: classDetail })
+  }
+
+  const hanldeAddStudent = () => {
+    navigation.push("AddStudent")
   }
 
   const getClassList = () => {
@@ -269,9 +184,9 @@ export default function DocumentScreen({ navigation }) {
           })
         }
         <View style={styles.studentView}>
-          <View style={styles.studentImage}>
+          <TouchableOpacity style={styles.studentImage} onPress={hanldeAddStudent}>
             <Icon name={"account-plus"} color={"#5A5A5A"} size={50} />
-          </View>
+          </TouchableOpacity>
           <View style={styles.studentNameView}>
             <Text style={styles.studentName}>
               Thêm Bé
@@ -324,8 +239,9 @@ export default function DocumentScreen({ navigation }) {
                 "#BFE3C6"
           }}
         >
+          {/* getClassList() */}
           {
-            filterClassList(getClassList()).map((item, index) => {
+            filterClassList(classListData).map((item, index) => {
               return (
                 renderClassCard(type, item, index)
               )
@@ -374,7 +290,7 @@ const styles = StyleSheet.create({
     width: WIDTH * 0.2,
     height: WIDTH * 0.2,
     borderWidth: 3,
-    borderRadius: 50,
+    borderRadius: 150,
     borderColor: "#888888",
     justifyContent: "center",
     alignItems: "center",

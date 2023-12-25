@@ -5,9 +5,11 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import Header from '../components/header/Header';
 import StudentView from '../components/StudentView';
 
-import { formatPrice } from '../util/util';
+import { formatDate, formatPrice } from '../util/util';
 import ClassCard from '../components/ClassCard';
 import ChooseClassModal from '../components/modal/ChooseClassModal';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../store/selector';
 
 const studentListDefault = [
     {
@@ -31,15 +33,17 @@ const HEIGHT = Dimensions.get('window').height;
 
 export default function ClassRegisterScreen({ route, navigation }) {
 
-    const [studentList, setStudentList] = useState([...studentListDefault])
+    const [studentList, setStudentList] = useState([])
     const [classList, setClassList] = useState(route?.params?.classList)
     const [classChoosed, setClassChoosed] = useState(classList?.filter(obj => obj.choose === true)[0])
     const [modalVisible, setModalVisible] = useState({ classChoose: false })
+    const user = useSelector(userSelector);
 
     useEffect(() => {
         setClassList(route?.params?.classList)
         setStudentList(studentListDefault)
         setClassChoosed(classList?.filter(obj => obj.choose === true)[0])
+        setStudentList(user.students)
     }, [route?.params?.classList, route?.params?.goback])
 
     const hanldeConfirm = () => {
@@ -47,15 +51,19 @@ export default function ClassRegisterScreen({ route, navigation }) {
         navigation.push("PaymentScreen", { classDetail: classChoosed, studentList: registerList })
     }
 
-    const selectStudent = (id) => {
-        const index = studentList.findIndex(obj => obj.id === id);
-        const updateArray = [...studentListDefault]
-        const defaultStatus = updateArray[index].check
-        // updateArray.forEach(item => item.check = false)
-        updateArray[index].check = !defaultStatus;
-        // console.log(updateArray);
-        setStudentList(updateArray)
+    const hanldeAddStudent = () => {
+        navigation.push("AddStudent")
     }
+
+    const selectStudent = (id) => {
+        setStudentList((prevStudentList) => {
+          const index = prevStudentList.findIndex(obj => obj.id === id);
+          return prevStudentList.map((item, i) => ({
+            ...item,
+            check: i === index ? !item.check : item.check ,
+          }));
+        });
+      };
 
     const onCancleClassChoose = () => {
         setModalVisible({ ...modalVisible, classChoose: false })
@@ -81,9 +89,9 @@ export default function ClassRegisterScreen({ route, navigation }) {
                         })
                     }
                     <View style={styles.studentView}>
-                        <View style={styles.studentImage}>
+                        <TouchableOpacity style={styles.studentImage} onPress={hanldeAddStudent}>
                             <Icon name={"person-add-alt"} color={"#5A5A5A"} size={50} />
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.studentNameView}>
                             <Text style={styles.studentName}>
                                 Thêm Bé
@@ -110,7 +118,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                                             <Text style={styles.detailViewTitle}>Họ và Tên:</Text>
                                             <TextInput
                                                 style={styles.studentInput}
-                                                value={item.name}
+                                                value={item.fullName}
                                                 editable={false}
                                             />
                                         </View>
@@ -118,10 +126,10 @@ export default function ClassRegisterScreen({ route, navigation }) {
                                     <View style={styles.flexColumn}>
                                         <Icon name={"card-giftcard"} color={"#4582E6"} size={32} />
                                         <View style={styles.detailView}>
-                                            <Text style={styles.detailViewTitle}>Họ và Tên:</Text>
+                                            <Text style={styles.detailViewTitle}>Ngày sinh:</Text>
                                             <TextInput
                                                 style={styles.studentInput}
-                                                value={item.dob}
+                                                value={formatDate(item.dateOfBirth)}
                                                 editable={false}
                                             />
                                         </View>
@@ -141,15 +149,15 @@ export default function ClassRegisterScreen({ route, navigation }) {
                             <Text style={styles.boldText}>Thông tin khóa học:</Text>
                             <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                 <Text style={styles.detailViewTitle}>Tên Khóa Học:</Text>
-                                <Text style={styles.boldText}>{classChoosed?.title} </Text>
+                                <Text style={styles.boldText}>{classChoosed?.name} </Text>
                             </View>
                             <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                 <Text style={styles.detailViewTitle}>Số Lượng Đăng Ký:</Text>
-                                <Text style={styles.boldText}>{classChoosed?.registerAmount}</Text>
+                                <Text style={styles.boldText}>{classChoosed?.registerAmount ? classChoosed?.registerAmount : 0}</Text>
                             </View>
                             <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                 <Text style={styles.detailViewTitle}>Học Phí:</Text>
-                                <Text style={styles.boldText}>{formatPrice(classChoosed?.price)}đ</Text>
+                                <Text style={styles.boldText}>{formatPrice(classChoosed?.price ? classChoosed?.price : 0)}đ</Text>
                             </View>
                         </>
                     }
@@ -317,7 +325,7 @@ const styles = StyleSheet.create({
         width: WIDTH * 0.2,
         height: WIDTH * 0.2,
         borderWidth: 3,
-        borderRadius: 50,
+        borderRadius: 150,
         borderColor: "#888888",
         justifyContent: "center",
         alignItems: "center",

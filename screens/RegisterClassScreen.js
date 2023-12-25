@@ -5,35 +5,20 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { formatPrice } from '../util/util';
 import DropdownComponent from '../components/DropdownComponent';
 import FavoriteHeader from '../components/header/FavoriteHeader';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../store/selector';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-const studentListDefault = [
-    {
-        id: 0,
-        name: "Lê Bảo Ngọc",
-        age: "10",
-        dob: "2-2-2002",
-        check: true,
-    },
-    {
-        id: 1,
-        name: "Trần Hữu Nghĩa",
-        age: "11",
-        dob: "2-2-2003",
-        check: false,
-    },
-]
-
 const dateDefault = [
     {
         id: 0,
-        name: "Thứ 2 - 4 - 6 (7h30 - 9h)",
+        fullName: "Thứ 2 - 4 - 6 (7h30 - 9h)",
     },
     {
         id: 1,
-        name: "Thứ 3 - 5 - 7 (7h30 - 9h)",
+        fullName: "Thứ 3 - 5 - 7 (7h30 - 9h)",
     },
 ]
 
@@ -41,6 +26,7 @@ export default function RegisterClassScreen({ route, navigation }) {
 
     const [courseList, setCourseList] = useState(route?.params?.courseList)
     const [visible, setVisible] = useState({ submit: true })
+    const user = useSelector(userSelector);
 
     const handleNavigate = () => {
         if (totalComplete() === courseList.length) {
@@ -49,23 +35,23 @@ export default function RegisterClassScreen({ route, navigation }) {
     }
 
     const handleChooseStudent = (item, student) => {
-        const index = courseList.findIndex(obj => obj.id === item.id);
+        const index = courseList.findIndex(obj => obj?.class?.id === item?.id);
         const updateArray = [...courseList]
-        updateArray[index].student = student;
+        updateArray[index].class.student = student;
         setCourseList(updateArray)
     }
 
     const handleChooseDate = (item, date) => {
-        const index = courseList.findIndex(obj => obj.id === item.id);
+        const index = courseList.findIndex(obj => obj.class.id === item.id);
         const updateArray = [...courseList]
-        updateArray[index].date = date;
+        updateArray[index].class.date = date;
         setCourseList(updateArray)
     }
 
     const totalPrice = () => {
         let total = 0
         courseList.forEach(element => {
-            total += element.price
+            total += element.class.price
         });
         return total
     }
@@ -91,13 +77,15 @@ export default function RegisterClassScreen({ route, navigation }) {
     const totalComplete = () => {
         let amount = 0
         courseList.forEach(item => {
-            if (item?.student && item?.date) {
+            if (item?.class?.student && item?.class?.date) {
                 amount += 1
             }
         });
 
         return amount
     }
+
+    console.log(totalComplete());
 
     return (
         <>
@@ -130,35 +118,37 @@ export default function RegisterClassScreen({ route, navigation }) {
                         </View>
                     </View>
                     {
-                        courseList?.filter(item => item.choose === true)?.map((item, index) => {
+                        courseList?.filter(item => item.class.choose === true)?.map((item, index) => {
                             return (
                                 <View style={{ ...styles.tableColumn, borderBottomWidth: 1, borderColor: "#F9ACC0" }} key={index}>
                                     {
-                                        checkAllFeild(item) &&
+                                        checkAllFeild(item.class) &&
                                         <View style={styles.completeCheck}>
                                             <Icon name={"check"} color={"white"} size={22} />
                                         </View>
                                     }
                                     <View style={[styles.courseName, styles.tabRightBorder]}>
-                                        <Text style={{ ...styles.tableText, color: "#3AA6B9", fontWeight: "600" }} numberOfLines={1}>{item.title}</Text>
+                                        <Text style={{ ...styles.tableText, color: "#3AA6B9", fontWeight: "600" }} numberOfLines={1}>{item?.class.name}</Text>
                                     </View>
                                     <View style={[styles.studentInfor, styles.tabRightBorder]}>
                                         {
                                             <DropdownComponent
                                                 dropdownStyle={styles.dropdownStyle}
-                                                studentList={studentListDefault}
+                                                studentList={user.students}
+                                                labelField={"fullName"}
+                                                valueField={"id"}
                                                 rightIcon={() => (
-                                                    !item.student &&
+                                                    !item.class.student &&
                                                     <View style={{ backgroundColor: "rgba(126, 134, 158, 0.25)", borderRadius: 50 }}>
                                                         <Icon name={"plus"} color={"#241468"} size={22} />
                                                     </View>
                                                 )}
-                                                onChoose={(student) => handleChooseStudent(item, student)}
+                                                onChoose={(student) => handleChooseStudent(item.class, student)}
                                                 placeHolder={
-                                                    item?.student ?
-                                                        item?.student?.name
+                                                    item?.class?.student ?
+                                                        item?.class?.student?.fullName
                                                         :
-                                                        <Text numberOfLines={1}>Thêm thông tin cháu</Text>
+                                                        "Thêm thông tin cháu"
                                                 }
                                             />
                                         }
@@ -167,16 +157,18 @@ export default function RegisterClassScreen({ route, navigation }) {
                                         <DropdownComponent
                                             dropdownStyle={styles.dropdownStyle}
                                             studentList={dateDefault}
+                                            labelField={"fullName"}
+                                            valueField={"id"}
                                             rightIcon={() => (
-                                                !item.date &&
+                                                !item?.class.date &&
                                                 <View >
                                                     <Icon name={"chevron-down"} color={"#241468"} size={12} />
                                                 </View>
                                             )}
-                                            onChoose={(date) => handleChooseDate(item, date)}
+                                            onChoose={(date) => handleChooseDate(item?.class, date)}
                                             placeHolder={
-                                                item?.date ?
-                                                    item?.date?.name
+                                                item?.class?.date ?
+                                                    item?.class?.date?.name
                                                     :
                                                     <Text numberOfLines={1}>Chọn lớp</Text>
                                             }
@@ -184,7 +176,7 @@ export default function RegisterClassScreen({ route, navigation }) {
                                         {/* <Text style={[styles.tableText]} >Lịch học</Text> */}
                                     </View>
                                     <View style={[styles.classPrice]}>
-                                        <Text style={[styles.tableText]}>{formatPrice(item?.price)}đ</Text>
+                                        <Text style={[styles.tableText]}>{formatPrice(item?.price ? item?.price : 0)}đ</Text>
                                     </View>
                                 </View>
                             )
@@ -193,7 +185,7 @@ export default function RegisterClassScreen({ route, navigation }) {
                 </View>
                 <View style={{ ...styles.flexColumnBetween, paddingHorizontal: 20, marginVertical: 20 }}>
                     <Text style={styles.boldText}>Tổng thanh toán</Text>
-                    <Text style={styles.price}>{formatPrice(totalPrice())}đ</Text>
+                    <Text style={styles.price}>{formatPrice(totalPrice() ? totalPrice() : 0)}đ</Text>
                 </View>
             </ScrollView >
             <View style={styles.bottomButton}>
@@ -214,7 +206,7 @@ export default function RegisterClassScreen({ route, navigation }) {
                     <View style={styles.flexColumn}>
                         {
                             visible.submit &&
-                            <Text style={{ color: "white", fontWeight: "600", marginRight: 10 }}>{formatPrice(totalPrice())}đ</Text>
+                            <Text style={{ color: "white", fontWeight: "600", marginRight: 10 }}>{formatPrice(totalPrice() ? totalPrice() : 0)}đ</Text>
                         }
 
                         <TouchableOpacity style={{ ...styles.button, backgroundColor: totalComplete() === courseList.length ? "white" : "#C4C4C4" }} onPress={handleNavigate}>

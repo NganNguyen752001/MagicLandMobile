@@ -1,6 +1,7 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import React from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { formatDate } from '../util/util';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -45,37 +46,50 @@ export default function ClassCard({ cardDetail, check, index, onClick, backgroun
                     borderWidth: index % 2 === 1 ? 1 : 0
                 }}>
                 <View style={styles.flexColumnBetween}>
-                    <Text style={styles.cardName}>Lớp Toán Tư Duy 1</Text>
-                    <View style={{ ...styles.flexColumn, marginLeft: 0 }}>
-                        <View style={{ ...styles.statusCircle, backgroundColor: cardDetail?.status ? "#3AAC45" : "#888888" }} />
-                        {
-                            cardDetail?.status ?
-                                <Text style={styles.cardDetailText}>Online</Text>
-                                :
-                                <Text style={styles.cardDetailText}>Offline</Text>
-                        }
+                    <Text style={styles.cardName}>{cardDetail.name ? cardDetail.name : "Toán cấp 1"}</Text>
+
+                </View>
+
+                <View style={{ ...styles.flexColumn, marginTop: 5 }}>
+                    <View style={{ ...styles.flexColumn, width: "50%", marginRight: "5%" }}>
+                        <View style={{ ...styles.flexColumn, marginLeft: 0 }}>
+                            <View style={{ ...styles.statusCircle, backgroundColor: cardDetail?.method === "ONLINE" ? "#3AAC45" : "#888888" }} />
+                            {
+                                cardDetail?.method === "ONLINE" ?
+                                    <Text style={styles.cardDetailText}>Online</Text>
+                                    :
+                                    <Text style={styles.cardDetailText}>Offline</Text>
+                            }
+                        </View>
+                    </View>
+                    <View style={{ ...styles.flexColumn, width: "35%" }}>
+                        <Icon name={"notebook-multiple"} color={"#241468"} size={18} />
+                        <Text style={styles.cardDetailText}>{cardDetail?.schedules ? cardDetail?.schedules?.length : 0} buổi</Text>
                     </View>
                 </View>
 
                 <View style={{ ...styles.flexColumn, marginTop: 5 }}>
-                    <View style={{ ...styles.flexColumn, width: "60%", marginRight: "3%" }}>
+                    <View style={{ ...styles.flexColumn, width: "50%", marginRight: "5%" }}>
                         <Icon name={"account-multiple"} color={"#241468"} size={18} />
-                        <Text style={styles.cardDetailText}>{cardDetail.leasonAmount} buổi</Text>
+                        <Text style={styles.cardDetailText}>{cardDetail.limitNumberStudent ? cardDetail.limitNumberStudent : 0} Học Viên</Text>
                     </View>
-                    <View style={styles.flexColumn}>
-                        <Icon name={"notebook-multiple"} color={"#241468"} size={18} />
-                        <Text style={styles.cardDetailText}>{cardDetail.leasonAmount} buổi</Text>
+                    <View style={{ ...styles.flexColumn, width: "35%" }}>
+                        <Icon name={"account"} color={"#241468"} size={18} />
+                        <Text style={styles.cardDetailText}>{cardDetail?.lecture?.fullName ? cardDetail?.lecture?.fullName : "Chưa có GV"}</Text>
                     </View>
                 </View>
 
                 <View style={{ ...styles.flexColumn, marginTop: 10 }}>
-                    <View style={{ ...styles.flexColumn, width: "60%", marginRight: "3%" }}>
+                    <View style={{ ...styles.flexColumn, width: "50%", marginRight: "5%" }}>
                         <Icon name={"calendar-check"} color={"#241468"} size={18} />
-                        <Text style={styles.cardDetailText}>Khai giảng ngày: 05/01/2024 Lịch học: 3 - 5 - 7 (17:00 - 18:30)</Text>
+                        <View>
+                            <Text style={styles.cardDetailText}>Khai giảng ngày: {cardDetail?.startDate ? formatDate(cardDetail?.startDate) : 0}</Text>
+                            <Text style={styles.cardDetailText}>Lịch học: 3 - 5 - 7 (17:00 - 18:30)</Text>
+                        </View>
                     </View>
-                    <View style={{ ...styles.flexColumn }}>
-                        <Icon name={"account"} color={"#241468"} size={18} />
-                        <Text style={styles.cardDetailText}>Chưa có GV</Text>
+                    <View style={{ ...styles.flexColumn, width: "35%" }}>
+                        <Icon name={"map-marker-radius"} color={"#241468"} size={18} />
+                        <Text style={styles.cardDetailText}>{cardDetail?.lecture?.address ? cardDetail?.lecture?.address : "Chưa có địa chỉ"}</Text>
                     </View>
                 </View>
             </View>

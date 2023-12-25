@@ -4,9 +4,10 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import Header from '../components/header/Header';
 import NotificationModal from '../components/modal/NotificationModal';
+import CircularProgressBar from '../components/CircularProgressBar';
 
 import ThuyTienAvt from "../assets/images/ThuyTienAvt.png"
-import ProcessBar from '../components/ProcessBar';
+// import ProcessBar from '../components/ProcessBar';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -128,19 +129,54 @@ const programEducationDefault = [
     },
 ]
 
+const scoreDetailDefault = [
+    {
+        name: "Quiz 1",
+        mark: 8,
+        total: 10,
+    },
+    {
+        name: "Quiz 2",
+        mark: 10,
+        total: 10,
+    },
+    {
+        name: "Thực hành 1",
+        mark: 4,
+        total: 10,
+    },
+    {
+        name: "Thực hành 2",
+        mark: undefined,
+        total: 10,
+    },
+    {
+        name: "Bài đánh giá năng lực",
+        mark: undefined,
+        total: 10,
+    },
+]
+
+const progressData = [
+    { label: "Tiến độ học tập", value: 85, inActiveStrokeColor: "#7388A95A", activeStrokeColor: "#5BBF4A" },
+    { label: "Tình trạng điểm danh", value: 85, inActiveStrokeColor: "#7388A95A", activeStrokeColor: "#F2334E" },
+    { label: "Tiến độ hoàn thành các bài kiểm tra", value: 80, inActiveStrokeColor: "#7388A95A", activeStrokeColor: "#EF892A" },
+];
+
 export default function ClassDetailScreen({ route, navigation }) {
     let classDetail = route?.params?.classDetail
     const [programEducation, setProgramEducation] = useState(programEducationDefault)
+    const [currentPage, setCurrentPage] = useState(0);
     let count = 0
 
     useEffect(() => {
         classDetail = route?.params?.classDetail
     }, [route?.params?.classDetail])
 
-    const getLeftWidth = (amount, total) => {
-        const percent = amount / total
-        return (WIDTH * 0.9) * percent
-    }
+    const handleScroll = (event) => {
+        const page = Math.round(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+        setCurrentPage(page);
+    };
 
     return (
         <>
@@ -151,50 +187,56 @@ export default function ClassDetailScreen({ route, navigation }) {
                 </View>
                 <View style={styles.classDetail}>
                     <View style={styles.flexColumnBetween}>
-                        <Text style={styles.boldText}>
+                        <Text style={{ ...styles.boldText, width: "38%", textAlign: "right", color: "#707070" }}>
                             Khóa học:
                         </Text>
-                        <Text style={styles.classValue}>
+                        <Text style={{ ...styles.classValue, width: "58%", textAlign: "left" }}>
                             {classDetail?.title}
                         </Text>
                     </View>
                     <View style={styles.flexColumnBetween}>
-                        <Text style={styles.boldText}>
+                        <Text style={{ ...styles.boldText, width: "38%", textAlign: "right", color: "#707070" }}>
                             Lớp học:
                         </Text>
-                        <Text style={styles.classValue}>
+                        <Text style={{ ...styles.classValue, width: "58%", textAlign: "left" }}>
                             TTD2
                         </Text>
                     </View>
                     <View style={styles.flexColumnBetween}>
-                        <Text style={styles.boldText}>
+                        <Text style={{ ...styles.boldText, width: "38%", textAlign: "right", color: "#707070" }}>
                             Ngày khai giảng:
                         </Text>
-                        <Text style={styles.classValue}>
+                        <Text style={{ ...styles.classValue, width: "58%", textAlign: "left" }}>
                             05/01/2024
                         </Text>
                     </View>
                     <View style={styles.flexColumnBetween}>
-                        <Text style={styles.boldText}>
+                        <Text style={{ ...styles.boldText, width: "38%", textAlign: "right", color: "#707070" }}>
                             Lịch học
                         </Text>
-                        <Text style={styles.classValue}>
-                            Thứ 3 - 5 - 7 (17h - 18h:30)
-                        </Text>
+                        <Text style={{ ...styles.classValue, width: "58%", textAlign: "left", color: "#3AA6B9" }}>Thứ 3 - 5 - 7 (17h - 18h:30)</Text>
                     </View>
                     <View style={styles.flexColumnBetween}>
-                        <Text style={styles.boldText}>
+                        <Text style={{ ...styles.boldText, width: "38%", textAlign: "right", color: "#707070" }}>
                             Hình Thức:
                         </Text>
-                        <Text style={styles.classValue}>
+                        <Text style={{ ...styles.classValue, width: "58%", textAlign: "left" }}>
                             Offline
                         </Text>
                     </View>
                     <View style={styles.flexColumnBetween}>
-                        <Text style={styles.boldText}>
+                        <Text style={{ ...styles.boldText, width: "38%", textAlign: "right", color: "#707070" }}>
+                            Giáo viên:
+                        </Text>
+                        <Text style={{ ...styles.classValue, width: "58%", textAlign: "left" }}>
+                            Thủy Tiên
+                        </Text>
+                    </View>
+                    <View style={styles.flexColumnBetween}>
+                        <Text style={{ ...styles.boldText, width: "38%", textAlign: "right", color: "#707070" }}>
                             Trạng thái:
                         </Text>
-                        <Text style={styles.classValue}>
+                        <Text style={{ ...styles.classValue, width: "58%", textAlign: "left" }}>
                             Đang học
                         </Text>
                     </View>
@@ -205,13 +247,36 @@ export default function ClassDetailScreen({ route, navigation }) {
                     <Text style={styles.title}>Tiến độ:</Text>
                 </View>
 
-                <ProcessBar
-                    leftLable={"7 buổi"}
-                    leftWidth={getLeftWidth(7, classDetail.leasonAmount)}
-                    rightLabel={"13 buổi"}
-                    rightWidth={(WIDTH * 0.9) - getLeftWidth(7, classDetail.leasonAmount)}
-                    mainLabel={"20 buổi"}
-                />
+                <ScrollView
+                    style={styles.processScrollView}
+                    showsHorizontalScrollIndicator={false}
+                    pagingEnabled
+                    horizontal
+                    onScroll={handleScroll}
+                >
+                    {progressData.map((item, index) => (
+                        <View key={index} style={styles.processBar}>
+                            <Text style={{...styles.boldText, fontSize: 20, marginBottom: 10}}>{item.label}</Text>
+                            <CircularProgressBar
+                                value={item.value}
+                                inActiveStrokeColor={item.inActiveStrokeColor}
+                                activeStrokeColor={item.activeStrokeColor}
+                            />
+                        </View>
+                    ))}
+                </ScrollView>
+
+                <View style={styles.paginationContainer}>
+                    {progressData.map((item, index) => (
+                        <Icon
+                            key={index}
+                            name={"circle"}
+                            color={currentPage === index ? item.activeStrokeColor : "#7388A95A"}
+                            size={18}
+                            style={styles.paginationIcon}
+                        />
+                    ))}
+                </View>
 
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Chương trình giảng dạy:</Text>
@@ -259,7 +324,59 @@ export default function ClassDetailScreen({ route, navigation }) {
                     }
                 </View>
 
+                {/* markScoreDetail */}
+
                 <View style={styles.titleView}>
+                    <Text style={styles.title}>Bảng điểm:</Text>
+                </View>
+
+                <View style={styles.scoreTable}>
+                    <View style={{ ...styles.flexColumn, width: "100%", paddingHorizontal: 20, backgroundColor: "#C2D9FF", borderRadius: 10 }}>
+                        <View style={{ ...styles.flexColumn, width: "70%", paddingVertical: 20, borderRightWidth: 1 }}>
+                            <View style={styles.tabletIcon}></View>
+                            {/* <Icon name={"checkbox-marked-circle"} color={"#4582E6"} size={15} /> */}
+                            <Text>
+                                Bài kiểm tra
+                            </Text>
+                        </View>
+                        <View style={styles.scoreValue}>
+                            <Text style={styles.boldText}>Điểm</Text>
+                        </View>
+                    </View>
+                    {
+                        scoreDetailDefault.map((item, key) => (
+                            <View style={{ ...styles.flexColumn, width: "100%", paddingHorizontal: 20 }} key={key}>
+                                <View style={{ ...styles.flexColumn, width: "70%", paddingVertical: 20, borderRightWidth: 1 }}>
+                                    <View style={styles.tabletIcon}>
+                                        {
+                                            item.mark ?
+                                                item.mark > 5 ?
+                                                    <Icon name={"checkbox-marked-circle"} color={"#2C8535"} size={28} />
+                                                    :
+                                                    <Icon name={"close-circle"} color={"#F4A120"} size={28} />
+                                                :
+                                                <Icon name={"circle"} color={"#888888"} size={28} />
+                                        }
+                                    </View>
+                                    {/* <Icon name={"checkbox-marked-circle"} color={"#4582E6"} size={15} /> */}
+                                    <Text style={styles.boldText}>
+                                        {item.name}
+                                    </Text>
+                                </View>
+                                <View style={styles.scoreValue}>
+                                    {
+                                        item.mark ?
+                                            <Text style={styles.boldText}>{item.mark}/{item.total}</Text>
+                                            :
+                                            ""
+                                    }
+                                </View>
+                            </View>
+                        ))
+                    }
+                </View>
+
+                {/* <View style={styles.titleView}>
                     <Text style={styles.title}>Yêu cầu:</Text>
                 </View>
 
@@ -270,9 +387,9 @@ export default function ClassDetailScreen({ route, navigation }) {
                 <View style={{ ...styles.flexColumn, alignItems: "baseline", marginHorizontal: WIDTH * 0.05 }}>
                     <Icon name={"circle"} color={"#4582E6"} size={15} />
                     <Text style={{ ...styles.boldText, marginLeft: 10 }}>Tham gia tích cực</Text>
-                </View>
+                </View> */}
 
-                <View style={styles.titleView}>
+                {/* <View style={styles.titleView}>
                     <Text style={styles.title}>Giáo Viên:</Text>
                 </View>
 
@@ -299,7 +416,7 @@ export default function ClassDetailScreen({ route, navigation }) {
                             </View>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
 
             </ScrollView>
         </>
@@ -356,13 +473,14 @@ const styles = StyleSheet.create({
     classDetail: {
         width: WIDTH * 0.9,
         padding: 20,
-        paddingHorizontal: 25,
+        paddingHorizontal: 15,
         borderRadius: 10,
         marginHorizontal: WIDTH * 0.05,
         backgroundColor: "rgba(69, 130, 230, 0.28)"
     },
     classValue: {
-        color: "#888888"
+        color: "#000000",
+        fontWeight: "600"
     },
     program: {
         width: WIDTH * 0.9,
@@ -370,6 +488,22 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginHorizontal: WIDTH * 0.05,
         overflow: "hidden"
+    },
+    processScrollView: {
+        flexDirection: "row"
+    },
+    paginationContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        marginTop: 10,
+    },
+    paginationIcon: {
+        marginHorizontal: 5,
+    },
+    processBar: {
+        width: WIDTH,
+        alignItems: "center",
+        justifyContent: "center",
     },
     mainTab: {
         padding: 10,
@@ -385,6 +519,24 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         marginBottom: 5,
     },
+    scoreTable: {
+        width: WIDTH * 0.9,
+        borderWidth: 1,
+        borderRadius: 10,
+        marginHorizontal: WIDTH * 0.05,
+        marginBottom: 20
+    },
+    tabletIcon: {
+        width: WIDTH * 0.1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    scoreValue: {
+        width: "32%",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+
     teacherInfor: {
         flexDirection: "row",
         width: WIDTH * 0.9,

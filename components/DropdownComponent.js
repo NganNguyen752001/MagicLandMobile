@@ -4,13 +4,13 @@ import { Dropdown } from 'react-native-element-dropdown';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 
-const DropdownComponent = ({ dropdownStyle, studentList, rightIcon, onChoose, placeHolder }) => {
+const DropdownComponent = ({ dropdownStyle, studentList, rightIcon, onChoose, placeHolder, labelField, valueField }) => {
     const [value, setValue] = useState(null);
 
     const renderItem = item => {
         return (
             <View style={styles.item}>
-                <Text style={styles.textItem}>{item.name}</Text>
+                <Text style={styles.textItem}>{item.fullName}</Text>
                 {/* {item.value === value && (
             <AntDesign
               style={styles.icon}
@@ -37,8 +37,8 @@ const DropdownComponent = ({ dropdownStyle, studentList, rightIcon, onChoose, pl
             iconStyle={styles.iconStyle}
             data={studentList}
             maxHeight={300}
-            labelField="name"
-            valueField="id"
+            labelField={labelField}
+            valueField={valueField}
             placeholder={placeHolder}
             value={value}
             onChange={item => {

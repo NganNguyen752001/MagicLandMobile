@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, ActivityIndicator, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../store/selector';
+
 import HomeScreen from '../screens/HomeScreen';
 import DocumentScreen from '../screens/DocumentScreen';
 import ScanScreen from '../screens/ScanScreen';
@@ -21,6 +24,12 @@ import TransactionDetailScreen from '../screens/TransactionDetailScreen';
 import RegisterClassScreen from '../screens/RegisterClassScreen';
 import MultiplePaymentScreen from '../screens/MultiplePaymentScreen';
 import ClassStudyDetailScreen from '../screens/ClassStudyDetailScreen';
+import ClassContentScreen from '../screens/ClassContentScreen';
+import MutilpleChoiceScreen from '../screens/MutilpleChoiceScreen';
+
+import WorkScheduleScreen from '../screens/teacher/WorkScheduleScreen';
+import RateStudentScreen from '../screens/teacher/RateStudentScreen';
+import AttendanceScreen from '../screens/teacher/AttendanceScreen';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -30,6 +39,7 @@ const BottomTabNavigator = () => {
 
     const activeColor = "#FFC90C"
     const inactiveColor = "#FFFFFF"
+    const user = useSelector(userSelector);
 
     return (
         <Tab.Navigator
@@ -40,17 +50,20 @@ const BottomTabNavigator = () => {
                 headerShown: false,
             }}
         >
-            <Tab.Screen name="Home" component={HomeScreen} options={{
-                tabBarIcon: ({ focused }) => {
-                    return <Icon name={"home-minus"} color={focused ? activeColor : inactiveColor} size={28} />
-                },
-                tabBarLabel: 'Trang Chủ',
-            }} />
-            <Tab.Screen name="Document" component={DocumentScreen} options={{
+            <Tab.Screen
+                name="Home"
+                component={user?.role.name === 'LECTURER' ? HomeScreen : CourseScreen}
+                options={{
+                    tabBarIcon: ({ focused }) => {
+                        return <Icon name={"home-minus"} color={focused ? activeColor : inactiveColor} size={28} />
+                    },
+                    tabBarLabel: 'Trang Chủ',
+                }} />
+            <Tab.Screen name="Document" component={user?.role.name === 'LECTURER' ? WorkScheduleScreen : DocumentScreen} options={{
                 tabBarIcon: ({ focused }) => {
                     return <Icon name={"school"} color={focused ? activeColor : inactiveColor} size={28} />
                 },
-                tabBarLabel: 'Học Viên',
+                tabBarLabel: user?.role.name === 'LECTURER' ? 'Lịch Làm Việc' : 'Học Viên',
             }} />
             <Tab.Screen name="Scan" component={ScanScreen} options={{
                 tabBarIcon: ({ focused }) => {
@@ -59,11 +72,11 @@ const BottomTabNavigator = () => {
                 },
                 tabBarLabel: 'Quét QR',
             }} />
-            <Tab.Screen name="Schedule" component={ScheduleScreen} options={{
+            <Tab.Screen name="Schedule" component={user?.role.name === 'LECTURER' ? RateStudentScreen : ScheduleScreen} options={{
                 tabBarIcon: ({ focused }) => {
                     return <Icon name={"calendar-month"} color={focused ? activeColor : inactiveColor} size={28} />
                 },
-                tabBarLabel: 'Lịch học',
+                tabBarLabel: user?.role.name === 'LECTURER' ? 'Đánh Giá' : 'Lịch học',
             }} />
             <Tab.Screen name="Profile" component={ProfileScreen} options={{
                 tabBarIcon: ({ focused }) => {
@@ -71,7 +84,7 @@ const BottomTabNavigator = () => {
                 },
                 tabBarLabel: 'Tài Khoản',
             }} />
-            <Tab.Screen name="CourseScreen" component={CourseScreen} options={{ tabBarButton: () => null }} />
+            {/* <Tab.Screen name="CourseScreen" component={CourseScreen} options={{ tabBarButton: () => null }} /> */}
             <Tab.Screen name="CourseDetailScreen" component={CourseDetailScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="ClassScreen" component={ClassScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="ClassDetailScreen" component={ClassDetailScreen} options={{ tabBarButton: () => null }} />
@@ -85,6 +98,9 @@ const BottomTabNavigator = () => {
             <Tab.Screen name="RegisterClassScreen" component={RegisterClassScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="MultiplePaymentScreen" component={MultiplePaymentScreen} options={{ tabBarButton: () => null }} />
             <Tab.Screen name="ClassStudyDetailScreen" component={ClassStudyDetailScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="ClassContentScreen" component={ClassContentScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="MutilpleChoiceScreen" component={MutilpleChoiceScreen} options={{ tabBarButton: () => null }} />
+            <Tab.Screen name="AttendanceScreen" component={AttendanceScreen} options={{ tabBarButton: () => null }} />
         </Tab.Navigator>
     )
 }

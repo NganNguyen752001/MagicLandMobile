@@ -17,6 +17,29 @@ export const formatPrice = (price) => {
     return formattedNumber;
 }
 
+export const formatDate = (date) => {
+    const startDateString = date;
+    const startDate = new Date(startDateString);
+
+    const day = startDate.getDate().toString().padStart(2, '0');
+    const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = startDate.getFullYear();
+
+    const formattedStartDate = `${day}/${month}/${year}`;
+    return formattedStartDate;
+}
+
+export const formatTime = (date) => {
+    const startDateString = date;
+    const startDate = new Date(startDateString);
+
+    const hours = startDate.getHours().toString().padStart(2, '0');
+    const minutes = startDate.getMinutes().toString().padStart(2, '0');
+
+    const formattedStartTime = `${hours}:${minutes}`;
+    return formattedStartTime;
+}
+
 export function getIndexById(array, id) {
     return array.findIndex(obj => obj.id === id);
 }

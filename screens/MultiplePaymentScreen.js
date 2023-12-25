@@ -112,7 +112,7 @@ export default function MultiplePaymentScreen({ route, navigation }) {
         courseList.forEach(element => {
             total += element.price
         });
-        return total
+        return total ? total : 0
     }
 
     const vourcherDiscount = () => {
@@ -128,7 +128,7 @@ export default function MultiplePaymentScreen({ route, navigation }) {
     const totalPayment = () => {
         const discountValue = vourcherValue() ? vourcherDiscount() : 0
         const totalPayment = totalPrice() - discountValue
-        return totalPayment
+        return totalPayment ? totalPayment : 0
     }
 
     return (
@@ -155,8 +155,8 @@ export default function MultiplePaymentScreen({ route, navigation }) {
                     {
                         courseList.map((item, index) => (
                             <View style={{ ...styles.flexColumnBetween }} key={index}>
-                                <Text style={{ ...styles.boldText, marginTop: 5 }}>{item?.title}</Text>
-                                <Text style={{ ...styles.boldText, marginTop: 5 }}>{item?.date?.name}</Text>
+                                <Text style={{ ...styles.boldText, marginTop: 5 }}>{item?.class.name}</Text>
+                                <Text style={{ ...styles.boldText, marginTop: 5 }}>{item?.date?.fullName}</Text>
                             </View>
                         ))
                     }
