@@ -29,6 +29,7 @@ export default function CartScreen({ navigation }) {
     const loadClassData = async () => {
         const response = await getCartOfParent()
         if (response?.status === 200) {
+            console.log(response?.data.cartItems);
             setClassCardDetail(response?.data?.cartItems)
         }
     }

@@ -149,7 +149,7 @@ export default function CourseDetailScreen({ route, navigation }) {
         const index = classCardDetail.findIndex(obj => obj.id === id);
         const updateArray = [...classCardDetail]
         const defaultStatus = updateArray[index].choose ? updateArray[index].choose : false
-        // updateArray.forEach(item => item.choose = false)
+        updateArray.forEach(item => item.choose = false)
         updateArray[index].choose = !defaultStatus;
         setClassCardDetail(updateArray)
     }

@@ -195,7 +195,7 @@ export default function ScheduleScreen({ navigation }) {
 
   return (
     <>
-      <Header navigation={navigation} background={"#241468"} title={"Lịch Học"} goback={navigation.pop} />
+      <Header navigation={navigation} background={"#241468"} title={"Lịch Học"} goback={navigation.goBack} />
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={styles.titleView}>
           <Text style={styles.title}>Danh sách các cháu:</Text>

@@ -158,11 +158,15 @@ export default function PaymentScreen({ route, navigation }) {
                                 }
                                 <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                     <Text style={styles.detailViewTitle}>Tên học viên:</Text>
-                                    <Text style={styles.boldText}>{item.name}</Text>
+                                    <Text style={styles.boldText}>{item.fullName}</Text>
                                 </View>
                                 <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                     <Text style={styles.detailViewTitle}>Khóa Học:</Text>
-                                    <Text style={styles.boldText}>{classDetail.name}</Text>
+                                    <Text style={styles.boldText}>
+                                        {
+                                            classDetail.map(item => (item.name))
+                                        }
+                                    </Text>
                                 </View>
                                 <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                     <Text style={styles.detailViewTitle}>Khai giảng ngày:</Text>

@@ -31,7 +31,7 @@ export default function ClassCard({ cardDetail, check, index, onClick, backgroun
 
     return (
         <TouchableOpacity style={styles.container} onPress={() => { onClick(cardDetail.id) }}>
-            {
+            {/* {
                 check &&
                 <>
                     <View style={styles.checkBoxLine} />
@@ -42,7 +42,7 @@ export default function ClassCard({ cardDetail, check, index, onClick, backgroun
                         }
                     </View>
                 </>
-            }
+            } */}
             <View
                 style={{
                     ...styles.card,
@@ -59,6 +59,19 @@ export default function ClassCard({ cardDetail, check, index, onClick, backgroun
                         "#C2D9FF",
                     borderWidth: index % 2 === 1 ? 1 : 0
                 }}>
+                {
+                    check &&
+                    <>
+                        {/* <View style={styles.checkBoxLine} /> */}
+                        {
+                            cardDetail.choose &&
+                            <View style={styles.checkBox}>
+                                <Icon name={"check"} color={"#C2D9FF"} size={20} />
+                            </View>
+                        }
+
+                    </>
+                }
                 <View style={styles.flexColumnBetween}>
                     <Text style={styles.cardName}>{cardDetail.name ? cardDetail.name : "Toán cấp 1"}</Text>
 
@@ -118,6 +131,7 @@ const styles = StyleSheet.create({
         position: "relative",
         flexDirection: "row",
         marginBottom: 10,
+        justifyContent: "center",
     },
     checkBoxLine: {
         position: "absolute",
@@ -128,19 +142,24 @@ const styles = StyleSheet.create({
         top: 10,
     },
     checkBox: {
-        width: 20,
-        height: 20,
+        position: "absolute",
+        width: 25,
+        height: 25,
         borderWidth: 2,
-        borderColor: "#42AEF4",
-        borderRadius: 3,
-        backgroundColor: "white"
+        borderColor: "#241468",
+        borderRadius: 15,
+        backgroundColor: "#241468",
+        left: "101%",
+        bottom: "105%"
     },
     card: {
+        position: "relative",
         minWidth: WIDTH * 0.8,
         paddingHorizontal: 10,
         paddingVertical: 10,
         borderRadius: 5,
         marginLeft: 10,
+        marginBottom: 20,
     },
     cardName: {
         color: "#241468",
