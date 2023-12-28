@@ -15,6 +15,20 @@ const colorList = [
 
 export default function ClassCard({ cardDetail, check, index, onClick, background }) {
 
+    const getSchedule = (item) => {
+        switch (item?.schedules[0].dayOfWeeks) {
+            case "Monday":
+                return "Thứ 2 - 4 - 6 (7h30 - 9h)"
+            case "Tuesday":
+                return "Thứ 3 - 5 - 7 (7h30 - 9h)"
+            case "Saturday":
+                return "Thứ 7 - Cn (7h30 - 9h)"
+
+            default:
+                break;
+        }
+    }
+
     return (
         <TouchableOpacity style={styles.container} onPress={() => { onClick(cardDetail.id) }}>
             {
@@ -89,7 +103,7 @@ export default function ClassCard({ cardDetail, check, index, onClick, backgroun
                     </View>
                     <View style={{ ...styles.flexColumn, width: "35%" }}>
                         <Icon name={"map-marker-radius"} color={"#241468"} size={18} />
-                        <Text style={styles.cardDetailText}>{cardDetail?.lecture?.address ? cardDetail?.lecture?.address : "Chưa có địa chỉ"}</Text>
+                        <Text style={styles.cardDetailText}>{cardDetail?.address ? cardDetail?.address : "Chưa có địa chỉ"}</Text>
                     </View>
                 </View>
             </View>

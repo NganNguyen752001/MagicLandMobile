@@ -61,7 +61,6 @@ export default function AttendanceScreen({ navigation }) {
 
     const [studentList, setStudentList] = useState(studentListDefault)
     const [searchValue, setSearchValue] = useState("")
-    const [mode, setMode] = useState("attend")
 
     const handleCheckAttend = (id) => {
         const index = studentList.findIndex(obj => obj.id === id);
@@ -73,8 +72,8 @@ export default function AttendanceScreen({ navigation }) {
         setStudentList(updateArray)
     }
 
-    const handleChangeMode = (mode) => {
-        setMode(mode)
+    const handleCompleteAttend = () => {
+        console.log("completed attend");
     }
 
     const handleClearAttend = () => {
@@ -107,75 +106,41 @@ export default function AttendanceScreen({ navigation }) {
                         <Text style={styles.columnNote}>Ghi chú</Text>
                     </View>
                     {
-                        mode === "attend" ?
-                            studentList.map((item, index) => {
-                                return (
-                                    <TouchableOpacity
-                                        onPress={() => handleCheckAttend(item.id)}
-                                        style={{ ...styles.tableColumn, borderBottomWidth: 1 }}
-                                        key={index}>
-                                        <View style={styles.columnNumber}>
-                                            <Text style={{ ...styles.boldText, marginHorizontal: 10 }}>{index + 1}</Text>
-                                            <Icon name={"account-circle"} color={"#908484"} size={70} />
-                                        </View>
-                                        <Text style={styles.columnName}>{item?.name}</Text>
-                                        <View style={styles.columnStatus}>
-                                            {
-                                                !item?.status ?
-                                                    <Icon name={"circle"} color={"#908484"} size={15} />
-                                                    :
-                                                    <View style={styles.checkIcon}>
-                                                        <Icon name={"check"} color={"#3AAC45"} size={12} />
-                                                    </View>
-                                            }
-                                            <Text style={{ marginHorizontal: 10 }}>Có mặt</Text>
-                                        </View>
-                                        <Text style={styles.columnNote}>Ghi chú</Text>
-                                    </TouchableOpacity>
-                                )
-                            })
-                            :
-                            studentList.map((item, index) => {
-                                return (
-                                    <TouchableOpacity
-                                        onPress={() => handleCheckAttend(item.id)}
-                                        style={{ ...styles.tableColumn, borderBottomWidth: 1 }}
-                                        key={index}>
-                                        <View style={styles.columnNumber}>
-                                            <Text style={{ ...styles.boldText, marginHorizontal: 10 }}>{index + 1}</Text>
-                                            <Icon name={"account-circle"} color={"#908484"} size={70} />
-                                        </View>
-                                        <Text style={styles.columnName}>{item?.name}</Text>
-                                        <View style={styles.columnStatus}>
-                                            <TouchableOpacity style={{marginRight: 10}}>
-                                                <Image
-                                                    source={unhappyIcon}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={{marginRight: 10}}>
-                                                <Image
-                                                    source={happyIcon}
-                                                />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity>
-                                                <Image
-                                                    source={ContentedIcon}
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-                                        <Text style={styles.columnNote}>Ghi chú</Text>
-                                    </TouchableOpacity>
-                                )
-                            })
+                        studentList.map((item, index) => {
+                            return (
+                                <TouchableOpacity
+                                    onPress={() => handleCheckAttend(item.id)}
+                                    style={{ ...styles.tableColumn, borderBottomWidth: 1 }}
+                                    key={index}>
+                                    <View style={styles.columnNumber}>
+                                        <Text style={{ ...styles.boldText, marginHorizontal: 10 }}>{index + 1}</Text>
+                                        <Icon name={"account-circle"} color={"#908484"} size={70} />
+                                    </View>
+                                    <Text style={styles.columnName}>{item?.name}</Text>
+                                    <View style={styles.columnStatus}>
+                                        {
+                                            !item?.status ?
+                                                <Icon name={"circle"} color={"#908484"} size={15} />
+                                                :
+                                                <View style={styles.checkIcon}>
+                                                    <Icon name={"check"} color={"#3AAC45"} size={12} />
+                                                </View>
+                                        }
+                                        <Text style={{ marginHorizontal: 10, color: item?.status ? "#3AAC45" : "black" }}>Có mặt</Text>
+                                    </View>
+                                    <Text style={styles.columnNote}>Ghi chú</Text>
+                                </TouchableOpacity>
+                            )
+                        })
                     }
                 </View>
                 {
-                    getAttendList().length !== 0 && mode === "attend" &&
+                    getAttendList().length !== 0 &&
                     <View style={styles.buttonPack}>
                         <TouchableOpacity style={{ ...styles.buttonView }} onPress={handleClearAttend}>
                             <Text style={{ ...styles.boldText, width: "100%" }}>Hủy</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ ...styles.buttonView, backgroundColor: "#241468" }} onPress={() => handleChangeMode("rate")}>
+                        <TouchableOpacity style={{ ...styles.buttonView, backgroundColor: "#241468" }} onPress={handleCompleteAttend}>
                             <Text style={{ ...styles.boldText, width: "100%", color: "white" }}>Điểm danh</Text>
                         </TouchableOpacity>
                     </View>

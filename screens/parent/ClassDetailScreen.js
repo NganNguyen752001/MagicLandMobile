@@ -2,11 +2,11 @@ import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView,
 import React, { useState, useEffect, useContext } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import Header from '../components/header/Header';
-import NotificationModal from '../components/modal/NotificationModal';
-import CircularProgressBar from '../components/CircularProgressBar';
+import Header from '../../components/header/Header';
+import NotificationModal from '../../components/modal/NotificationModal';
+import CircularProgressBar from '../../components/CircularProgressBar';
 
-import ThuyTienAvt from "../assets/images/ThuyTienAvt.png"
+// import ThuyTienAvt from "../assets/images/ThuyTienAvt.png"
 // import ProcessBar from '../components/ProcessBar';
 
 const WIDTH = Dimensions.get('window').width;

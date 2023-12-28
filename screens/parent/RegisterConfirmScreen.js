@@ -2,9 +2,9 @@ import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView,
 import React, { useState, useEffect, useContext } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import Header from '../components/header/Header';
+import Header from '../../components/header/Header';
 
-import { formatPrice } from '../util/util';
+import { formatPrice } from '../../util/util';
 
 
 const WIDTH = Dimensions.get('window').width;

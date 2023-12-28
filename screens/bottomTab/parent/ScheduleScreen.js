@@ -1,59 +1,137 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import StudentView from '../../components/StudentView';
-import { Calendar, CalendarProvider, WeekCalendar } from 'react-native-calendars';
-import Header from '../../components/header/Header';
+import StudentView from '../../../components/StudentView';
+import { CalendarProvider, Calendar, WeekCalendar, Agenda } from 'react-native-calendars';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../../store/selector';
+import Header from '../../../components/header/Header';
 
-const dateListDefault = [
+const studentListDefault = [
   {
-    date: "2023-12-13T00:00:00",
-    classList: [
+    id: 0,
+    fullName: "Lê Bảo Ngọc",
+    age: "10",
+    dob: "2-2-2002",
+    check: true,
+    dateList: [
       {
-        title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
-        time: "10:00-13:00",
-        room: "110",
+        date: "2023-12-13T00:00:00",
+        classList: [
+          {
+            title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
+            time: "10:00-13:00",
+            room: "110",
+          },
+        ]
       },
+      {
+        date: "2023-12-14T00:00:00",
+        classList: [
+          {
+            title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
+            time: "10:00-13:00",
+            room: "110",
+          },
+          {
+            title: "Hát cùng cô giáo nhỏ",
+            time: "10:00-13:00",
+            room: "110",
+          },
+          {
+            title: "Toán Tư Duy",
+            time: "10:00-13:00",
+            room: "110",
+          },
+        ]
+      },
+
     ]
   },
   {
-    date: "2023-12-14T00:00:00",
-    classList: [
+    id: 1,
+    fullName: "Trần Hữu Nghĩa",
+    age: "11",
+    dob: "2-2-2003",
+    check: false,
+    dateList: [
       {
-        title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
-        time: "10:00-13:00",
-        room: "110",
+        date: "2023-12-14T00:00:00",
+        classList: [
+          {
+            title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
+            time: "10:00-13:00",
+            room: "110",
+          },
+        ]
       },
       {
-        title: "Hát cùng cô giáo nhỏ",
-        time: "10:00-13:00",
-        room: "110",
+        date: "2023-12-15T00:00:00",
+        classList: [
+          {
+            title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
+            time: "10:00-13:00",
+            room: "110",
+          },
+          {
+            title: "Hát cùng cô giáo nhỏ",
+            time: "10:00-13:00",
+            room: "110",
+          },
+          {
+            title: "Toán Tư Duy",
+            time: "10:00-13:00",
+            room: "110",
+          },
+        ]
       },
-      {
-        title: "Toán Tư Duy",
-        time: "10:00-13:00",
-        room: "110",
-      },
+
     ]
   },
-
 ]
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-export default function WorkScheduleScreen({ navigation }) {
+export default function ScheduleScreen({ navigation }) {
 
-  const [dateList, setDateList] = useState(dateListDefault)
+  const [studentList, setStudentList] = useState(studentListDefault)
   const [dateSelected, setDateSelected] = useState(new Date);
   const [calendarType, setCalendarType] = useState("month")
 
+  const user = useSelector(userSelector);
+
+  // useEffect(() => {
+  //   loadStudentData()
+  // }, [])
+
+  // const loadStudentData = async () => {
+  //   setStudentList(user?.students)
+  // }
+
   const handleClassNavigate = (classDetail) => {
-    navigation.push("AttendanceScreen", { classDetail: classDetail })
+    navigation.push("ClassStudyDetailScreen", { classDetail: classDetail })
+  }
+
+  const hanldeAddStudent = () => {
+    navigation.push("AddStudent")
+  }
+
+  const selectStudent = (id) => {
+    const index = studentList.findIndex(obj => obj.id === id);
+    const updateArray = [...studentListDefault]
+    const defaultStatus = updateArray[index].check
+    updateArray.forEach(item => item.check = false)
+    updateArray[index].check = !defaultStatus;
+    // console.log(updateArray);
+    setStudentList(updateArray)
   }
 
   const getCurrentDate = (date) => {
-    const currentDate = dateList.filter(item => item.date.substring(0, 10) === date?.dateString)
+    const selectedStudent = studentList.find((student) =>
+      student.check === true
+    );
+    const currentDate = selectedStudent?.dateList.filter(item => item.date.substring(0, 10) === date?.dateString)
     return currentDate
   }
 
@@ -63,7 +141,7 @@ export default function WorkScheduleScreen({ navigation }) {
 
     return (
       <TouchableOpacity style={[styles.customDate, dateSelected === date.dateString && styles.selectedDate]} onPress={() => { setDateSelected(date.dateString) }}>
-        <Text style={styles.boldText}>{date.day}</Text>
+        <Text style={{...styles.boldText}}>{date.day}</Text>
         {
           currentDate && currentDate[0]?.classList?.map((item, index) => {
             return (
@@ -82,6 +160,7 @@ export default function WorkScheduleScreen({ navigation }) {
                 <Text
                   style={{
                     ...styles.scheduleText,
+                    fontSize: 10,
                     color: index === 0 ?
                       "#F52798" :
                       index === 1 ?
@@ -97,7 +176,6 @@ export default function WorkScheduleScreen({ navigation }) {
       </TouchableOpacity>
     );
   };
-
 
   function formatScheduleDate(inputDate) {
     const daysOfWeek = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
@@ -117,23 +195,45 @@ export default function WorkScheduleScreen({ navigation }) {
 
   return (
     <>
-      <Header navigation={navigation} background={"#241468"} title={"Lich Làm Việc"} goback={() => navigation.navigate("Root")} />
+      <Header navigation={navigation} background={"#241468"} title={"Lịch Học"} goback={navigation.pop} />
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+        <View style={styles.titleView}>
+          <Text style={styles.title}>Danh sách các cháu:</Text>
+        </View>
+        <ScrollView showsHorizontalScrollIndicator={false} horizontal style={styles.studentList}>
+          {
+            studentList?.map((item, index) => {
+              return (
+                <StudentView student={item} index={index} key={index} onClick={selectStudent} />
+              )
+            })
+          }
+          <View style={styles.studentView}>
+            <TouchableOpacity style={styles.studentImage} onPress={hanldeAddStudent}>
+              <Icon name={"account-plus"} color={"#5A5A5A"} size={50} />
+            </TouchableOpacity>
+            <View style={styles.studentNameView}>
+              <Text style={styles.studentName}>
+                Thêm Bé
+              </Text>
+            </View>
+          </View >
+        </ScrollView>
         <View style={styles.titleView}>
           <Text style={styles.title}>Lịch học:</Text>
         </View>
         <View style={styles.calendarView}>
           <View style={{ ...styles.flexColumnBetween, marginVertical: 20 }}>
-            <Text style={styles.boldText}>{formatScheduleDate(dateSelected)}</Text>
+            <Text style={{...styles.boldText, fontSize: 10}}>{formatScheduleDate(dateSelected)}</Text>
             <View style={{ ...styles.flexColumn, borderWidth: 1, borderRadius: 10, overflow: "hidden" }}>
               <TouchableOpacity style={{ ...styles.changeTypeButton, backgroundColor: calendarType === "month" ? "#241468" : "white" }} onPress={() => { setCalendarType("month") }}>
-                <Text style={{ ...styles.boldText, color: calendarType === "month" ? "white" : "#888888" }}>Tháng</Text>
+                <Text style={{ ...styles.boldText, fontSize: 10, color: calendarType === "month" ? "white" : "#888888" }}>Tháng</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ ...styles.changeTypeButton, backgroundColor: calendarType === "week" ? "#241468" : "white" }} onPress={() => { setCalendarType("week") }}>
-                <Text style={{ ...styles.boldText, color: calendarType === "week" ? "white" : "#888888" }}>Tuần</Text>
+                <Text style={{ ...styles.boldText, fontSize: 10, color: calendarType === "week" ? "white" : "#888888" }}>Tuần</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ ...styles.changeTypeButton, borderRightWidth: 0, backgroundColor: calendarType === "day" ? "#241468" : "white" }} onPress={() => { setCalendarType("day") }}>
-                <Text style={{ ...styles.boldText, color: calendarType === "day" ? "white" : "#888888" }}>Ngày</Text>
+                <Text style={{ ...styles.boldText, fontSize: 10, color: calendarType === "day" ? "white" : "#888888" }}>Ngày</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -171,6 +271,7 @@ export default function WorkScheduleScreen({ navigation }) {
                   </View>
                 </View>
               </>
+
               : calendarType === "week" ?
 
                 <CalendarProvider date={dateSelected}>
@@ -226,8 +327,10 @@ export default function WorkScheduleScreen({ navigation }) {
           }
 
         </View>
+
       </ScrollView>
     </>
+
   )
 }
 
@@ -326,6 +429,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center"
   },
+  boldText: {
+    fontWeight: "600"
+  },
 
   calendarView: {
     width: WIDTH * 0.95,
@@ -336,7 +442,7 @@ const styles = StyleSheet.create({
     marginHorizontal: WIDTH * 0.025
   },
   changeTypeButton: {
-    padding: 15,
+    padding: 10,
     borderRightWidth: 1
   },
   customDate: {
@@ -391,4 +497,5 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginRight: 10
   }
+
 });

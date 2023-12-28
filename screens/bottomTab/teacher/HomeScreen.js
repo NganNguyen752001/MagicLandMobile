@@ -3,9 +3,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { useSelector } from 'react-redux';
-import { userSelector } from '../store/selector';
+import { userSelector } from '../../../store/selector';
 
-import SearchBar from '../components/SearchBar';
+import SearchBar from '../../../components/SearchBar';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;

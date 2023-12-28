@@ -1,15 +1,18 @@
-import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView, StyleSheet } from 'react-native'
-import React, { useState, useEffect, useContext } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import Header from '../components/header/Header';
-import ChooseVourcherModal from '../components/modal/ChooseVourcherModal';
-import InputOtpModal from '../components/modal/InputOtpModal';
-import PaymentSuccessModal from '../components/modal/PaymentSuccessModal';
+import FavoriteHeader from '../../components/header/FavoriteHeader';
+import { formatPrice } from '../../util/util';
 
-import { formatPrice } from '../util/util';
+// import defaultCardImage from "../assets/home/cardImage/homeCardDrawImg.png"
+import ChooseVourcherModal from '../../components/modal/ChooseVourcherModal';
+import InputOtpModal from '../../components/modal/InputOtpModal';
+import PaymentSuccessModal from '../../components/modal/PaymentSuccessModal';
+import Header from '../../components/header/Header';
 
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
 
 const vourcherListDefault = [
     {
@@ -50,21 +53,16 @@ const vourcherListDefault = [
     },
 ]
 
-const WIDTH = Dimensions.get('window').width;
-const HEIGHT = Dimensions.get('window').height;
+export default function MultiplePaymentScreen({ route, navigation }) {
 
-export default function PaymentScreen({ route, navigation }) {
-
-    let classDetail = route?.params?.classDetail
-    const [studentList, setStudentList] = useState(route?.params?.studentList)
+    let courseList = route?.params?.courseList
     const [vourcherList, setVourcherList] = useState(vourcherListDefault)
     const [modalVisible, setModalVisible] = useState({ vourcher: false, otp: false, notifi: false })
 
     useEffect(() => {
-        classDetail = route?.params?.classDetail
-        setStudentList(route?.params?.studentList)
+        courseList = route?.params?.courseList
         setVourcherList(vourcherListDefault)
-    }, [route?.params?.classDetail, route?.params?.studentList])
+    }, [route?.params?.courseList])
 
     const hanldeCloseOtpModal = () => {
         setModalVisible({ ...modalVisible, otp: false })
@@ -110,7 +108,11 @@ export default function PaymentScreen({ route, navigation }) {
     }
 
     const totalPrice = () => {
-        return (studentList.length * (classDetail.price ? classDetail.price : 200000))
+        let total = 0
+        courseList.forEach(element => {
+            total += element.price
+        });
+        return total ? total : 0
     }
 
     const vourcherDiscount = () => {
@@ -126,12 +128,12 @@ export default function PaymentScreen({ route, navigation }) {
     const totalPayment = () => {
         const discountValue = vourcherValue() ? vourcherDiscount() : 0
         const totalPayment = totalPrice() - discountValue
-        return totalPayment
+        return totalPayment ? totalPayment : 0
     }
 
     return (
         <>
-            <Header navigation={navigation} background={"#241468"} title={"Thông tin thanh toán"} goback={navigation.popToTop} />
+            <Header navigation={navigation} background={"#241468"} title={"Thông tin thanh toán"} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <View style={styles.checkPayment}>
                     <Icon name={"alert-circle"} color={"#241468"} size={28} />
@@ -140,34 +142,27 @@ export default function PaymentScreen({ route, navigation }) {
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Thông Tin Đăng Ký</Text>
                 </View>
-                {
-                    studentList?.map((item, index) => {
-                        return (
-                            <View style={styles.studentDetail} key={index}>
-                                {
-                                    index !== 0 &&
-                                    <View style={styles.dashline} />
-                                }
-                                <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
-                                    <Text style={styles.detailViewTitle}>Tên học viên:</Text>
-                                    <Text style={styles.boldText}>{item.name}</Text>
-                                </View>
-                                <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
-                                    <Text style={styles.detailViewTitle}>Khóa Học:</Text>
-                                    <Text style={styles.boldText}>{classDetail.name}</Text>
-                                </View>
-                                <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
-                                    <Text style={styles.detailViewTitle}>Khai giảng ngày:</Text>
-                                    <Text style={{ ...styles.boldText, color: "#2ECFFB" }}>05/01/2024</Text>
-                                </View>
-                                <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
-                                    <Text style={styles.detailViewTitle}>Lịch Học:</Text>
-                                    <Text style={{ ...styles.boldText, color: "#2ECFFB" }}>Thứ 2-4-6 / tuần (7h30 - 9h)</Text>
-                                </View>
+
+                <View style={styles.courseInfor}>
+                    <View style={styles.flexColumnBetween}>
+                        <Text>
+                            Khóa Học:
+                        </Text>
+                        <Text style={{width: "53%" }}>
+                            Lịch Học:
+                        </Text>
+                    </View>
+                    {
+                        courseList.map((item, index) => (
+                            <View style={{ ...styles.flexColumnBetween }} key={index}>
+                                {/* {console.log(item?.date)} */}
+                                <Text style={{ ...styles.boldText, marginTop: 5 }}>{item?.class.name}</Text>
+                                <Text style={{ ...styles.boldText, marginTop: 5 }}>{item?.class?.date?.name}</Text>
                             </View>
-                        )
-                    })
-                }
+                        ))
+                    }
+                </View>
+
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Chọn phương thức thanh toán</Text>
                 </View>
@@ -175,7 +170,7 @@ export default function PaymentScreen({ route, navigation }) {
                 <View style={styles.studentDetail} >
                     <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5, borderBottomWidth: 1, paddingBottom: 10, borderColor: "#F9ACC0" }}>
                         <Text style={styles.detailViewTitle}>Học Phí:</Text>
-                        <Text style={styles.boldText}>{formatPrice(200000)}đ</Text>
+                        <Text style={styles.boldText}>{formatPrice(totalPrice())}đ</Text>
                     </View>
                     <TouchableOpacity style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, height: 45, marginVertical: 5, borderBottomWidth: 1, paddingBottom: 10, borderColor: "#F9ACC0" }} onPress={handleChooseVourcherModal}>
                         <Text style={{ ...styles.detailViewTitle, color: "#3AAC45" }}>Vourcher Giảm Giá</Text>
@@ -207,6 +202,7 @@ export default function PaymentScreen({ route, navigation }) {
             <PaymentSuccessModal visible={modalVisible.notifi} onSubmit={handleCloseNotifiModal} />
         </>
     )
+
 }
 
 const styles = StyleSheet.create({
@@ -272,6 +268,10 @@ const styles = StyleSheet.create({
         height: 2,
         backgroundColor: "#FF8D9D",
         marginVertical: 10
+    },
+    courseInfor: {
+        width: WIDTH * 0.8,
+        marginHorizontal: WIDTH * 0.1,
     },
 
     buttonContainer: {

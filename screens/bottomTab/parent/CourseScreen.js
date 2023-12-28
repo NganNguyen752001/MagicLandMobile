@@ -3,15 +3,15 @@ import { useFocusEffect } from '@react-navigation/native';
 import React, { useState, useEffect, useRef } from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import SearchBar from '../components/SearchBar';
-import CourseSlide from '../components/CourseSlide';
-import CourseCard from '../components/CourseCard';
-import FilterCustomModal from '../components/modal/FilterCustomModal';
-import InputRange from '../components/InputRange';
-import StarChoose from '../components/StarChoose';
-import { getAllCourse } from '../api/course';
-import SpinnerLoading from '../components/SpinnerLoading';
-import { userSelector } from '../store/selector';
+import SearchBar from '../../../components/SearchBar';
+import CourseSlide from '../../../components/CourseSlide';
+import CourseCard from '../../../components/CourseCard';
+import FilterCustomModal from '../../../components/modal/FilterCustomModal';
+import InputRange from '../../../components/InputRange';
+import StarChoose from '../../../components/StarChoose';
+import { getAllCourse } from '../../../api/course';
+import SpinnerLoading from '../../../components/SpinnerLoading';
+import { userSelector } from '../../../store/selector';
 import { useSelector } from 'react-redux';
 
 const WIDTH = Dimensions.get('window').width;
@@ -60,13 +60,13 @@ const priceDefault = {
 const homeContentDetail = {
     carousel: [
         {
-            img: require("../assets/home/carousel/carouselImg1.png")
+            img: require("../../../assets/home/carousel/carouselImg1.png")
         },
         {
-            img: require("../assets/home/carousel/carouselImg2.png")
+            img: require("../../../assets/home/carousel/carouselImg2.png")
         },
         {
-            img: require("../assets/home/carousel/carouselImg3.png")
+            img: require("../../../assets/home/carousel/carouselImg3.png")
         },
     ],
     courseIcon: [
@@ -74,43 +74,43 @@ const homeContentDetail = {
             id: 0,
             type: "math",
             name: "Toán",
-            img: require("../assets/home/courseImage/courseMath.png")
+            img: require("../../../assets/home/courseImage/courseMath.png")
         },
         {
             id: 1,
             type: "physics",
             name: "Vật Lý",
-            img: require("../assets/home/courseImage/coursePhysics.png")
+            img: require("../../../assets/home/courseImage/coursePhysics.png")
         },
         {
             id: 2,
             type: "translation",
             name: "Ngoại Ngữ",
-            img: require("../assets/home/courseImage/courseTranslation.png")
+            img: require("../../../assets/home/courseImage/courseTranslation.png")
         },
         {
             id: 3,
             type: "art",
             name: "Vẽ",
-            img: require("../assets/home/courseImage/courseArt.png")
+            img: require("../../../assets/home/courseImage/courseArt.png")
         },
         {
             id: 4,
             type: "cooking",
             name: "Nấu Ăn",
-            img: require("../assets/home/courseImage/courseCooking.png")
+            img: require("../../../assets/home/courseImage/courseCooking.png")
         },
         {
             id: 5,
             type: "ballet",
             name: "Ba Lê",
-            img: require("../assets/home/courseImage/courseBallet.png")
+            img: require("../../../assets/home/courseImage/courseBallet.png")
         },
         {
             id: 6,
             type: "coding",
             name: "Lập Trình",
-            img: require("../assets/home/courseImage/courseCoding.png")
+            img: require("../../../assets/home/courseImage/courseCoding.png")
         },
     ]
 }

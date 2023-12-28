@@ -14,10 +14,10 @@ export default function ChooseClassModal({ visible, classList, setClassList, set
         const index = classList.findIndex(obj => obj.id === id);
         const updateArray = [...classList]
         const defaultStatus = updateArray[index].choose
-        updateArray.forEach(item => item.choose = false)
+        // updateArray.forEach(item => item.choose = false)
         updateArray[index].choose = !defaultStatus;
         setClassList(updateArray)
-        setClassChoosed(updateArray[index])
+        setClassChoosed(updateArray?.filter(obj => obj.choose === true))
     }
 
     return (
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: "#241468"
     },
-    cardList:{
+    cardList: {
         marginTop: 20,
         paddingHorizontal: WIDTH * 0.05
     }

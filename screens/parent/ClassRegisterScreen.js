@@ -2,31 +2,14 @@ import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView,
 import React, { useState, useEffect, useContext } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-import Header from '../components/header/Header';
-import StudentView from '../components/StudentView';
+import Header from '../../components/header/Header';
+import StudentView from '../../components/StudentView';
 
-import { formatDate, formatPrice } from '../util/util';
-import ClassCard from '../components/ClassCard';
-import ChooseClassModal from '../components/modal/ChooseClassModal';
+import { formatDate, formatPrice } from '../../util/util';
+import ClassCard from '../../components/ClassCard';
+import ChooseClassModal from '../../components/modal/ChooseClassModal';
 import { useSelector } from 'react-redux';
-import { userSelector } from '../store/selector';
-
-const studentListDefault = [
-    {
-        id: 0,
-        name: "Lê Bảo Ngọc",
-        age: "10",
-        dob: "2-2-2002",
-        check: true,
-    },
-    {
-        id: 1,
-        name: "Trần Hữu Nghĩa",
-        age: "11",
-        dob: "2-2-2003",
-        check: false,
-    },
-]
+import { userSelector } from '../../store/selector';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -35,14 +18,13 @@ export default function ClassRegisterScreen({ route, navigation }) {
 
     const [studentList, setStudentList] = useState([])
     const [classList, setClassList] = useState(route?.params?.classList)
-    const [classChoosed, setClassChoosed] = useState(classList?.filter(obj => obj.choose === true)[0])
+    const [classChoosed, setClassChoosed] = useState(classList?.filter(obj => obj.choose === true))
     const [modalVisible, setModalVisible] = useState({ classChoose: false })
     const user = useSelector(userSelector);
 
     useEffect(() => {
         setClassList(route?.params?.classList)
-        setStudentList(studentListDefault)
-        setClassChoosed(classList?.filter(obj => obj.choose === true)[0])
+        setClassChoosed(classList?.filter(obj => obj.choose === true))
         setStudentList(user.students)
     }, [route?.params?.classList, route?.params?.goback])
 
@@ -57,13 +39,13 @@ export default function ClassRegisterScreen({ route, navigation }) {
 
     const selectStudent = (id) => {
         setStudentList((prevStudentList) => {
-          const index = prevStudentList.findIndex(obj => obj.id === id);
-          return prevStudentList.map((item, i) => ({
-            ...item,
-            check: i === index ? !item.check : item.check ,
-          }));
+            const index = prevStudentList.findIndex(obj => obj.id === id);
+            return prevStudentList.map((item, i) => ({
+                ...item,
+                check: i === index ? !item.check : item.check,
+            }));
         });
-      };
+    };
 
     const onCancleClassChoose = () => {
         setModalVisible({ ...modalVisible, classChoose: false })
@@ -143,29 +125,35 @@ export default function ClassRegisterScreen({ route, navigation }) {
                     <Text style={styles.title}>Thông Tin Khóa Học:</Text>
                 </View>
                 <View style={{ ...styles.studentDetail, marginTop: 20 }}>
+
+                    <Text style={styles.boldText}>Thông tin khóa học:</Text>
                     {
-                        classChoosed &&
-                        <>
-                            <Text style={styles.boldText}>Thông tin khóa học:</Text>
-                            <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
-                                <Text style={styles.detailViewTitle}>Tên Khóa Học:</Text>
-                                <Text style={styles.boldText}>{classChoosed?.name} </Text>
-                            </View>
-                            <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
-                                <Text style={styles.detailViewTitle}>Số Lượng Đăng Ký:</Text>
-                                <Text style={styles.boldText}>{classChoosed?.registerAmount ? classChoosed?.registerAmount : 0}</Text>
-                            </View>
-                            <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
-                                <Text style={styles.detailViewTitle}>Học Phí:</Text>
-                                <Text style={styles.boldText}>{formatPrice(classChoosed?.price ? classChoosed?.price : 0)}đ</Text>
-                            </View>
-                        </>
+                        classChoosed.map((item, index) => {
+                            // borderTopWidth:  1 : 0,
+                            return (
+                                <View style={[index !== 0 ? styles.classDetail : ""]} key={index}>
+                                    <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
+                                        <Text style={styles.detailViewTitle}>Tên Khóa Học:</Text>
+                                        <Text style={styles.boldText}>{item?.name} </Text>
+                                    </View>
+                                    <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
+                                        <Text style={styles.detailViewTitle}>Số Lượng Đăng Ký:</Text>
+                                        <Text style={styles.boldText}>{item?.limitNumberStudent ? item?.limitNumberStudent : 0} học sinh</Text>
+                                    </View>
+                                    <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
+                                        <Text style={styles.detailViewTitle}>Học Phí:</Text>
+                                        <Text style={styles.boldText}>{formatPrice(item?.price ? item?.price : 0)}đ</Text>
+                                    </View>
+                                </View>
+                            )
+                        })
+
                     }
                 </View>
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Lịch Học:</Text>
                     {
-                        !classChoosed &&
+                        !classChoosed[0] &&
                         <TouchableOpacity style={{ ...styles.addClass, ...styles.flexColumn }} onPress={onChooseClass}>
                             <Text style={styles.addClassText}>Vui lòng chọn lịch học</Text>
                             <View style={styles.addClassIcon}>
@@ -176,15 +164,17 @@ export default function ClassRegisterScreen({ route, navigation }) {
                 </View>
                 <View style={styles.classCard}>
                     {
-                        classChoosed &&
-                        <>
-                            <ClassCard cardDetail={classChoosed} index={classChoosed?.id} check={false} onClick={onChooseClass} />
-                            <TouchableOpacity style={{ ...styles.flexColumn, marginLeft: 20 }} onPress={onChooseClass}>
-                                <Icon name={"edit"} color={"#CFC9CA"} size={22} />
-                                <Text style={styles.chooseClassText}>Chọn lịch học khác</Text>
-                            </TouchableOpacity>
-                        </>
+                        classChoosed.map((item, index) => (
+                            <React.Fragment key={index}>
+                                <ClassCard cardDetail={item} index={item?.id} check={false} onClick={onChooseClass} />
+
+                            </React.Fragment>
+                        ))
                     }
+                    <TouchableOpacity style={{ ...styles.flexColumn, marginLeft: 20 }} onPress={onChooseClass}>
+                        <Icon name={"edit"} color={"#CFC9CA"} size={22} />
+                        <Text style={styles.chooseClassText}>Chọn lịch học khác</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={{ ...styles.button, backgroundColor: "#4582E6" }} onPress={() => { hanldeConfirm() }}>
@@ -249,6 +239,11 @@ const styles = StyleSheet.create({
     },
     studentDetail: {
         paddingHorizontal: WIDTH * 0.12
+    },
+    classDetail: {
+        paddingTop: 10,
+        borderTopWidth: 1,
+        marginTop: 10,
     },
     detailView: {
         marginVertical: 10,

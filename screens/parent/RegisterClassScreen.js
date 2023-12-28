@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { formatPrice } from '../util/util';
-import DropdownComponent from '../components/DropdownComponent';
-import FavoriteHeader from '../components/header/FavoriteHeader';
+import { formatPrice } from '../../util/util';
+import DropdownComponent from '../../components/DropdownComponent';
+import FavoriteHeader from '../../components/header/FavoriteHeader';
 import { useSelector } from 'react-redux';
-import { userSelector } from '../store/selector';
+import { userSelector } from '../../store/selector';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -14,11 +14,15 @@ const HEIGHT = Dimensions.get('window').height;
 const dateDefault = [
     {
         id: 0,
-        fullName: "Thứ 2 - 4 - 6 (7h30 - 9h)",
+        name: "Thứ 2 - 4 - 6 (7h30 - 9h)",
     },
     {
         id: 1,
-        fullName: "Thứ 3 - 5 - 7 (7h30 - 9h)",
+        name: "Thứ 3 - 5 - 7 (7h30 - 9h)",
+    },
+    {
+        id: 2,
+        name: "Thứ 7 - Cn (7h30 - 9h)",
     },
 ]
 
@@ -28,7 +32,19 @@ export default function RegisterClassScreen({ route, navigation }) {
     const [visible, setVisible] = useState({ submit: true })
     const user = useSelector(userSelector);
 
+    useEffect(() => {
+        loadSchedule()
+    }, [route?.params?.courseList])
+
+    const loadSchedule = async () => {
+        courseList.map(item => {
+            checkExistedSchedule(item) &&
+                setSchedule(item)
+        })
+    }
+
     const handleNavigate = () => {
+        // console.log(courseList[1].class);
         if (totalComplete() === courseList.length) {
             navigation.push("MultiplePaymentScreen", { courseList: courseList })
         }
@@ -85,7 +101,31 @@ export default function RegisterClassScreen({ route, navigation }) {
         return amount
     }
 
-    console.log(totalComplete());
+    const checkExistedSchedule = (item) => {
+        const index = courseList.findIndex(obj => obj.class.id === item?.class.id);
+        return courseList[index]?.class?.schedules[0] ?
+            true
+            :
+            false
+    }
+
+    const setSchedule = (item) => {
+        const index = courseList.findIndex(obj => obj.class.id === item?.class.id);
+        switch (courseList[index]?.class?.schedules[0].dayOfWeeks) {
+            case "Monday":
+                handleChooseDate(item?.class, dateDefault[0])
+                break;
+            case "Tuesday":
+                handleChooseDate(item?.class, dateDefault[1])
+                break;
+            case "Saturday":
+                handleChooseDate(item?.class, dateDefault[2])
+                break;
+
+            default:
+                break;
+        }
+    }
 
     return (
         <>
@@ -137,6 +177,7 @@ export default function RegisterClassScreen({ route, navigation }) {
                                                 studentList={user.students}
                                                 labelField={"fullName"}
                                                 valueField={"id"}
+                                                dropdownItem={(item) => item.fullName}
                                                 rightIcon={() => (
                                                     !item.class.student &&
                                                     <View style={{ backgroundColor: "rgba(126, 134, 158, 0.25)", borderRadius: 50 }}>
@@ -157,8 +198,9 @@ export default function RegisterClassScreen({ route, navigation }) {
                                         <DropdownComponent
                                             dropdownStyle={styles.dropdownStyle}
                                             studentList={dateDefault}
-                                            labelField={"fullName"}
+                                            labelField={"name"}
                                             valueField={"id"}
+                                            dropdownItem={(item) => item.name}
                                             rightIcon={() => (
                                                 !item?.class.date &&
                                                 <View >
@@ -167,11 +209,15 @@ export default function RegisterClassScreen({ route, navigation }) {
                                             )}
                                             onChoose={(date) => handleChooseDate(item?.class, date)}
                                             placeHolder={
-                                                item?.class?.date ?
+                                                checkExistedSchedule(item) ?
                                                     item?.class?.date?.name
                                                     :
-                                                    <Text numberOfLines={1}>Chọn lớp</Text>
+                                                    item?.class?.date ?
+                                                        item?.class?.date?.name
+                                                        :
+                                                        <Text numberOfLines={1}>Chọn lớp</Text>
                                             }
+                                            disable={checkExistedSchedule(item)}
                                         />
                                         {/* <Text style={[styles.tableText]} >Lịch học</Text> */}
                                     </View>
@@ -344,7 +390,7 @@ const styles = StyleSheet.create({
     },
 
     dropdownStyle: {
-        width: 100,
+        // width: 100,
         maxWidth: "100%",
         justifyContent: "center",
         alignItems: "center",

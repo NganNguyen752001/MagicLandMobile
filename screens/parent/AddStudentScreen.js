@@ -6,15 +6,15 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { CheckBox } from "@rneui/themed";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import MainButton from "../components/MainButton";
+import MainButton from "../../components/MainButton";
 import { useDispatch } from 'react-redux';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
-import { addStudent } from "../api/student";
-import { fetchUser } from "../store/features/authSlice";
+import { addStudent } from "../../api/student";
+import { fetchUser } from "../../store/features/authSlice";
 import { Icon, Button } from "@rneui/themed";
-import { storage } from "../firebase.config";
+import { storage } from "../../firebase.config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 
 export default function AddStudentScreen() {
@@ -118,7 +118,7 @@ export default function AddStudentScreen() {
                 }) => (
                     <>
                         <Text style={styles.title}>Thêm học viên</Text>
-                        <Image style={{ width: 180, height: 180 }} source={image ? { uri: image } : require('./../assets/images/empty_avatar.png')}></Image>
+                        <Image style={{ width: 180, height: 180 }} source={image ? { uri: image } : require('../../assets/images/empty_avatar.png')}></Image>
                         <View style={{ height: 25, width: '75%', justifyContent: 'center' }}>
                             {imageError &&
                                 <Text style={{ fontSize: 12, color: 'red' }}>{imageError}</Text>
@@ -199,7 +199,7 @@ export default function AddStudentScreen() {
                     </>
                 )}
             </Formik>
-            <Image source={require('./../assets/images/logo.png')} style={styles.logo} />
+            <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
         </KeyboardAwareScrollView>
     )
 }

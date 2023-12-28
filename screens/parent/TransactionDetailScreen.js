@@ -2,13 +2,13 @@ import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView,
 import React, { useState, useEffect, useContext } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-import Header from '../components/header/Header';
-import PaymentSuccessModal from '../components/modal/PaymentSuccessModal';
-import { formatDate, formatPrice, formatTime } from '../util/util';
+import Header from '../../components/header/Header';
+import PaymentSuccessModal from '../../components/modal/PaymentSuccessModal';
+import { formatDate, formatPrice, formatTime } from '../../util/util';
 
-import monneyIcon from "../assets/images/money-send.png"
+import monneyIcon from "../../assets/images/money-send.png"
 import { useSelector } from 'react-redux';
-import { userSelector } from '../store/selector';
+import { userSelector } from '../../store/selector';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;

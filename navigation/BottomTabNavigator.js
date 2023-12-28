@@ -4,31 +4,32 @@ import { Image, StyleSheet, ActivityIndicator, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../store/selector';
 
-import HomeScreen from '../screens/HomeScreen';
-import DocumentScreen from '../screens/DocumentScreen';
-import ScanScreen from '../screens/ScanScreen';
-import ScheduleScreen from '../screens/ScheduleScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import ProfileScreen from '../screens/bottomTab/ProfileScreen';
+import ScanScreen from '../screens/bottomTab/ScanScreen';
+import DocumentScreen from '../screens/bottomTab/parent/DocumentScreen';
+import ScheduleScreen from '../screens/bottomTab/parent/ScheduleScreen';
+import CourseScreen from '../screens/bottomTab/parent/CourseScreen';
+import HomeScreen from '../screens/bottomTab/teacher/HomeScreen';
+import WorkScheduleScreen from '../screens/bottomTab/teacher/WorkScheduleScreen';
+import RateStudentScreen from '../screens/bottomTab/teacher/RateStudentScreen';
 
-import CourseScreen from '../screens/CourseScreen';
-import CourseDetailScreen from '../screens/CourseDetailScreen';
-import ClassScreen from '../screens/ClassScreen';
-import ClassDetailScreen from '../screens/ClassDetailScreen';
-import ClassRegisterScreen from '../screens/ClassRegisterScreen';
-import ClassConfirmScreen from '../screens/ClassConfirmScreen';
-import RegisterConfirmScreen from '../screens/RegisterConfirmScreen';
-import PaymentScreen from '../screens/PaymentScreen';
-import CartScreen from '../screens/CartScreen';
-import ChooseVoucherScreen from '../screens/ChooseVoucherScreen';
-import TransactionDetailScreen from '../screens/TransactionDetailScreen';
-import RegisterClassScreen from '../screens/RegisterClassScreen';
-import MultiplePaymentScreen from '../screens/MultiplePaymentScreen';
-import ClassStudyDetailScreen from '../screens/ClassStudyDetailScreen';
-import ClassContentScreen from '../screens/ClassContentScreen';
-import MutilpleChoiceScreen from '../screens/MutilpleChoiceScreen';
+import CourseDetailScreen from '../screens/parent/CourseDetailScreen';
+import ClassScreen from '../screens/parent/ClassScreen';
+import ClassDetailScreen from '../screens/parent/ClassDetailScreen';
+import ClassRegisterScreen from '../screens/parent/ClassRegisterScreen';
+import ClassConfirmScreen from '../screens/parent/ClassConfirmScreen';
+import RegisterConfirmScreen from '../screens/parent/RegisterConfirmScreen';
+import PaymentScreen from '../screens/parent/PaymentScreen';
+import CartScreen from '../screens/parent/CartScreen';
+import ChooseVoucherScreen from '../screens/parent/ChooseVoucherScreen';
+import TransactionDetailScreen from '../screens/parent/TransactionDetailScreen';
+import RegisterClassScreen from '../screens/parent/RegisterClassScreen';
+import MultiplePaymentScreen from '../screens/parent/MultiplePaymentScreen';
+import ClassStudyDetailScreen from '../screens/parent/ClassStudyDetailScreen';
+import ClassContentScreen from '../screens/parent/ClassContentScreen';
+import MutilpleChoiceScreen from '../screens/parent/MutilpleChoiceScreen';
 
-import WorkScheduleScreen from '../screens/teacher/WorkScheduleScreen';
-import RateStudentScreen from '../screens/teacher/RateStudentScreen';
+
 import AttendanceScreen from '../screens/teacher/AttendanceScreen';
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";

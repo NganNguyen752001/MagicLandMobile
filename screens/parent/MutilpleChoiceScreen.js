@@ -1,8 +1,8 @@
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Header from '../components/header/Header'
-import CorrentAnswerModal from '../components/modal/CorrentAnswerModal';
-import IncorrentAnswerModal from '../components/modal/IncorrentAnswerModal';
+import Header from '../../components/header/Header'
+import CorrentAnswerModal from '../../components/modal/CorrentAnswerModal';
+import IncorrentAnswerModal from '../../components/modal/IncorrentAnswerModal';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;

@@ -2,14 +2,14 @@ import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView,
 import React, { useState, useEffect, useContext } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { getCartOfParent, removeClassInCart } from "../api/cart"
+import { getCartOfParent, removeClassInCart } from "../../api/cart"
 
-import FavoriteHeader from '../components/header/FavoriteHeader';
+import FavoriteHeader from '../../components/header/FavoriteHeader';
 
-import { formatPrice, getIndexById } from '../util/util';
-import CourseCard from '../components/CourseCard';
-import ClassCard from '../components/ClassCard';
-import SpinnerLoading from "../components/SpinnerLoading"
+import { formatPrice, getIndexById } from '../../util/util';
+import CourseCard from '../../components/CourseCard';
+import ClassCard from '../../components/ClassCard';
+import SpinnerLoading from "../../components/SpinnerLoading"
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -77,7 +77,7 @@ export default function CartScreen({ navigation }) {
     }
 
     const getCountChoosed = () => {
-        const choosesListCount = classCardDetail?.filter(item => item.choose)
+        const choosesListCount = classCardDetail?.filter(item => item.class.choose)
         return choosesListCount.length
     }
 
@@ -110,10 +110,11 @@ export default function CartScreen({ navigation }) {
                 dataLoading ?
                     <SpinnerLoading />
                     :
-                    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+                    <ScrollView showsVerticalScrollIndicator={false} style={{...styles.container}}>
                         {classCardDetail?.map((item, index) => {
                             return <ClassCard cardDetail={item.class} check={bottomModalVisible.total} index={index} onClick={selectCourse} key={index} />
                         })}
+                        <View  style={{height: bottomModalVisible.total ? bottomModalVisible.confirm ? 195 : 135 : 30}}/>
                     </ScrollView>
             }
             {
@@ -155,11 +156,13 @@ export default function CartScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
+        height: HEIGHT,
         backgroundColor: 'white',
         paddingHorizontal: WIDTH * 0.03,
         paddingTop: 20,
         // borderTopLeftRadius: 30,
         // borderTopRightRadius: 30,
+        paddingBottom: 80
     },
     flexColumnAround: {
         width: WIDTH,

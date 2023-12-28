@@ -2,13 +2,13 @@ import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView,
 import React, { useState, useEffect, useContext } from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { getClassByCourseId } from '../api/class';
+import { getClassByCourseId } from '../../api/class';
 
-import ClassCard from '../components/ClassCard';
-import FilterCustomModal from '../components/modal/FilterCustomModal';
-import SpinnerLoading from '../components/SpinnerLoading';
-import { truncateString, formatPrice } from '../util/util';
-import { modifyCart } from '../api/cart';
+import ClassCard from '../../components/ClassCard';
+import FilterCustomModal from '../../components/modal/FilterCustomModal';
+import SpinnerLoading from '../../components/SpinnerLoading';
+import { truncateString, formatPrice } from '../../util/util';
+import { modifyCart } from '../../api/cart';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -126,7 +126,7 @@ export default function CourseDetailScreen({ route, navigation }) {
         setViewDetail({ detail: false, course: false })
         loadClassData()
         course = route?.params?.course
-    }, [])
+    }, [route?.params?.course])
 
     const loadClassData = async () => {
         setDataLoading(true)
@@ -149,7 +149,7 @@ export default function CourseDetailScreen({ route, navigation }) {
         const index = classCardDetail.findIndex(obj => obj.id === id);
         const updateArray = [...classCardDetail]
         const defaultStatus = updateArray[index].choose ? updateArray[index].choose : false
-        updateArray.forEach(item => item.choose = false)
+        // updateArray.forEach(item => item.choose = false)
         updateArray[index].choose = !defaultStatus;
         setClassCardDetail(updateArray)
     }
@@ -159,14 +159,16 @@ export default function CourseDetailScreen({ route, navigation }) {
     }
 
     const handleCare = async () => {
-        const classChoosed = getChoosedClass()
-        if (classChoosed) {
-            const response = await modifyCart([], classChoosed.id)
-            if (response?.status === 200) {
-                console.log(`Đã thêm ${classChoosed?.name} vào giỏ hàng`);
-            } else {
-                console.log(`Thêm ${classChoosed?.name} vào giỏ hàng thất bại`);
-            }
+        const classChoosed = classCardDetail.filter(obj => obj.choose === true);
+        if (classChoosed[0]) {
+            classChoosed.map(async (item) => {
+                const response = await modifyCart([], item.id)
+                if (response?.status === 200) {
+                    console.log(`Đã thêm ${item?.name} vào giỏ hàng`);
+                } else {
+                    console.log(`Thêm ${item?.name} vào giỏ hàng thất bại`);
+                }
+            })
         } else {
             console.log("chưa Chọn lớp");
         }

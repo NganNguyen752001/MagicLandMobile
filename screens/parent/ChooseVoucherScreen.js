@@ -3,12 +3,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-import Header from '../components/header/Header';
-import ChooseVourcherModal from '../components/modal/ChooseVourcherModal';
-import InputOtpModal from '../components/modal/InputOtpModal';
-import PaymentSuccessModal from '../components/modal/PaymentSuccessModal';
+import Header from '../../components/header/Header';
+import ChooseVourcherModal from '../../components/modal/ChooseVourcherModal';
+import InputOtpModal from '../../components/modal/InputOtpModal';
+import PaymentSuccessModal from '../../components/modal/PaymentSuccessModal';
 
-import { formatPrice } from '../util/util';
+import { formatPrice } from '../../util/util';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;

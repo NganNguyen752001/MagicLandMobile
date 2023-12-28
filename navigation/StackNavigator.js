@@ -12,31 +12,31 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import FillInfoScreen from '../screens/FillInfoScreen';
 
-import AddStudentScreen from '../screens/AddStudentScreen';
-import StudentMenuScreen from '../screens/StudentMenuScreen';
-import StudentClassScreen from '../screens/StudentClassScreen';
+import CourseScreen from '../screens/bottomTab/parent/CourseScreen';
+import HomeScreen from '../screens/bottomTab/teacher/HomeScreen';
+import WorkScheduleScreen from '../screens/bottomTab/teacher/WorkScheduleScreen';
+import RateStudentScreen from '../screens/bottomTab/teacher/RateStudentScreen';
 
-import HomeScreen from '../screens/HomeScreen';
-import WorkScheduleScreen from '../screens/teacher/WorkScheduleScreen';
-import RateStudentScreen from '../screens/teacher/RateStudentScreen';
+import AddStudentScreen from '../screens/parent/AddStudentScreen';
+import StudentMenuScreen from '../screens/parent/StudentMenuScreen';
+import StudentClassScreen from '../screens/parent/StudentClassScreen';
+import CourseDetailScreen from '../screens/parent/CourseDetailScreen';
+import ClassScreen from '../screens/parent/ClassScreen';
+import ClassDetailScreen from '../screens/parent/ClassDetailScreen';
+import ClassRegisterScreen from '../screens/parent/ClassRegisterScreen';
+import ClassConfirmScreen from '../screens/parent/ClassConfirmScreen';
+import RegisterConfirmScreen from '../screens/parent/RegisterConfirmScreen';
+import PaymentScreen from '../screens/parent/PaymentScreen';
+import CartScreen from '../screens/parent/CartScreen';
+import ChooseVoucherScreen from '../screens/parent/ChooseVoucherScreen';
+import TransactionDetailScreen from '../screens/parent/TransactionDetailScreen';
+import RegisterClassScreen from '../screens/parent/RegisterClassScreen';
+import MultiplePaymentScreen from '../screens/parent/MultiplePaymentScreen';
+import ClassStudyDetailScreen from '../screens/parent/ClassStudyDetailScreen';
+import ClassContentScreen from '../screens/parent/ClassContentScreen';
+import MutilpleChoiceScreen from '../screens/parent/MutilpleChoiceScreen';
+
 import AttendanceScreen from '../screens/teacher/AttendanceScreen';
-
-import CourseScreen from '../screens/CourseScreen';
-import CourseDetailScreen from '../screens/CourseDetailScreen';
-import ClassScreen from '../screens/ClassScreen';
-import ClassDetailScreen from '../screens/ClassDetailScreen';
-import ClassRegisterScreen from '../screens/ClassRegisterScreen';
-import ClassConfirmScreen from '../screens/ClassConfirmScreen';
-import RegisterConfirmScreen from '../screens/RegisterConfirmScreen';
-import PaymentScreen from '../screens/PaymentScreen';
-import CartScreen from '../screens/CartScreen';
-import ChooseVoucherScreen from '../screens/ChooseVoucherScreen';
-import TransactionDetailScreen from '../screens/TransactionDetailScreen';
-import RegisterClassScreen from '../screens/RegisterClassScreen';
-import MultiplePaymentScreen from '../screens/MultiplePaymentScreen';
-import ClassStudyDetailScreen from '../screens/ClassStudyDetailScreen';
-import ClassContentScreen from '../screens/ClassContentScreen';
-import MutilpleChoiceScreen from '../screens/MutilpleChoiceScreen';
 
 const Stack = createNativeStackNavigator();
 const StackNavigator = () => {

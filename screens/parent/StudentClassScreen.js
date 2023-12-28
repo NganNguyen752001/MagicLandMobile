@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Dimensions, FlatList, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { getClasses } from '../api/student';
+import { getClasses } from '../../api/student';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useFonts, Inter_400Regular, Inter_700Bold } from '@expo-google-fonts/inter';
 import { Baloo2_700Bold } from '@expo-google-fonts/baloo-2';

@@ -2,12 +2,12 @@ import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, ScrollView,
 import React, { useState, useEffect, useContext } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 
-import Header from '../components/header/Header';
-import SearchBar from '../components/SearchBar';
-import ClassCard from '../components/ClassCard';
-import FilterCustomModal from '../components/modal/FilterCustomModal';
-import InputRange from '../components/InputRange';
-import StarChoose from '../components/StarChoose';
+import Header from '../../components/header/Header';
+import SearchBar from '../../components/SearchBar';
+import ClassCard from '../../components/ClassCard';
+import FilterCustomModal from '../../components/modal/FilterCustomModal';
+import InputRange from '../../components/InputRange';
+import StarChoose from '../../components/StarChoose';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
