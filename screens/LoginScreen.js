@@ -53,8 +53,8 @@ export default function LoginScreen() {
       }
     } catch (error) {
       console.error(error);
+      setLoading(false)
       if (error.response?.status === 404) {
-        setLoading(false)
         setErrorMessage("Tài khoản của bạn không tồn tại, hãy đăng kí để tiếp tục");
       }
     }
@@ -84,7 +84,7 @@ export default function LoginScreen() {
   }
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
-      {/* {loading && (<LoadingModal />)} */}
+      {loading && (<LoadingModal />)}
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}
         firebaseConfig={firebaseConfig}
