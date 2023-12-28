@@ -17,6 +17,7 @@ import { Icon, Button } from "@rneui/themed";
 import { storage } from "../../firebase.config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import { format } from 'date-fns';
+import LoadingModal from "../../components/LoadingModal"
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
