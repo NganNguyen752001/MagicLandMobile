@@ -19,3 +19,13 @@ export const getCourseByCourseId = async () => {
         return error;
     }
 };
+
+export const getCourseCategories = async () => {
+    try {
+        const response = await api.get(`/api/v1/courses/categories`);
+        return response;
+    } catch (error) {
+        console.log("getCourseCategories in api/course.js error : ", error);
+        return error;
+    }
+};

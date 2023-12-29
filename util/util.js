@@ -43,3 +43,24 @@ export const formatTime = (date) => {
 export function getIndexById(array, id) {
     return array.findIndex(obj => obj.id === id);
 }
+
+export function getMinMaxPrice(courses) {
+    if (!courses || courses.length === 0) {
+        return { minPrice: undefined, maxPrice: undefined };
+    }
+
+    let minPrice = courses[0].price;
+    let maxPrice = courses[0].price;
+
+    for (let i = 1; i < courses.length; i++) {
+        const currentPrice = courses[i].price;
+        if (currentPrice < minPrice) {
+            minPrice = currentPrice;
+        }
+        if (currentPrice > maxPrice) {
+            maxPrice = currentPrice;
+        }
+    }
+
+    return { minPrice, maxPrice };
+}

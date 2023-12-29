@@ -12,9 +12,10 @@ const MAXWIDTH = WIDTH * 0.8 - KONBSIZE / 2 + 6
 
 export default function InputRange({ min, max, minValue, maxValue, steps, title, onValueChange }) {
 
-    const xKnob1 = useSharedValue(Math.round((minValue / (max - min)) * MAXWIDTH));
+    // const xKnob1 = useSharedValue(Math.round((minValue / (max - min)) * MAXWIDTH));Math.round((value - min) * MAXWIDTH / (max - min))
+    const xKnob1 = useSharedValue(Math.round((minValue - min) * MAXWIDTH / (max - min)))
     const scaleKnob1 = useSharedValue(1)
-    const xKnob2 = useSharedValue(Math.round((maxValue / (max - min)) * MAXWIDTH));
+    const xKnob2 = useSharedValue(Math.round((maxValue - min) * MAXWIDTH / (max - min)))
     const scaleKnob2 = useSharedValue(1)
 
     const gestureHandler1 = useAnimatedGestureHandler({
@@ -31,9 +32,10 @@ export default function InputRange({ min, max, minValue, maxValue, steps, title,
         },
         onEnd: () => {
             scaleKnob1.value = 1;
-            const minValue = Math.round((min + (xKnob1.value / MAXWIDTH) * (max - min) / steps) * steps)
-            const maxValue = Math.round((min + (xKnob2.value / MAXWIDTH) * (max - min) / steps) * steps) 
-            runOnJS(onValueChange)({ min: minValue, max: maxValue})
+            runOnJS(onValueChange)({
+                min: Math.round((min + (xKnob1.value / MAXWIDTH) * (max - min)) / steps) * steps,
+                max: Math.round((min + (xKnob2.value / MAXWIDTH) * (max - min)) / steps) * steps
+            })
         },
     })
 
@@ -51,7 +53,10 @@ export default function InputRange({ min, max, minValue, maxValue, steps, title,
         },
         onEnd: () => {
             scaleKnob2.value = 1;
-            runOnJS(onValueChange)({ min: Math.round((min + (xKnob1.value / MAXWIDTH) * (max - min) / steps) * steps), max: Math.round((min + (xKnob2.value / MAXWIDTH) * (max - min) / steps) * steps) })
+            runOnJS(onValueChange)({
+                min: Math.round((min + (xKnob1.value / MAXWIDTH) * (max - min)) / steps) * steps,
+                max: Math.round((min + (xKnob2.value / MAXWIDTH) * (max - min)) / steps) * steps
+            })
         },
     })
 
@@ -94,16 +99,16 @@ export default function InputRange({ min, max, minValue, maxValue, steps, title,
 
     const propsLabel1 = useAnimatedProps(() => {
         return {
-            text: `${Math.round((min + (xKnob1.value / MAXWIDTH) * (max - min) / steps) * steps)}`,
+            text: `${Math.round((min + (xKnob1.value / MAXWIDTH) * (max - min)) / steps) * steps}`,
         }
     })
 
     const propsLabel2 = useAnimatedProps(() => {
         return {
-            text: `${Math.round((min + (xKnob2.value / MAXWIDTH) * (max - min) / steps) * steps)}`,
+            text: `${Math.round((min + (xKnob2.value / MAXWIDTH) * (max - min)) / steps) * steps}`,
         }
     })
-    
+
     return (
         <GestureHandlerRootView>
             <View style={styles.rangeContainer}>
@@ -145,6 +150,7 @@ const styles = StyleSheet.create({
     },
     track: {
         height: 3,
+        width: MAXWIDTH,
         backgroundColor: "#B8B8D2",
         borderRadius: 3,
     },

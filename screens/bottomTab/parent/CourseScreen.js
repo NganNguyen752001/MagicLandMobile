@@ -11,123 +11,58 @@ import InputRange from '../../../components/InputRange';
 import StarChoose from '../../../components/StarChoose';
 import { getAllCourse } from '../../../api/course';
 import SpinnerLoading from '../../../components/SpinnerLoading';
-import { userSelector } from '../../../store/selector';
+import { userSelector, courseSelector } from '../../../store/selector';
 import { useSelector } from 'react-redux';
+import { getMinMaxPrice } from '../../../util/util';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-const courseOptionDefault = [
-    {
-        name: "Tất cả",
-        choose: true
-    },
-    {
-        name: "Toán",
-        choose: false
-    },
-    {
-        name: "Vật Lý",
-        choose: false
-    },
-    {
-        name: "Ngoại Ngữ",
-        choose: false
-    },
-    {
-        name: "Vẽ",
-        choose: false
-    },
-    {
-        name: "Nấu Ăn",
-        choose: false
-    },
-    {
-        name: "Ba Lê",
-        choose: false
-    },
-    {
-        name: "Lập Trình",
-        choose: false
-    },
-]
 
 const priceDefault = {
     min: 0,
     max: 2000
 }
 
-const homeContentDetail = {
-    carousel: [
-        {
-            img: require("../../../assets/home/carousel/carouselImg1.png")
-        },
-        {
-            img: require("../../../assets/home/carousel/carouselImg2.png")
-        },
-        {
-            img: require("../../../assets/home/carousel/carouselImg3.png")
-        },
-    ],
-    courseIcon: [
-        {
-            id: 0,
-            type: "math",
-            name: "Toán",
-            img: require("../../../assets/home/courseImage/courseMath.png")
-        },
-        {
-            id: 1,
-            type: "physics",
-            name: "Vật Lý",
-            img: require("../../../assets/home/courseImage/coursePhysics.png")
-        },
-        {
-            id: 2,
-            type: "translation",
-            name: "Ngoại Ngữ",
-            img: require("../../../assets/home/courseImage/courseTranslation.png")
-        },
-        {
-            id: 3,
-            type: "art",
-            name: "Vẽ",
-            img: require("../../../assets/home/courseImage/courseArt.png")
-        },
-        {
-            id: 4,
-            type: "cooking",
-            name: "Nấu Ăn",
-            img: require("../../../assets/home/courseImage/courseCooking.png")
-        },
-        {
-            id: 5,
-            type: "ballet",
-            name: "Ba Lê",
-            img: require("../../../assets/home/courseImage/courseBallet.png")
-        },
-        {
-            id: 6,
-            type: "coding",
-            name: "Lập Trình",
-            img: require("../../../assets/home/courseImage/courseCoding.png")
-        },
-    ]
-}
+
 
 export default function CourseScreen({ navigation }) {
 
     const [courseList, setCourseList] = useState([])
     const [searchValue, setSearchValue] = useState("")
-    const [courseOption, setCourseOption] = useState([...courseOptionDefault])
-    const [filterValue, setFilterValue] = useState({ type: undefined })
+    const [filterValue, setFilterValue] = useState({ type: "ALL" })
     const [filterVisible, setFilterVisible] = useState(false)
     const [dataLoading, setDataLoading] = useState(true)
     const [carouselIndex, setCarouselIndex] = useState(0)
     const [rate, setRate] = useState(0)
-    const [priceRange, setPriceRange] = useState(priceDefault)
+    const [priceRange, setPriceRange] = useState({ min: 0, max: 2000 })
     const scrollViewRef = useRef(null);
     const user = useSelector(userSelector);
+    const course = useSelector(courseSelector)
+    const { minPrice, maxPrice } = getMinMaxPrice(courseList);
+
+    const homeContentDetail = {
+        carousel: [
+            {
+                img: require("../../../assets/home/carousel/carouselImg1.png")
+            },
+            {
+                img: require("../../../assets/home/carousel/carouselImg2.png")
+            },
+            {
+                img: require("../../../assets/home/carousel/carouselImg3.png")
+            },
+        ],
+        courseIcon: [
+            {
+                id: 999,
+                name: "ALL",
+                vietName: "Tất cả",
+                img: require("../../../assets/home/courseImage/courseMath.png")
+            },
+            ...course
+        ]
+    }
 
     useEffect(() => {
         loadAllCourseData()
@@ -152,6 +87,8 @@ export default function CourseScreen({ navigation }) {
         const response = await getAllCourse()
         if (response?.status === 200) {
             setCourseList(response?.data)
+            const { minPrice, maxPrice } = getMinMaxPrice(response?.data);
+            setPriceRange({ min: minPrice, max: maxPrice })
         } else {
             console.log("load courseList fail");
         }
@@ -167,48 +104,55 @@ export default function CourseScreen({ navigation }) {
     }
 
     const hanldeSubmit = () => {
-        hanldeClear()
         setFilterVisible(false)
     }
 
     const hanldeCancle = () => {
-        hanldeClear()
         setFilterVisible(false)
     }
 
     const hanldeClear = () => {
         setRate(0)
-        setPriceRange(priceDefault)
+        setFilterValue({ ...filterValue, type: "ALL" })
+        setPriceRange({ min: minPrice, max: maxPrice })
+        setFilterVisible(false)
     }
 
     const hanldeCoursePress = (course) => {
         navigation.navigate("CourseDetailScreen", { course: course })
     }
 
+    const hanldeFilter = (array) => {
+        let updateArray = [...array]
+        // rate > 0 && updateArray.filter(item => item)
+        filterValue.type !== "ALL" && (updateArray = updateArray.filter(item => item.subject === filterValue.type))
+        updateArray = updateArray.filter(item => item.price >= priceRange.min && item.price <= priceRange.max)
+        return updateArray
+    }
+
     const filterModal = () => {
         return (
             <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Học Phí</Text>
-                <InputRange title={"Học Phí"} min={0} max={2000} minValue={priceRange.min} maxValue={priceRange.max} steps={10} onValueChange={handleChangePrice} />
+                <InputRange title={"Học Phí"} min={minPrice} max={maxPrice} minValue={priceRange.min} maxValue={priceRange.max} steps={1000} onValueChange={handleChangePrice} />
                 <Text style={styles.modalTitle}>Môn Học:</Text>
                 <View style={styles.modalOption}>
                     {
-                        courseOption.map((item, index) => {
+                        homeContentDetail.courseIcon.map((item, index) => {
                             return (
                                 <TouchableOpacity
-                                    style={[styles.optionButton, item.choose && styles.choosed]}
+                                    style={[styles.optionButton, item.name === filterValue.type && styles.choosed]}
                                     onPress={() => {
-                                        setCourseOption((prevAgeOption) => {
-                                            const updatedList = [...prevAgeOption];
-                                            updatedList.map(item => item.choose = false)
-                                            updatedList[index].choose = true;
-                                            return updatedList;
-                                        });
+                                        if (item.name === filterValue.type) {
+                                            setFilterValue({ ...filterValue, type: "ALL" })
+                                        } else {
+                                            setFilterValue({ ...filterValue, type: item.name })
+                                        }
                                     }}
                                     key={index}
                                 >
-                                    <Text style={[styles.optionText, item.choose && styles.choosedText]}>
-                                        {item.name}
+                                    <Text style={[styles.optionText, item.name === filterValue.type && styles.choosedText]}>
+                                        {item.vietName}
                                     </Text>
                                 </TouchableOpacity>
                             )
@@ -279,14 +223,15 @@ export default function CourseScreen({ navigation }) {
                     {
                         homeContentDetail.courseIcon.map((item, index) => {
                             return (
+                                item.name !== "ALL" &&
                                 <TouchableOpacity
                                     style={styles.courseView}
                                     key={index}
                                     onPress={() => {
-                                        if (item.type === filterValue.type) {
-                                            setFilterValue({ ...filterValue, type: undefined })
+                                        if (item.name === filterValue.type) {
+                                            setFilterValue({ ...filterValue, type: "ALL" })
                                         } else {
-                                            setFilterValue({ ...filterValue, type: item.type })
+                                            setFilterValue({ ...filterValue, type: item.name })
                                         }
                                     }}
                                     activeOpacity={0.5}
@@ -294,7 +239,7 @@ export default function CourseScreen({ navigation }) {
                                     <View
                                         style={{
                                             ...styles.courseImageView,
-                                            backgroundColor: item.type === filterValue.type ?
+                                            backgroundColor: item.name === filterValue.type ?
                                                 "rgba(69, 130, 230, 0.7)"
                                                 :
                                                 "rgba(58, 166, 185, 0.25)"
@@ -302,7 +247,7 @@ export default function CourseScreen({ navigation }) {
                                     >
                                         <Image source={item.img} style={styles.courseImage} resizeMode="cover" />
                                     </View>
-                                    <Text style={styles.courseName}>{item.name}</Text>
+                                    <Text style={styles.courseName}>{item.vietName}</Text>
                                 </TouchableOpacity>
                             )
                         })
@@ -332,7 +277,7 @@ export default function CourseScreen({ navigation }) {
                         dataLoading ?
                             <SpinnerLoading />
                             :
-                            courseList.map((item, index) => {
+                            hanldeFilter(courseList).map((item, index) => {
                                 return (
                                     <CourseCard cardDetail={item} onClick={hanldeCoursePress} navigation={navigation} key={index} />
                                 )
