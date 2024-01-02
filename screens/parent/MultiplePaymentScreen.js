@@ -110,7 +110,7 @@ export default function MultiplePaymentScreen({ route, navigation }) {
     const totalPrice = () => {
         let total = 0
         courseList.forEach(element => {
-            total += element.price
+            total += element.coursePrice
         });
         return total ? total : 0
     }

@@ -14,6 +14,7 @@ const studentListDefault = [
     {
         id: 1,
         name: "Nguyễn Văn A",
+        note: "Học Bù"
     },
     {
         id: 2,
@@ -26,6 +27,7 @@ const studentListDefault = [
     {
         id: 4,
         name: "Nguyễn Văn C",
+        note: "Học Bù"
     },
     {
         id: 5,
@@ -38,6 +40,7 @@ const studentListDefault = [
     {
         id: 7,
         name: "Nguyễn Văn A",
+        note: "Học Bù"
     },
     {
         id: 8,
@@ -50,6 +53,7 @@ const studentListDefault = [
     {
         id: 10,
         name: "Nguyễn Văn F",
+        note: "Dự thính"
     },
     {
         id: 11,
@@ -126,9 +130,9 @@ export default function AttendanceScreen({ navigation }) {
                                                     <Icon name={"check"} color={"#3AAC45"} size={12} />
                                                 </View>
                                         }
-                                        <Text style={{ marginHorizontal: 10, color: item?.status ? "#3AAC45" : "black" }}>Có mặt</Text>
+                                        {/* <Text style={{ marginHorizontal: 10, color: item?.status ? "#3AAC45" : "black" }}>Có mặt</Text> */}
                                     </View>
-                                    <Text style={styles.columnNote}>Ghi chú</Text>
+                                    <Text style={styles.columnNote}>{item.note}</Text>
                                 </TouchableOpacity>
                             )
                         })
