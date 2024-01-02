@@ -14,6 +14,7 @@ const studentListDefault = [
   {
     id: 1,
     name: "Nguyễn Văn A",
+    note: "Học Bù"
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ const studentListDefault = [
   {
     id: 4,
     name: "Nguyễn Văn C",
+    note: "Học Bù"
   },
   {
     id: 5,
@@ -38,6 +40,7 @@ const studentListDefault = [
   {
     id: 7,
     name: "Nguyễn Văn A",
+    note: "Học Bù"
   },
   {
     id: 8,
@@ -50,6 +53,7 @@ const studentListDefault = [
   {
     id: 10,
     name: "Nguyễn Văn F",
+    note: "Dự thính"
   },
   {
     id: 11,
@@ -73,7 +77,7 @@ export default function AttendanceScreen({ navigation }) {
   }
 
   const handleClearAttend = () => {
-    const updateArray = [...studentList]  
+    const updateArray = [...studentList]
     updateArray.forEach(item => item.status = false)
     setStudentList(updateArray)
   }
@@ -85,7 +89,7 @@ export default function AttendanceScreen({ navigation }) {
 
   return (
     <>
-      <Header navigation={navigation} background={"#241468"} title={"Lớp TTD - Điểm danh"} goback={navigation.pop} />
+      <Header navigation={navigation} background={"#241468"} title={"Lớp TTD - Điểm danh"} goback={() => navigation.goBack()} />
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={styles.titleView}>
           <Text style={styles.title}>Danh sách lớp:</Text>
@@ -109,8 +113,8 @@ export default function AttendanceScreen({ navigation }) {
                   style={{ ...styles.tableColumn, borderBottomWidth: 1 }}
                   key={index}>
                   <View style={styles.columnNumber}>
-                    <Text style={{ ...styles.boldText, marginHorizontal: 10 }}>{index + 1}</Text>
-                    <Icon name={"account-circle"} color={"#908484"} size={70} />
+                    <Text style={{ ...styles.boldText, marginHorizontal: 10, marginRight: 2 }}>{index + 1}</Text>
+                    <Icon name={"account-circle"} color={"#908484"} size={WIDTH * 0.13} />
                   </View>
                   <Text style={styles.columnName}>{item?.name}</Text>
                   <View style={styles.columnStatus}>
@@ -130,7 +134,7 @@ export default function AttendanceScreen({ navigation }) {
                       />
                     </TouchableOpacity>
                   </View>
-                  <Text style={styles.columnNote}>Ghi chú</Text>
+                  <Text style={styles.columnNote}>{item.note}</Text>
                 </TouchableOpacity>
               )
             })
@@ -192,7 +196,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "25%",
     paddingLeft: 5,
-    alignItems: "center"
+    alignItems: "center",
+    marginRight: 10,
   },
   columnNote: {
     width: "25%",

@@ -23,7 +23,9 @@ export default function FilterCustomModal({ visible, content, onCancle, onSubmit
                         Tìm Kiếm
                     </Text>
                 </View>
-                {content}
+                <ScrollView style={styles.contentScrollView}>
+                    {content}
+                </ScrollView>
                 <View style={styles.modalBottom}>
                     <TouchableOpacity style={styles.cancleButton} onPress={onClear}>
                         <Text style={styles.cancleText}>
@@ -51,6 +53,9 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         backgroundColor: "white"
     },
+    contentScrollView: {
+        height: HEIGHT * 0.6
+    },
     layout: {
         position: "absolute",
         top: 0,
@@ -77,6 +82,7 @@ const styles = StyleSheet.create({
         color: "#4582E6"
     },
     modalBottom: {
+        paddingTop: 5,
         marginBottom: 40,
         flexDirection: "row",
         justifyContent: "center",

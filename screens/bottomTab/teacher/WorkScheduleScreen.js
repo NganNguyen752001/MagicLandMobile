@@ -7,7 +7,7 @@ import Header from '../../../components/header/Header';
 
 const dateListDefault = [
   {
-    date: "2023-12-13T00:00:00",
+    date: "2024-01-13T00:00:00",
     classList: [
       {
         title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
@@ -17,7 +17,7 @@ const dateListDefault = [
     ]
   },
   {
-    date: "2023-12-14T00:00:00",
+    date: "2024-01-14T00:00:00",
     classList: [
       {
         title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",

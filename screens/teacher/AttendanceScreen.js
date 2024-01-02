@@ -117,14 +117,14 @@ export default function AttendanceScreen({ navigation }) {
                                     style={{ ...styles.tableColumn, borderBottomWidth: 1 }}
                                     key={index}>
                                     <View style={styles.columnNumber}>
-                                        <Text style={{ ...styles.boldText, marginHorizontal: 10 }}>{index + 1}</Text>
-                                        <Icon name={"account-circle"} color={"#908484"} size={70} />
+                                        <Text style={{ ...styles.boldText, marginHorizontal: 10, marginRight: 2 }}>{index + 1}</Text>
+                                        <Icon name={"account-circle"} color={"#908484"} size={WIDTH * 0.13} />
                                     </View>
                                     <Text style={styles.columnName}>{item?.name}</Text>
                                     <View style={styles.columnStatus}>
                                         {
                                             !item?.status ?
-                                                <Icon name={"circle"} color={"#908484"} size={15} />
+                                                <Icon name={"circle"} color={"#908484"} size={18} />
                                                 :
                                                 <View style={styles.checkIcon}>
                                                     <Icon name={"check"} color={"#3AAC45"} size={12} />
@@ -187,14 +187,16 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     columnName: {
-        width: "25%",
+        width: "30%",
         paddingLeft: 5
     },
     columnStatus: {
         flexDirection: "row",
-        width: "25%",
+        width: "20%",
         paddingLeft: 5,
-        alignItems: "center"
+        alignItems: "center",
+        justifyContent: "center",
+        marginRight: 10,
     },
     columnNote: {
         width: "25%",
@@ -203,8 +205,8 @@ const styles = StyleSheet.create({
     checkIcon: {
         padding: 2,
         borderRadius: 50,
-        marginHorizontal: 5,
-        backgroundColor: "#BFE3C6"
+        // marginHorizontal: 5,
+        backgroundColor: "#BFE3C6",
     },
     boldText: {
         width: "20%",

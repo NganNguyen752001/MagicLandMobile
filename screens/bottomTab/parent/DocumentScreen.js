@@ -527,10 +527,10 @@ export default function DocumentScreen({ navigation }) {
         <View
           style={{
             ...styles.classItemList,
-            borderColor: type === "start" ?
+            borderColor: type === "UPCOMMING" ?
               "#C8A9F1"
               :
-              type === "going" ?
+              type === "PROGRESSING" ?
                 "#FACE9B"
                 :
                 "#BFE3C6"

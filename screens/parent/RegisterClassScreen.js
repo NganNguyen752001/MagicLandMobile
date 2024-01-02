@@ -67,7 +67,7 @@ export default function RegisterClassScreen({ route, navigation }) {
     const totalPrice = () => {
         let total = 0
         courseList.forEach(element => {
-            total += element.class.price
+            total += element.class.coursePrice
         });
         return total
     }
@@ -222,7 +222,7 @@ export default function RegisterClassScreen({ route, navigation }) {
                                         {/* <Text style={[styles.tableText]} >Lịch học</Text> */}
                                     </View>
                                     <View style={[styles.classPrice]}>
-                                        <Text style={[styles.tableText]}>{formatPrice(item?.coursePrice ? item?.coursePrice : 0)}đ</Text>
+                                        <Text style={[styles.tableText]}>{formatPrice(item?.class?.coursePrice ? item?.class?.coursePrice : 0)}đ</Text>
                                     </View>
                                 </View>
                             )

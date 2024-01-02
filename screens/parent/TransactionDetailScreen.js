@@ -32,7 +32,7 @@ export default function TransactionDetailScreen({ route, navigation }) {
                         <Image style={styles.monneyImage} source={monneyIcon} />
                     </View>
                     <Text style={{ ...styles.boldText, fontSize: 20, color: "#C71212", fontWeight: "700" }}>
-                        -{formatPrice(total)}đ
+                        - {formatPrice(total)}đ
                     </Text>
                 </View>
                 <View style={{ ...styles.flexColumnBetween, alignItems: "center", marginVertical: 10 }}>
