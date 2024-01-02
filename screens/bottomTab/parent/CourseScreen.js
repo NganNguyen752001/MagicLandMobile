@@ -36,6 +36,11 @@ export default function CourseScreen({ navigation }) {
     const [carouselIndex, setCarouselIndex] = useState(0)
     const [rate, setRate] = useState(0)
     const [priceRange, setPriceRange] = useState({ min: 0, max: 2000 })
+    const [filterTmpValue, setFilterTmpValue] = useState({
+        type: "ALL",
+        rate: 0,
+        priceRange: { min: 0, max: 2000 }
+    })
     const scrollViewRef = useRef(null);
     const user = useSelector(userSelector);
     const course = useSelector(courseSelector)
@@ -66,6 +71,7 @@ export default function CourseScreen({ navigation }) {
 
     useEffect(() => {
         loadAllCourseData()
+        loadFilterData()
     }, [])
 
     useEffect(() => {
@@ -80,7 +86,7 @@ export default function CourseScreen({ navigation }) {
             x: WIDTH * carouselIndex,
             animated: true,
         });
-    }, [carouselIndex]);
+    }, [filterValue]);
 
     const loadAllCourseData = async () => {
         setDataLoading(true)
@@ -95,8 +101,19 @@ export default function CourseScreen({ navigation }) {
         setDataLoading(false)
     }
 
+    const loadFilterData = () => {
+        setFilterTmpValue(
+            {
+                type: filterValue.type,
+                rate: rate,
+                priceRange: priceRange
+            }
+        )
+    }
+
     const handleChangePrice = (value) => {
-        setPriceRange({ min: value?.min, max: value?.max })
+        setFilterTmpValue({ ...filterTmpValue, priceRange: { min: value?.min, max: value?.max } })
+        // setPriceRange({ min: value?.min, max: value?.max })
     }
 
     const handleSearch = (value) => {
@@ -104,17 +121,28 @@ export default function CourseScreen({ navigation }) {
     }
 
     const hanldeSubmit = () => {
+        setFilterValue({ ...filterValue, type: filterTmpValue.type })
+        setRate(filterTmpValue.rate)
+        setPriceRange(filterTmpValue.priceRange)
         setFilterVisible(false)
     }
 
     const hanldeCancle = () => {
         setFilterVisible(false)
+        loadFilterData()
     }
 
     const hanldeClear = () => {
         setRate(0)
         setFilterValue({ ...filterValue, type: "ALL" })
         setPriceRange({ min: minPrice, max: maxPrice })
+        setFilterTmpValue(
+            {
+                type: "ALL",
+                rate: 0,
+                priceRange: { min: minPrice, max: maxPrice }
+            }
+        )
         setFilterVisible(false)
     }
 
@@ -134,24 +162,24 @@ export default function CourseScreen({ navigation }) {
         return (
             <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Học Phí</Text>
-                <InputRange title={"Học Phí"} min={minPrice} max={maxPrice} minValue={priceRange.min} maxValue={priceRange.max} steps={1000} onValueChange={handleChangePrice} />
+                <InputRange title={"Học Phí"} min={minPrice} max={maxPrice} minValue={filterTmpValue.priceRange.min} maxValue={filterTmpValue.priceRange.max} steps={1000} onValueChange={handleChangePrice} />
                 <Text style={styles.modalTitle}>Môn Học:</Text>
                 <View style={styles.modalOption}>
                     {
                         homeContentDetail.courseIcon.map((item, index) => {
                             return (
                                 <TouchableOpacity
-                                    style={[styles.optionButton, item.name === filterValue.type && styles.choosed]}
+                                    style={[styles.optionButton, item.name === filterTmpValue.type && styles.choosed]}
                                     onPress={() => {
                                         if (item.name === filterValue.type) {
-                                            setFilterValue({ ...filterValue, type: "ALL" })
+                                            setFilterTmpValue({ ...filterTmpValue, type: "ALL" })
                                         } else {
-                                            setFilterValue({ ...filterValue, type: item.name })
+                                            setFilterTmpValue({ ...filterTmpValue, type: item.name })
                                         }
                                     }}
                                     key={index}
                                 >
-                                    <Text style={[styles.optionText, item.name === filterValue.type && styles.choosedText]}>
+                                    <Text style={[styles.optionText, item.name === filterTmpValue.type && styles.choosedText]}>
                                         {item.vietName}
                                     </Text>
                                 </TouchableOpacity>
@@ -160,7 +188,7 @@ export default function CourseScreen({ navigation }) {
                     }
                 </View>
                 <Text style={styles.modalTitle}>Đánh Giá:</Text>
-                <StarChoose size={rate} setSize={setRate} />
+                <StarChoose size={filterTmpValue.rate} setSize={(rate) => { setFilterTmpValue({ ...filterTmpValue, rate: rate }) }} />
             </View>
         )
     }
@@ -230,8 +258,10 @@ export default function CourseScreen({ navigation }) {
                                     onPress={() => {
                                         if (item.name === filterValue.type) {
                                             setFilterValue({ ...filterValue, type: "ALL" })
+                                            setFilterTmpValue({ ...filterTmpValue, type: "ALL" })
                                         } else {
                                             setFilterValue({ ...filterValue, type: item.name })
+                                            setFilterTmpValue({ ...filterTmpValue, type: item.name })
                                         }
                                     }}
                                     activeOpacity={0.5}

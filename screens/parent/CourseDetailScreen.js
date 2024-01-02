@@ -27,6 +27,10 @@ const filterDetailDefault = {
             name: "Trên 20 học viên",
             check: false,
         },
+        {
+            name: "Tất cả",
+            check: true,
+        },
     ],
     amountLesson: [
         {
@@ -41,6 +45,10 @@ const filterDetailDefault = {
             name: "Trên 20 buổi",
             check: false,
         },
+        {
+            name: "Tất cả",
+            check: true,
+        },
     ],
     type: [
         {
@@ -50,6 +58,10 @@ const filterDetailDefault = {
         {
             name: "Offline",
             check: false,
+        },
+        {
+            name: "Tất cả",
+            check: true,
         },
     ],
     time: [

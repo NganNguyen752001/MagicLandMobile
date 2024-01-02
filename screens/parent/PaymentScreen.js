@@ -77,13 +77,18 @@ export default function PaymentScreen({ route, navigation }) {
 
     const handleSubmitOtp = async (otp) => {
         // console.log(studentList.map(item => item.id), classDetail.id);
-        const response = await modifyCart(studentList.map(item => item.id), classDetail.id)
-        if (response?.status === 200) {
-            console.log(`Đã đăng ký ${studentList.map(item => item.fullName)} vào lớp ${classDetail.name}`);
-            setModalVisible({ ...modalVisible, otp: false, notifi: true })
-        } else {
-            console.log(`Đăng ký ${studentList.map(item => item.fullName)} vào lớp ${classDetail.name} thất bại`);
-        }
+
+        // console.log(classDetail);
+        classDetail?.map(async (classItem) => {
+            const response = await modifyCart(studentList.map(item => item.id), classItem.id)
+            if (response?.status === 200) {
+                console.log(`Đã đăng ký ${studentList.map(item => item.fullName)} vào lớp ${classItem.name}`);
+                setModalVisible({ ...modalVisible, otp: false, notifi: true })
+            } else {
+                console.log(`Đăng ký ${studentList.map(item => item.fullName)} vào lớp ${classItem.name} thất bại`);
+            }
+        })
+
     }
 
     const handleChooseVourcherModal = () => {
@@ -118,7 +123,11 @@ export default function PaymentScreen({ route, navigation }) {
     }
 
     const totalPrice = () => {
-        return (studentList.length * (classDetail.price ? classDetail.price : 200000))
+        let totalPrice = 0
+        classDetail?.map(item => {
+            totalPrice += item.coursePrice
+        })
+        return (studentList.length * (totalPrice !== 0 ? totalPrice : 200000))
     }
 
     const vourcherDiscount = () => {
@@ -183,11 +192,10 @@ export default function PaymentScreen({ route, navigation }) {
                 <View style={styles.titleView}>
                     <Text style={styles.title}>Chọn phương thức thanh toán</Text>
                 </View>
-
                 <View style={styles.studentDetail} >
                     <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5, borderBottomWidth: 1, paddingBottom: 10, borderColor: "#F9ACC0" }}>
                         <Text style={styles.detailViewTitle}>Học Phí:</Text>
-                        <Text style={styles.boldText}>{formatPrice(200000)}đ</Text>
+                        <Text style={styles.boldText}>{formatPrice(classDetail[0].coursePrice)}đ</Text>
                     </View>
                     <TouchableOpacity style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, height: 45, marginVertical: 5, borderBottomWidth: 1, paddingBottom: 10, borderColor: "#F9ACC0" }} onPress={handleChooseVourcherModal}>
                         <Text style={{ ...styles.detailViewTitle, color: "#3AAC45" }}>Vourcher Giảm Giá</Text>

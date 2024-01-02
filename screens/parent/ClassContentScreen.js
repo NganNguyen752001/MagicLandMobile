@@ -15,6 +15,7 @@ const contentDataDefault = [
                 homeworkList: [
                     {
                         answer: 2,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -24,6 +25,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 3,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -33,6 +35,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 4,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -42,6 +45,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 1,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -57,6 +61,7 @@ const contentDataDefault = [
                 homeworkList: [
                     {
                         answer: 1,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -66,6 +71,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 3,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -75,6 +81,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 2,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -84,6 +91,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 4,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -99,6 +107,7 @@ const contentDataDefault = [
                 homeworkList: [
                     {
                         answer: 1,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -108,6 +117,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 2,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -117,6 +127,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 3,
+                        mark: 1,
                         answerList: [
                             1,
                             2,
@@ -126,6 +137,7 @@ const contentDataDefault = [
                     },
                     {
                         answer: 4,
+                        mark: 1,
                         answerList: [
                             1,
                             2,

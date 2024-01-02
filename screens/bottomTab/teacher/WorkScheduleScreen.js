@@ -174,7 +174,7 @@ export default function WorkScheduleScreen({ navigation }) {
               </>
               : calendarType === "week" ?
 
-                <CalendarProvider date={dateSelected}>
+                <CalendarProvider date={dateSelected ? dateSelected : new Date}>
                   <WeekCalendar
                     onDayPress={(day) => {
                       setDateSelected(day.dateString);

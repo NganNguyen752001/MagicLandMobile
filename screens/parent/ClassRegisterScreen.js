@@ -142,7 +142,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                                     </View>
                                     <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5 }}>
                                         <Text style={styles.detailViewTitle}>Học Phí:</Text>
-                                        <Text style={styles.boldText}>{formatPrice(item?.price ? item?.price : 0)}đ</Text>
+                                        <Text style={styles.boldText}>{formatPrice(item?.coursePrice ? item?.coursePrice : 0)}đ</Text>
                                     </View>
                                 </View>
                             )

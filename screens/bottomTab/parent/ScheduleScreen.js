@@ -16,7 +16,7 @@ const studentListDefault = [
     check: true,
     dateList: [
       {
-        date: "2023-12-13T00:00:00",
+        date: "2024-01-13T00:00:00",
         classList: [
           {
             title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
@@ -26,7 +26,7 @@ const studentListDefault = [
         ]
       },
       {
-        date: "2023-12-14T00:00:00",
+        date: "2024-01-14T00:00:00",
         classList: [
           {
             title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
@@ -56,7 +56,7 @@ const studentListDefault = [
     check: false,
     dateList: [
       {
-        date: "2023-12-14T00:00:00",
+        date: "2024-01-14T00:00:00",
         classList: [
           {
             title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
@@ -66,7 +66,7 @@ const studentListDefault = [
         ]
       },
       {
-        date: "2023-12-15T00:00:00",
+        date: "2024-01-15T00:00:00",
         classList: [
           {
             title: "Khóa Học Vẽ Cho Trẻ Mới Bắt Đầu",
@@ -274,7 +274,7 @@ export default function ScheduleScreen({ navigation }) {
 
               : calendarType === "week" ?
 
-                <CalendarProvider date={dateSelected}>
+                <CalendarProvider date={dateSelected ? dateSelected : new Date}>
                   <WeekCalendar
                     onDayPress={(day) => {
                       setDateSelected(day.dateString);

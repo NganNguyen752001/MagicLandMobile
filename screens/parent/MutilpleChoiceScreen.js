@@ -9,9 +9,10 @@ const HEIGHT = Dimensions.get('window').height;
 
 export default function MutilpleChoiceScreen({ route, navigation }) {
 
+    const [totalMark, setTotalMark] = useState(0)
     const [homeworkData, setHomeworkData] = useState(route?.params?.homework)
     const [homeworkListIndex, setHomeworkListIndex] = useState(0)
-    const [modalVisible, setModalVisible] = useState({ correct: false, incorrect: false })
+    const [modalVisible, setModalVisible] = useState({ correct: false, incorrect: false, chooseValue: "" })
 
     useEffect(() => {
         setHomeworkData(route?.params?.homework)
@@ -19,16 +20,18 @@ export default function MutilpleChoiceScreen({ route, navigation }) {
 
     const handleChooseAnswer = (answer) => {
         if (answer === homeworkData.homeworkList[homeworkListIndex].answer) {
-            setModalVisible({ ...modalVisible, correct: true })
+            setTotalMark(totalMark + homeworkData.homeworkList[homeworkListIndex].mark)
+            setModalVisible({ ...modalVisible, correct: true, chooseValue: answer })
+        } else {
+            setModalVisible({ ...modalVisible, incorrect: true, chooseValue: answer })
+        }
+
+        setTimeout(() => {
             if (homeworkListIndex !== homeworkData.homeworkList.length - 1) {
                 setHomeworkListIndex(homeworkListIndex + 1)
             }
-        } else {
-            setModalVisible({ ...modalVisible, incorrect: true })
-        }
-        setTimeout(() => {
-            setModalVisible({ correct: false, incorrect: false });
-        }, 1000);
+            setModalVisible({ correct: false, incorrect: false, chooseValue: "" });
+        }, 2000);
     }
 
     return (
@@ -36,13 +39,35 @@ export default function MutilpleChoiceScreen({ route, navigation }) {
             <Header navigation={navigation} background={"#241468"} goback={navigation.pop} title={"Chủ đề 3 - Bài 10 + 11"} />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
                 <View>
+                    {/* <Text style={styles.questionMark}>{homeworkData.homeworkList[homeworkListIndex].mark} Điểm</Text> */}
+                    <Text style={styles.questionMark}>{totalMark} Điểm</Text>
                     <Text style={styles.correctAnswer}>{homeworkData.homeworkList[homeworkListIndex].answer}</Text>
                     <View style={styles.flexColumnCenter}>
                         {
                             homeworkData.homeworkList[homeworkListIndex].answerList.map((item, index) => {
                                 return (
-                                    <TouchableOpacity style={styles.answerButton} onPress={() => handleChooseAnswer(item)} key={index}>
-                                        <Text style={{ ...styles.boldText, fontSize: 25 }}>{item}</Text>
+                                    <TouchableOpacity
+                                        style={{
+                                            ...styles.answerButton,
+                                            backgroundColor:
+                                                modalVisible.chooseValue === item ?
+                                                    modalVisible.correct ?
+                                                        "#3AAC45"
+                                                        :
+                                                        "#F8935B"
+                                                    :
+                                                    "white"
+                                        }}
+                                        onPress={() => handleChooseAnswer(item)} key={index}
+                                    >
+                                        <Text
+                                            style={{
+                                                ...styles.boldText,
+                                                fontSize: 25,
+                                                color: modalVisible.chooseValue === item && (modalVisible.correct || modalVisible.incorrect) ? "white" : "black"
+                                            }}>
+                                            {item}
+                                        </Text>
                                     </TouchableOpacity>
                                 )
                             })
@@ -59,6 +84,13 @@ export default function MutilpleChoiceScreen({ route, navigation }) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F5F5F5',
+    },
+    questionMark: {
+        width: WIDTH,
+        padding: 20,
+        textAlign: "right",
+        fontWeight: "600",
+        color: "#DF8A3C"
     },
     correctAnswer: {
         width: WIDTH,

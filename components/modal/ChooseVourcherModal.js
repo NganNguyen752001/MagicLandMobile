@@ -22,7 +22,7 @@ export default function ChooseVourcherModal({ visible, vourcherList, onCancle, o
                 </View>
                 <View style={styles.vourcherRight}>
                     <Text style={{ ...styles.boldText, color: "#241468" }}>Giảm tối đa {formatPrice(item.max)}đ </Text>
-                    <Text style={{...styles.boldText, fontWeight: "500"}}>Đơn tối thiểu {formatPrice(item.minUse)}đ</Text>
+                    <Text style={{ ...styles.boldText, fontWeight: "500" }}>Đơn tối thiểu {formatPrice(item.minUse)}đ</Text>
                     <Text style={styles.smallText}>{item?.content}</Text>
                 </View>
             </TouchableOpacity>
@@ -92,8 +92,9 @@ const styles = StyleSheet.create({
     },
     voucherBackground: {
         position: "absolute",
+        width: "100%",
         top: 0,
-        bottom: 0,
+        // bottom: 0,
         right: 0,
         left: 0,
     },

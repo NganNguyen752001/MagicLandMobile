@@ -30,6 +30,7 @@ export default function ChooseClassModal({ visible, classList, setClassList, set
                 <View style={styles.safeArea} />
                 <Header navigation={navigation} background={"#241468"} goback={onCancle} title={"Vui Lòng Chọn Lịch Học"} />
                 <ScrollView showsVerticalScrollIndicator={false} style={styles.cardList}>
+                    <View style={styles.srollHeader}></View>
                     {
                         classList.map((item, index) => {
                             return <ClassCard cardDetail={item} check={true} index={index} onClick={selectCourse} key={index} />
@@ -54,5 +55,9 @@ const styles = StyleSheet.create({
     cardList: {
         marginTop: 20,
         paddingHorizontal: WIDTH * 0.05
-    }
+    },
+
+    srollHeader: {
+        marginBottom: 20,
+    },
 });

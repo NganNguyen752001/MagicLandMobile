@@ -222,7 +222,7 @@ export default function RegisterClassScreen({ route, navigation }) {
                                         {/* <Text style={[styles.tableText]} >Lịch học</Text> */}
                                     </View>
                                     <View style={[styles.classPrice]}>
-                                        <Text style={[styles.tableText]}>{formatPrice(item?.price ? item?.price : 0)}đ</Text>
+                                        <Text style={[styles.tableText]}>{formatPrice(item?.coursePrice ? item?.coursePrice : 0)}đ</Text>
                                     </View>
                                 </View>
                             )
