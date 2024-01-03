@@ -401,7 +401,7 @@ export default function DocumentScreen({ navigation }) {
 
   const [studentList, setStudentList] = useState([])
   const [classList, setClassList] = useState([])
-  const [type, setType] = useState("UPCOMMING")
+  const [type, setType] = useState("PROGRESSING")
   const user = useSelector(userSelector);
 
   // console.log(user.students);
