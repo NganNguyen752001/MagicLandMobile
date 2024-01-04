@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, Animated } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -402,6 +402,7 @@ export default function DocumentScreen({ navigation }) {
   const [studentList, setStudentList] = useState([])
   const [classList, setClassList] = useState([])
   const [type, setType] = useState("PROGRESSING")
+  const [animation] = useState(new Animated.Value(0));
   const user = useSelector(userSelector);
 
   // console.log(user.students);
@@ -409,6 +410,40 @@ export default function DocumentScreen({ navigation }) {
   useEffect(() => {
     loadStudentData()
   }, [])
+
+  useEffect(() => {
+    switch (type) {
+      case "UPCOMMING":
+        animateBorder(0); // Set the width to 0 when "UPCOMMING"
+        break;
+      case "PROGRESSING":
+        animateBorder(1); // Set the width to 1 when "PROGRESSING"
+        break;
+      case "COMPLETED":
+        animateBorder(2); // Set the width to 2 when "COMPLETED"
+        break;
+      default:
+        break;
+    }
+  }, [type]);
+
+  const animateBorder = (toValue) => {
+    Animated.spring(animation, {
+      toValue,
+      duration: 500,
+      useNativeDriver: true,
+      overshootClamping: true
+    }).start();
+  };
+
+  const interpolatedValue = animation.interpolate({
+    inputRange: [0, 1, 2],
+    outputRange: [-WIDTH * 0.041, WIDTH * 0.27, WIDTH * 0.586],
+  });
+
+  const animatedStyle = {
+    transform: [{ translateX: interpolatedValue }],
+  };
 
   const loadStudentData = async () => {
     setStudentList(user?.students)
@@ -495,10 +530,23 @@ export default function DocumentScreen({ navigation }) {
         <Text style={styles.title}>Các khóa học đã đăng ký:</Text>
       </View>
       <View style={styles.classList}>
-        <View style={{ ...styles.flexColumnAround, position: "relative" }}>
-          {/* <View style={{ ...styles.buttonBorder }}>
-
-          </View> */}
+        <View style={{ ...styles.flexColumnAround, position: "relative", transform: [{ translateY: 4.5 }], zIndex: 100 }}>
+          <Animated.View style={[
+            styles.buttonBorderContainer,
+            animatedStyle,
+          ]} >
+            <View style={[styles.buttonBorder,
+            {
+              borderColor: type === "UPCOMMING" ?
+                "#C8A9F1"
+                :
+                type === "PROGRESSING" ?
+                  "#FACE9B"
+                  :
+                  "#BFE3C6",
+              borderBottomWidth: 0
+            }]} />
+          </Animated.View>
           <TouchableOpacity
             onPress={() => setType("UPCOMMING")}
             style={{ ...styles.typeButton, backgroundColor: "#C8A9F1" }}
@@ -623,15 +671,25 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 7,
     borderRadius: 10,
+    zIndex: 101
+  },
+  buttonBorderContainer: {
+    position: "absolute",
+    width: WIDTH * 0.95,
+    height: "150%",
+    marginHorizontal: WIDTH * 0.025,
+    justifyContent: "center",
+    borderBottomColor: "white",
+    // backgroundColor: "blue",
+    zIndex: 100,
   },
   buttonBorder: {
-    position: "absolute",
-    width: "32%",
-    height: "150%",
+    width: "33%",
+    height: "100%",
     borderWidth: 1,
-    borderBottomWidth: 0,
+    borderBottomColor: "white",
     backgroundColor: "white",
-    transform: [{ translateX: -10 }]
+    // transform: [{ translateX: -5 }],
   },
   typeText: {
     textAlign: "center",
@@ -643,6 +701,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
+    zIndex: 99
     // borderTopWidth: 0,
   },
 
