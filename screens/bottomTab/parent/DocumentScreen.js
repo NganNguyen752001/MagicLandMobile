@@ -7,6 +7,8 @@ import ClassCard from '../../../components/ClassCard';
 import { getStudents } from '../../../api/student';
 import ClassCartCard from '../../../components/ClassCartCard';
 import { useFocusEffect } from '@react-navigation/native';
+import { userSelector } from '../../../store/selector';
+import { useSelector } from 'react-redux';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -426,6 +428,11 @@ export default function DocumentScreen({ navigation }) {
   const [classList, setClassList] = useState([])
   const [type, setType] = useState("PROGRESSING")
   const [animation] = useState(new Animated.Value(0));
+  const user = useSelector(userSelector);
+
+  useEffect(() => {
+    loadStudentData()
+  }, [user])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -472,7 +479,7 @@ export default function DocumentScreen({ navigation }) {
     console.log(studentList);
     setStudentList(studentList)
   }
-  
+
   const selectStudent = (id) => {
     setStudentList((prevStudentList) => {
       const index = prevStudentList.findIndex(obj => obj.id === id);

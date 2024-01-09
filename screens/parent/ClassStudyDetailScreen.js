@@ -214,7 +214,7 @@ export default function ClassStudyDetailScreen({ route, navigation }) {
                     <Text style={styles.title}>Nội dung buổi học:</Text>
                 </View>
                 <View style={styles.programcontent}>
-                    <Text style={styles.boldText}>Buổi 7:</Text>
+                    <Text style={styles.boldText}>Buổi 7: {formatDate("2024-01-11T00:00:00")}</Text>
                     <Text style={styles.boldText} numberOfLines={1}>Chủ đề 3 - Làm quen các số từ 0 đến 10, tập đếm đến 20, ... </Text>
                     <Text style={{ marginLeft: 10 }} >Bài 10: Số nào ở đâu?</Text>
                     <Text style={{ marginLeft: 10 }}>Bài 11:  Que tính kỳ diệu</Text>

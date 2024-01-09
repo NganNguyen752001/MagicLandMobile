@@ -17,6 +17,7 @@ export default function TransactionWalletScreen({ route, navigation }) {
 
     const hanldeCloseOtpModal = () => {
         setModalVisible({ ...modalVisible, otp: false })
+        
     }
 
     const handleSubmitOtp = async (otp) => {
@@ -29,6 +30,8 @@ export default function TransactionWalletScreen({ route, navigation }) {
         //         console.log(`Đăng ký ${studentList.map(item => item.fullName)} vào lớp ${classItem.name} thất bại`);
         //     }
         // })
+        hanldeCloseOtpModal()
+        navigation.push("TransactionDetailScreen", { total: price })
     }
 
     return (
