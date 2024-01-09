@@ -25,22 +25,22 @@ export default function ProfileScreen({ navigation }) {
     {
       name: "Danh sách bé",
       icon: "",
-      onClick: "",
+      onClick: () => console.log("comming soon"),
     },
     {
       name: "Khóa học đăng ký",
       icon: "",
-      onClick: "",
+      onClick: () => console.log("comming soon"),
     },
     {
       name: "Khóa học quan tâm",
       icon: "",
-      onClick: "",
+      onClick: ()=>console.log("comming soon"),
     },
     {
       name: "Ví điện tử",
       icon: "",
-      onClick: "",
+      onClick: ()=>console.log("comming soon"),
     },
     {
       name: "Lịch sử giao dịch",
@@ -50,7 +50,7 @@ export default function ProfileScreen({ navigation }) {
     {
       name: "Quản lý tài khoản",
       icon: "",
-      onClick: "",
+      onClick: ()=>console.log("comming soon"),
     },
     {
       name: "Đăng xuất",
