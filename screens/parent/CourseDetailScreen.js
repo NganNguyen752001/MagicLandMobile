@@ -10,6 +10,7 @@ import SpinnerLoading from '../../components/SpinnerLoading';
 import { truncateString, formatPrice } from '../../util/util';
 import { modifyCart } from '../../api/cart';
 import ScheduleList from '../../components/ScheduleList';
+import CustomToast from "../../components/CustomToast";
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -134,6 +135,7 @@ export default function CourseDetailScreen({ route, navigation }) {
     const [filterValue, setFilterValue] = useState(filterDetailDefault)
     const [dataLoading, setDataLoading] = useState(true)
     let course = route?.params?.course
+    const showToast = CustomToast();
 
     useEffect(() => {
         setViewDetail({ detail: false, course: false })
@@ -177,13 +179,14 @@ export default function CourseDetailScreen({ route, navigation }) {
             classChoosed.map(async (item) => {
                 const response = await modifyCart([], item.id)
                 if (response?.status === 200) {
+                    showToast("Thành công", `Đã thêm ${item?.name} vào giỏ hàng`, "success");
                     console.log(`Đã thêm ${item?.name} vào giỏ hàng`);
                 } else {
-                    console.log(`Thêm ${item?.name} vào giỏ hàng thất bại`);
+                    showToast("Thất bại", `Thêm ${item?.name} vào giỏ hàng thất bại`, "error");
                 }
             })
         } else {
-            console.log("chưa Chọn lớp");
+            showToast("Thông Báo", `Chưa Chọn lớp`, "warning");
         }
     }
 

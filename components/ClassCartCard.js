@@ -108,10 +108,12 @@ export default function ClassCartCard({ cardDetail, check, index, onClick, backg
 const styles = StyleSheet.create({
     container: {
         width: WIDTH * 0.8,
+        maxHeight: HEIGHT * 0.2,
         position: "relative",
         flexDirection: "row",
         marginBottom: 10,
-        marginHorizontal: WIDTH * 0.05
+        marginHorizontal: WIDTH * 0.05,
+        transform: [{ translateX: -10 }]
     },
     checkBox: {
         position: "absolute",
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
     card: {
         position: "relative",
         width: "100%",
+        height: "90%",
         // paddingHorizontal: 10,
         // paddingVertical: 10,
         borderWidth: 1,
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
     cardImage: {
         position: "relative",
         width: "40%",
-        height: WIDTH * 0.25,
+        height: "100%",
         borderRadius: 15,
         overflow: "hidden"
     },

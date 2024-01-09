@@ -6,7 +6,7 @@ import Header from '../../components/header/Header';
 import StudentView from '../../components/StudentView';
 
 import { formatDate, formatPrice } from '../../util/util';
-import ClassCard from '../../components/ClassCard';
+import ClassCartCard from '../../components/ClassCartCard';
 import ChooseClassModal from '../../components/modal/ChooseClassModal';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../store/selector';
@@ -184,7 +184,7 @@ export default function ClassRegisterScreen({ route, navigation }) {
                     {
                         classChoosed.map((item, index) => (
                             <React.Fragment key={index}>
-                                <ClassCard cardDetail={item} index={item?.id} check={false} onClick={onChooseClass} />
+                                <ClassCartCard cardDetail={item} index={item?.id} check={false} onClick={onChooseClass} />
 
                             </React.Fragment>
                         ))

@@ -83,14 +83,15 @@ const styles = StyleSheet.create({
         // flexDirection: "row",
         marginBottom: 10,
         // justifyContent: "center",
+        transform: [{ translateX: -WIDTH * 0.025 }]
     },
     tableColumn: {
         width: "100%",
-        height: 50,
+        height: 40,
         // paddingVertical: 5,
     },
     checkColumn: {
-        width: 50,
+        width: 40,
         height: "100%",
         justifyContent: "center",
         alignItems: "center"
