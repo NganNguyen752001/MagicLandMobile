@@ -1,7 +1,8 @@
-import { View, Text, TextInput, TouchableOpacity, Dimensions, ScrollView, StyleSheet, Modal } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Dimensions, ScrollView, StyleSheet, Modal, Image } from 'react-native'
 import React, { useState } from 'react'
 import OTPTextInput from "react-native-otp-textinput"
 import Icon from "react-native-vector-icons/MaterialIcons";
+import successImage from "../../assets/images/paymentSuccessImage.png"
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -16,7 +17,12 @@ export default function PaymentSuccessModal({ visible, onSubmit }) {
         >
             <TouchableOpacity style={styles.layout} />
             <View style={styles.container}>
-                <Icon name={"check-circle"} color={"#3D5CFF"} size={60} />
+                {/* <Icon name={"check-circle"} color={"#3D5CFF"} size={60} /> */}
+                <Image
+                    source={successImage}
+                    style={styles.successImage}
+                    resizeMode='cover'
+                />
                 <View style={styles.modalHeader}>
                     <Text style={styles.modalHeaderText}>Thanh Toán Thành Công</Text>
                 </View>
@@ -75,5 +81,8 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingHorizontal: 30,
         color: "white",
+    },
+    successImage:{
+        width: "30%"
     }
 });

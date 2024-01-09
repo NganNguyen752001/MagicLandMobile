@@ -26,11 +26,16 @@ export default function ClassRegisterScreen({ route, navigation }) {
         setClassList(route?.params?.classList)
         setClassChoosed(classList?.filter(obj => obj.choose === true))
         setStudentList(user.students)
-    }, [route?.params?.classList, route?.params?.goback])
+    }, [route?.params?.classList, route?.params?.goback, user])
 
     const hanldeConfirm = () => {
         const registerList = studentList?.filter(student => student.check === true);
-        navigation.push("PaymentScreen", { classDetail: classChoosed, studentList: registerList })
+        if (registerList[0]) {
+            navigation.push("PaymentScreen", { classDetail: classChoosed, studentList: registerList })
+        }else{
+            console.log("Chưa chọn học sinh");
+        }
+
     }
 
     const hanldeAddStudent = () => {

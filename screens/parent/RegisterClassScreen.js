@@ -28,6 +28,7 @@ const dateDefault = [
 
 export default function RegisterClassScreen({ route, navigation }) {
 
+    const [studentList, setStudentList] = useState([])
     const [courseList, setCourseList] = useState(route?.params?.courseList)
     const [visible, setVisible] = useState({ submit: true })
     const user = useSelector(userSelector);
@@ -36,11 +37,19 @@ export default function RegisterClassScreen({ route, navigation }) {
         loadSchedule()
     }, [route?.params?.courseList])
 
+    useEffect(() => {
+        loadStudentData()
+    }, [user])
+
     const loadSchedule = async () => {
         courseList.map(item => {
             checkExistedSchedule(item) &&
                 setSchedule(item)
         })
+    }
+
+    const loadStudentData = async () => {
+        setStudentList(user.students)
     }
 
     const handleNavigate = () => {
@@ -174,7 +183,7 @@ export default function RegisterClassScreen({ route, navigation }) {
                                         {
                                             <DropdownComponent
                                                 dropdownStyle={styles.dropdownStyle}
-                                                studentList={user.students}
+                                                studentList={studentList}
                                                 labelField={"fullName"}
                                                 valueField={"id"}
                                                 dropdownItem={(item) => item.fullName}

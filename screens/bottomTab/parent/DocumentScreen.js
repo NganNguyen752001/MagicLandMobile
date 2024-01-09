@@ -8,6 +8,7 @@ import ClassCard from '../../../components/ClassCard';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../../store/selector';
 import { getStudents } from '../../../api/student';
+import ClassCartCard from '../../../components/ClassCartCard';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -26,8 +27,12 @@ const classListData = [
     limitNumberStudent: 30,
     leastNumberStudent: 1,
     numberStudentRegistered: 0,
+    coursePrice: 300000,
     image: "img.png",
     video: "vid.mp4",
+    courseDetail: {
+      subject: "math"
+    },
     lecture: {
       id: "573cc370-aeab-4d9a-ba2c-42b28e4f70dc",
       fullName: "Mai Thị Phương",
@@ -277,8 +282,12 @@ const classListData = [
     limitNumberStudent: 30,
     leastNumberStudent: 1,
     numberStudentRegistered: 0,
+    coursePrice: 200000,
     image: "img.png",
     video: "vid.mp4",
+    courseDetail: {
+      subject: "math"
+    },
     lecture: {
       id: "573cc370-aeab-4d9a-ba2c-42b28e4f70dc",
       fullName: "Mai Thị Phương",
@@ -303,8 +312,12 @@ const classListData = [
     limitNumberStudent: 30,
     leastNumberStudent: 1,
     numberStudentRegistered: 0,
+    coursePrice: 240000,
     image: "img.png",
     video: "vid.mp4",
+    courseDetail: {
+      subject: "math"
+    },
     lecture: {
       id: "573cc370-aeab-4d9a-ba2c-42b28e4f70dc",
       fullName: "Mai Thị Phương",
@@ -329,8 +342,12 @@ const classListData = [
     limitNumberStudent: 30,
     leastNumberStudent: 1,
     numberStudentRegistered: 0,
+    coursePrice: 400000,
     image: "img.png",
     video: "vid.mp4",
+    courseDetail: {
+      subject: "math"
+    },
     lecture: {
       id: "573cc370-aeab-4d9a-ba2c-42b28e4f70dc",
       fullName: "Mai Thị Phương",
@@ -355,8 +372,12 @@ const classListData = [
     limitNumberStudent: 30,
     leastNumberStudent: 1,
     numberStudentRegistered: 0,
+    coursePrice: 250000,
     image: "img.png",
     video: "vid.mp4",
+    courseDetail: {
+      subject: "math"
+    },
     lecture: {
       id: "573cc370-aeab-4d9a-ba2c-42b28e4f70dc",
       fullName: "Mai Thị Phương",
@@ -381,8 +402,12 @@ const classListData = [
     limitNumberStudent: 30,
     leastNumberStudent: 1,
     numberStudentRegistered: 0,
+    coursePrice: 200000,
     image: "img.png",
     video: "vid.mp4",
+    courseDetail: {
+      subject: "math"
+    },
     lecture: {
       id: "573cc370-aeab-4d9a-ba2c-42b28e4f70dc",
       fullName: "Mai Thị Phương",
@@ -409,7 +434,7 @@ export default function DocumentScreen({ navigation }) {
 
   useEffect(() => {
     loadStudentData()
-  }, [])
+  }, [user])
 
   useEffect(() => {
     switch (type) {
@@ -483,21 +508,21 @@ export default function DocumentScreen({ navigation }) {
     switch (type) {
       case "UPCOMMING":
         return (
-          <ClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#C8A9F1"} key={index} />
+          <ClassCartCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#C8A9F1"} key={index} />
         )
       case "PROGRESSING":
         return (
-          <ClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#FACE9B"} key={index} />
+          <ClassCartCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#FACE9B"} key={index} />
         )
 
       case "COMPLETED":
         return (
-          <ClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#BFE3C6"} key={index} />
+          <ClassCartCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"#BFE3C6"} key={index} />
         )
 
       default:
         return (
-          <ClassCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} key={index} />
+          <ClassCartCard cardDetail={item} check={false} index={index} onClick={() => handleClassNavigate(item)} background={"white"} key={index} />
         )
     }
   }
@@ -581,7 +606,9 @@ export default function DocumentScreen({ navigation }) {
               type === "PROGRESSING" ?
                 "#FACE9B"
                 :
-                "#BFE3C6"
+                "#BFE3C6",
+            borderTopLeftRadius: type !== "UPCOMMING" ? 10 : 0,
+            borderTopRightRadius: type !== "COMPLETED" ? 10 : 0,
           }}
         >
           {/* getClassList() */}
@@ -597,7 +624,7 @@ export default function DocumentScreen({ navigation }) {
       <View style={styles.titleView}>
         <Text style={styles.title}>Các sự kiện đã tham gia:</Text>
       </View>
-    </ScrollView>
+    </ScrollView >
   )
 }
 
@@ -677,6 +704,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: WIDTH * 0.95,
     height: "150%",
+
     marginHorizontal: WIDTH * 0.025,
     justifyContent: "center",
     borderBottomColor: "white",
@@ -686,7 +714,9 @@ const styles = StyleSheet.create({
   buttonBorder: {
     width: "33%",
     height: "100%",
-    borderWidth: 1,
+    borderWidth: 1.5,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     borderBottomColor: "white",
     backgroundColor: "white",
     // transform: [{ translateX: -5 }],
@@ -698,10 +728,11 @@ const styles = StyleSheet.create({
     padding: 10,
     // paddingHorizontal: 10,
     borderWidth: 1,
+    borderRadius: 10,
     marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 99
+    zIndex: 99,
     // borderTopWidth: 0,
   },
 
