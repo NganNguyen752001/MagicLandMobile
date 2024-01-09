@@ -32,12 +32,16 @@ export default function TransactionDetailSceen({ route, navigation }) {
                 <View style={styles.bottom}>
                     <Text style={styles.boldText}>Thông tin đơn hàng</Text>
                     <View style={styles.flexColumn}>
-                        <Text style={{ width: "50%", color: "#888888", marginVertical: 20 }}> Nội dung:</Text>
-                        <Text style={{ ...styles.boldText, width: "50%", marginVertical: 20 }}> {paymentDetail.content}</Text>
+                        <Text style={{ color: "#888888", marginVertical: 15, transform: [{ translateX: -3 }] }}> Nội dung:
+                            <Text style={{ ...styles.boldText, marginVertical: 15, color: "black" }}> {paymentDetail.content}</Text>
+                        </Text>
+
                     </View>
                     <View style={styles.flexColumn}>
-                        <Text style={{ width: "50%", color: "#888888", marginVertical: 20 }}> Hình thức thanh toán:</Text>
-                        <Text style={{ ...styles.boldText, width: "50%", marginVertical: 20 }}> {paymentDetail.from}</Text>
+                        <Text style={{ color: "#888888", marginVertical: 15, transform: [{ translateX: -3 }]  }}> Hình thức thanh toán:
+                            <Text style={{ ...styles.boldText, marginVertical: 15, color: "black" }}> {paymentDetail.from}</Text>
+                        </Text>
+
                     </View>
                 </View>
             </View >
