@@ -7,6 +7,8 @@ import DropdownComponent from '../../components/DropdownComponent';
 import FavoriteHeader from '../../components/header/FavoriteHeader';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../store/selector';
+import { getStudents } from '../../api/student';
+import { useFocusEffect } from '@react-navigation/native';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -37,9 +39,11 @@ export default function RegisterClassScreen({ route, navigation }) {
         loadSchedule()
     }, [route?.params?.courseList])
 
-    useEffect(() => {
-        loadStudentData()
-    }, [user])
+    useFocusEffect(
+        React.useCallback(() => {
+            loadStudentData()
+        }, [])
+    );
 
     const loadSchedule = async () => {
         courseList.map(item => {
@@ -49,7 +53,8 @@ export default function RegisterClassScreen({ route, navigation }) {
     }
 
     const loadStudentData = async () => {
-        setStudentList(user.students)
+        const studentList = await getStudents()
+        setStudentList(studentList)
     }
 
     const handleNavigate = () => {

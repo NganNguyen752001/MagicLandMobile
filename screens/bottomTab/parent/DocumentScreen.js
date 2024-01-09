@@ -3,12 +3,10 @@ import React, { useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import StudentView from '../../../components/StudentView';
-import PersonalClassCard from '../../../components/PersonalClassCard';
 import ClassCard from '../../../components/ClassCard';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../../store/selector';
 import { getStudents } from '../../../api/student';
 import ClassCartCard from '../../../components/ClassCartCard';
+import { useFocusEffect } from '@react-navigation/native';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -428,13 +426,12 @@ export default function DocumentScreen({ navigation }) {
   const [classList, setClassList] = useState([])
   const [type, setType] = useState("PROGRESSING")
   const [animation] = useState(new Animated.Value(0));
-  const user = useSelector(userSelector);
 
-  // console.log(user.students);
-
-  useEffect(() => {
-    loadStudentData()
-  }, [user])
+  useFocusEffect(
+    React.useCallback(() => {
+      loadStudentData()
+    }, [])
+  );
 
   useEffect(() => {
     switch (type) {
@@ -471,9 +468,11 @@ export default function DocumentScreen({ navigation }) {
   };
 
   const loadStudentData = async () => {
-    setStudentList(user?.students)
+    const studentList = await getStudents()
+    console.log(studentList);
+    setStudentList(studentList)
   }
-
+  
   const selectStudent = (id) => {
     setStudentList((prevStudentList) => {
       const index = prevStudentList.findIndex(obj => obj.id === id);

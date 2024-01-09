@@ -10,6 +10,8 @@ import ClassCard from '../../components/ClassCard';
 import ChooseClassModal from '../../components/modal/ChooseClassModal';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../store/selector';
+import { getStudents } from '../../api/student';
+import { useFocusEffect } from '@react-navigation/native';
 
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
@@ -22,17 +24,28 @@ export default function ClassRegisterScreen({ route, navigation }) {
     const [modalVisible, setModalVisible] = useState({ classChoose: false })
     const user = useSelector(userSelector);
 
+    useFocusEffect(
+        React.useCallback(() => {
+            loadStudentData()
+        }, [])
+    );
+
     useEffect(() => {
         setClassList(route?.params?.classList)
         setClassChoosed(classList?.filter(obj => obj.choose === true))
-        setStudentList(user.students)
+        loadStudentData()
     }, [route?.params?.classList, route?.params?.goback, user])
+
+    const loadStudentData = async () => {
+        const studentList = await getStudents()
+        setStudentList(studentList)
+    }
 
     const hanldeConfirm = () => {
         const registerList = studentList?.filter(student => student.check === true);
         if (registerList[0]) {
             navigation.push("PaymentScreen", { classDetail: classChoosed, studentList: registerList })
-        }else{
+        } else {
             console.log("Chưa chọn học sinh");
         }
 
