@@ -35,6 +35,8 @@ import MultiplePaymentScreen from '../screens/parent/MultiplePaymentScreen';
 import ClassStudyDetailScreen from '../screens/parent/ClassStudyDetailScreen';
 import ClassContentScreen from '../screens/parent/ClassContentScreen';
 import MutilpleChoiceScreen from '../screens/parent/MutilpleChoiceScreen';
+import RechargeScreen from '../screens/parent/RechargeScreen';
+import TransactionWalletScreen from '../screens/parent/TransactionWalletScreen';
 
 import AttendanceScreen from '../screens/teacher/AttendanceScreen';
 
@@ -103,6 +105,8 @@ const StackNavigator = () => {
                     <Stack.Screen name="ClassStudyDetailScreen" component={ClassStudyDetailScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="ClassContentScreen" component={ClassContentScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="MutilpleChoiceScreen" component={MutilpleChoiceScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="RechargeScreen" component={RechargeScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="TransactionWalletScreen" component={TransactionWalletScreen} options={{ headerShown: false }} />
                 </>
             ) : user?.role.name === 'LECTURER' ? (
                 <>

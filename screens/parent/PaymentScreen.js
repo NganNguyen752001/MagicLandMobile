@@ -83,6 +83,12 @@ export default function PaymentScreen({ route, navigation }) {
         setVourcherList(vourcherListDefault)
     }, [route?.params?.classDetail, route?.params?.studentList])
 
+    useFocusEffect(
+        React.useCallback(() => {
+            setModalVisible({ vourcher: false, otp: false, notifi: false, paymentMethod: false })
+        }, [])
+    );
+
     const hanldeCloseOtpModal = () => {
         setModalVisible({ ...modalVisible, otp: false })
     }
@@ -228,18 +234,21 @@ export default function PaymentScreen({ route, navigation }) {
                         onPress={handleOpenPaymentMethodModal}
                     >
                         {paymentMethod() &&
-                            <View
-                                style={styles.paymentMethod}
-                            >
-                                <Text style={{ ...styles.boldText, color: "#4582E6" }}>
-                                    {
-                                        paymentMethod().name
-                                    }
-                                </Text>
+                            <>
+                                <View
+                                    style={styles.paymentMethod}
+                                >
+                                    <Text style={{ ...styles.boldText, color: "#4582E6" }}>
+                                        {
+                                            paymentMethod().name
+                                        }
+                                    </Text>
 
-                            </View>
+                                </View>
+                                <Icon name={"chevron-right"} color={"#4582E6"} size={30} />
+                            </>
                         }
-                        <Icon name={"chevron-right"} color={"#4582E6"} size={30} />
+
                     </TouchableOpacity>
 
                     <View style={{ ...styles.flexColumnBetween, width: WIDTH * 0.75, marginVertical: 5, borderBottomWidth: 1, paddingBottom: 10, borderColor: "#F9ACC0" }}>
